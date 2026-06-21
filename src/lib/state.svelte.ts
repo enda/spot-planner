@@ -674,6 +674,22 @@ class AppState {
     this.patchDraft({ jrRefs });
   }
 
+  /** Drag handlers: reposition a single draft point in place. */
+  moveRef(i: number, ll: LatLng): void {
+    this.patchRef(i, { ll });
+  }
+
+  moveZonePoint(zi: number, pi: number, ll: LatLng): void {
+    const zones = this.adminDraft.zones.map((z, idx) =>
+      idx === zi ? { ...z, polygon: z.polygon.map((p, k) => (k === pi ? ll : p)) } : z,
+    );
+    this.patchDraft({ zones });
+  }
+
+  moveRunwayEnd(ri: number, end: 'a' | 'b', ll: LatLng): void {
+    this.patchRunway(ri, { [end]: ll });
+  }
+
   setAdminTool(tool: AdminTool, idx: number | null = null): void {
     this.adminTool = tool;
     if (tool === 'zone') {

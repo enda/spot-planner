@@ -433,6 +433,26 @@
     }
   }
 
+  /** A draggable admin handle (divIcon) that commits the new position on dragend. */
+  function draftDot(
+    ll: [number, number],
+    color: string,
+    fill: string,
+    r: number,
+    onMove: (ll: [number, number]) => void,
+  ) {
+    const html =
+      `<div style="width:${r * 2}px;height:${r * 2}px;border-radius:50%;background:${fill};` +
+      `border:2.5px solid ${color};box-sizing:border-box;box-shadow:0 0 0 1.5px rgba(0,0,0,.45);cursor:grab"></div>`;
+    const icon = L.divIcon({ className: '', html, iconSize: [r * 2, r * 2], iconAnchor: [r, r] });
+    const mk = L.marker(ll, { draggable: true, autoPan: false, keyboard: false, icon }).addTo(adminLayer);
+    mk.on('dragend', () => {
+      const p = mk.getLatLng();
+      onMove([p.lat, p.lng]);
+    });
+    return mk;
+  }
+
   function drawAdmin() {
     if (!map || !ready) return;
     if (!adminLayer) adminLayer = L.layerGroup().addTo(map);
@@ -457,16 +477,8 @@
           adminLayer,
         );
       }
-      z.polygon.forEach((pt) =>
-        L.circleMarker(pt, {
-          renderer,
-          interactive: false,
-          radius: active ? 6 : 5,
-          color: c,
-          weight: 2.5,
-          fillColor: '#fff',
-          fillOpacity: 1,
-        }).addTo(adminLayer),
+      z.polygon.forEach((pt, pi) =>
+        draftDot(pt, c, '#fff', active ? 6 : 5, (ll) => app.moveZonePoint(i, pi, ll)),
       );
     });
     // The draft target is shown by the main draggable marker (app.activeTarget).
@@ -482,32 +494,17 @@
           opacity: 0.9,
           dashArray: active ? '8 6' : undefined,
         }).addTo(adminLayer);
-      [rw.a, rw.b].forEach((pt) => {
-        if (pt)
-          L.circleMarker(pt, {
-            renderer,
-            interactive: false,
-            radius: 5,
-            color: '#fff',
-            weight: 2,
-            fillColor: '#1b232d',
-            fillOpacity: 1,
-          }).addTo(adminLayer);
+      (['a', 'b'] as const).forEach((end) => {
+        const pt = rw[end];
+        if (pt) draftDot(pt, '#fff', '#1b232d', 5, (ll) => app.moveRunwayEnd(i, end, ll));
       });
     });
-    d.jrRefs.forEach((r) => {
+    d.jrRefs.forEach((r, i) => {
       if (r && r.ll)
-        L.circleMarker(r.ll, {
-          renderer,
-          interactive: false,
-          radius: 7,
-          color: '#c77dff',
-          weight: 3,
-          fillColor: '#c77dff',
-          fillOpacity: 0.5,
-        })
-          .addTo(adminLayer)
-          .bindTooltip(r.name || 'repère', { permanent: true, direction: 'top', offset: [0, -6], className: 'zone-tip' });
+        draftDot(r.ll, '#c77dff', 'rgba(199,125,255,0.55)', 6, (ll) => app.moveRef(i, ll)).bindTooltip(
+          r.name || 'repère',
+          { permanent: true, direction: 'top', offset: [0, -8], className: 'zone-tip' },
+        );
     });
   }
 
