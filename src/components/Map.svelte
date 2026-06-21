@@ -22,6 +22,8 @@
   let { embed = false }: { embed?: boolean } = $props();
 
   const drawingZone = $derived(app.adminTool === 'zone' && app.adminActiveZone != null);
+  // A point-placing tool is active → show a crosshair instead of the pan hand.
+  const placing = $derived(app.adminOpen && app.adminTool !== 'none');
   const banner = $derived.by(() => {
     const tool = app.adminTool;
     const d = app.adminDraft;
@@ -584,7 +586,7 @@
 </script>
 
 <div class="map-card" class:fs={app.fullscreen}>
-  <div bind:this={mapEl} class="map"></div>
+  <div bind:this={mapEl} class="map" class:placing></div>
 
   <div class="topleft">
     <MapSummary />
@@ -686,6 +688,10 @@
     inset: 0;
     width: 100%;
     height: 100%;
+  }
+  /* Point-placing tool active → crosshair over the map (drag handles keep grab). */
+  .map.placing :global(.leaflet-container) {
+    cursor: crosshair;
   }
   .tabs {
     position: absolute;
