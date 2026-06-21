@@ -80,7 +80,7 @@ export const DROPZONES: Dropzone[] = [
   { name: 'Skydive Kiikala', country: 'Finlande', lat: 60.462502, lng: 23.6525 },
   { name: 'Skydive Finland (Jämijärvi)', country: 'Finlande', lat: 61.778599, lng: 22.716101 },
   // — France (FFP centres — coordinates are airfield reference points)
-  { name: '7ème Ciel (Lannion)', country: 'France', lat: 48.752885, lng: -3.470993 },
+  { name: '7ème Ciel (Lannion)', country: 'France', lat: 48.752595, lng: -3.470757 },
   { name: 'Abbeville', country: 'France', lat: 50.143501, lng: 1.831891 },
   { name: 'Agen-La Garenne', country: 'France', lat: 44.174171, lng: 0.59309 },
   { name: 'Albi-Le Séquestre', country: 'France', lat: 43.913898, lng: 2.11306 },
