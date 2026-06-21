@@ -1,0 +1,28 @@
+{
+  "name": "Circuit · vents & plané",
+  "short_name": "Circuit",
+  "description": "Préparation de circuit parachutisme — vents réels, plané sous voile, axe de largage.",
+  "lang": "fr",
+  "dir": "ltr",
+  "display": "standalone",
+  "orientation": "any",
+  "start_url": ".",
+  "scope": ".",
+  "background_color": "#0c1014",
+  "theme_color": "#0c1014",
+  "categories": ["sports", "navigation", "utilities"],
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
