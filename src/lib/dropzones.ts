@@ -124,6 +124,7 @@ export const DROPZONES: Dropzone[] = [
   { name: 'Muret-Lherm (Toulouse)', country: 'France', lat: 43.448898, lng: 1.26333 },
   { name: 'Niort-Marais Poitevin', country: 'France', lat: 46.313477, lng: -0.394529 },
   { name: 'Ariège Parachutisme (Pamiers)', country: 'France', lat: 43.090599, lng: 1.69583 },
+  { name: 'Orléans-Saint-Denis-de-l’Hôtel', country: 'France', lat: 47.897758, lng: 2.164478 },
   { name: 'Périgueux-Bassillac', country: 'France', lat: 45.198101, lng: 0.815556 },
   { name: 'Péronne-Saint-Quentin', country: 'France', lat: 49.868871, lng: 3.029566 },
   { name: 'Pontoise-Cormeilles', country: 'France', lat: 49.096064, lng: 2.035543 },
