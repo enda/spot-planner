@@ -43,6 +43,17 @@
     setTimeout(() => URL.revokeObjectURL(url), 2000);
   }
 
+  // Scroll the generated proposal into view when it appears (it sits below the
+  // fold, so validating looked like a no-op otherwise).
+  let resultEl: HTMLDivElement | undefined = $state();
+  $effect(() => {
+    if (app.adminResult && resultEl) {
+      requestAnimationFrame(() =>
+        resultEl?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+      );
+    }
+  });
+
   const rwState = (rw: { a: LatLng | null; b: LatLng | null }) =>
     rw.a && rw.b
       ? m.admin_runway_state_done()
@@ -216,7 +227,7 @@
     <div class="hint">{toolHint}</div>
 
     {#if app.adminResult}
-      <div class="result">
+      <div class="result" bind:this={resultEl}>
         <div class="rlead">{m.admin_result_lead({ email: ADMIN_EMAIL })}</div>
         <textarea readonly value={app.adminResult}></textarea>
         <div class="rbtns">
