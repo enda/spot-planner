@@ -23,16 +23,40 @@
     }
   }
   function download() {
-    const blob = new Blob([qrSvg], { type: 'image/svg+xml' });
-    const href = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = href;
+    if (!url) return;
+    // Render the QR straight onto a canvas → crisp PNG (broadly supported, unlike SVG).
+    const qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    const count = qr.getModuleCount();
+    const cell = 12;
+    const margin = 4;
+    const size = (count + margin * 2) * cell;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = '#000';
+    for (let r = 0; r < count; r++) {
+      for (let c = 0; c < count; c++) {
+        if (qr.isDark(r, c)) ctx.fillRect((c + margin) * cell, (r + margin) * cell, cell, cell);
+      }
+    }
     const slug = (app.target?.name ?? 'circuit').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
-    a.download = `circuit-${slug}.svg`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(href), 2000);
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const href = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = href;
+      a.download = `circuit-${slug}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(href), 2000);
+    }, 'image/png');
   }
 </script>
 
