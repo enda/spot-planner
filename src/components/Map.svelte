@@ -10,6 +10,7 @@
     type PhysState,
   } from '$lib/physics';
   import { fmtAlt } from '$lib/units';
+  import { draftJrRefs } from '$lib/admin';
   import * as m from '$lib/paraglide/messages';
   import type { Target } from '$lib/dropzones';
   import type { DzEntry } from '$lib/landingZones';
@@ -30,8 +31,6 @@
       return { main: m.admin_b_target_main(), sub: m.admin_b_target_sub(), dot: 'var(--accent)' };
     if (tool === 'runway')
       return { main: m.admin_b_runway_main(), sub: m.admin_b_runway_sub(), dot: 'var(--jump)' };
-    if (tool === 'jrref' || tool === 'jrmove')
-      return { main: m.admin_b_ref_main(), sub: m.admin_b_ref_sub(), dot: 'var(--jump)' };
     if (tool === 'zone' && zi != null) {
       const z = d.zones[zi];
       return {
@@ -324,11 +323,9 @@
     // Right of the flight direction, so a positive offset reads as "droite".
     const perp = { e: dir.n, n: -dir.e };
     const refs = app.jrRefs;
-    const rw = app.runway;
     const sel = refs[Math.min(app.jumpRefIdx || 0, refs.length - 1)];
     let originLL: [number, number];
     if (sel && sel.ll) originLL = sel.ll;
-    else if (rw) originLL = [(rw.a[0] + rw.b[0]) / 2, (rw.a[1] + rw.b[1]) / 2];
     else originLL = [o.lat, o.lng];
 
     const off = app.jumpRunOffset || 0;
@@ -472,12 +469,18 @@
       );
     });
     // The draft target is shown by the main draggable marker (app.activeTarget).
-    const rw = d.runway;
-    if (rw && rw.a) {
+    d.runways.forEach((rw, i) => {
+      if (!rw.a) return;
+      const active = i === app.adminActiveRunway;
       if (rw.b)
-        L.polyline([rw.a, rw.b], { renderer, interactive: false, color: '#fff', weight: 5, opacity: 0.9 }).addTo(
-          adminLayer,
-        );
+        L.polyline([rw.a, rw.b], {
+          renderer,
+          interactive: false,
+          color: '#fff',
+          weight: active ? 6 : 5,
+          opacity: 0.9,
+          dashArray: active ? '8 6' : undefined,
+        }).addTo(adminLayer);
       [rw.a, rw.b].forEach((pt) => {
         if (pt)
           L.circleMarker(pt, {
@@ -490,8 +493,8 @@
             fillOpacity: 1,
           }).addTo(adminLayer);
       });
-    }
-    d.jrRefs.forEach((r) => {
+    });
+    draftJrRefs(d.runways).forEach((r) => {
       if (r && r.ll)
         L.circleMarker(r.ll, {
           renderer,
@@ -576,7 +579,7 @@
 
   // Admin draft overlays.
   $effect(() => {
-    void [app.adminOpen, app.adminDraft, app.adminActiveZone];
+    void [app.adminOpen, app.adminDraft, app.adminActiveZone, app.adminActiveRunway];
     if (!map || !ready) return;
     drawAdmin();
   });

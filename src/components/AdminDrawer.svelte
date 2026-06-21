@@ -10,14 +10,6 @@
   const latlngTxt = $derived(
     isFinite(D.lat) && isFinite(D.lng) ? `${D.lat.toFixed(5)}, ${D.lng.toFixed(5)}` : m.admin_not_placed(),
   );
-  const runwayState = $derived(
-    D.runway && D.runway.a && D.runway.b
-      ? m.admin_runway_state_done()
-      : D.runway && D.runway.a
-        ? m.admin_runway_state_half()
-        : m.admin_runway_state_none(),
-  );
-  const hasRunway = $derived(!!(D.runway && D.runway.a && D.runway.b));
   const toolHint = $derived(
     app.adminTool === 'target'
       ? m.admin_hint_target()
@@ -51,20 +43,12 @@
     setTimeout(() => URL.revokeObjectURL(url), 2000);
   }
 
-  function patchRef(i: number, name: string) {
-    const refs = D.jrRefs.slice();
-    refs[i] = { ...refs[i], name };
-    app.patchDraft({ jrRefs: refs });
-  }
-  function removeRef(i: number) {
-    const refs = D.jrRefs.slice();
-    refs.splice(i, 1);
-    app.patchDraft({ jrRefs: refs });
-  }
-  function moveRef(i: number) {
-    app.adminMoveIdx = i;
-    app.setAdminTool('jrmove');
-  }
+  const rwState = (rw: { a: LatLng | null; b: LatLng | null }) =>
+    rw.a && rw.b
+      ? m.admin_runway_state_done()
+      : rw.a
+        ? m.admin_runway_state_half()
+        : m.admin_runway_state_none();
   const num = (v: string) => {
     const f = parseFloat(v);
     return isNaN(f) ? 0 : f;
@@ -133,44 +117,34 @@
       >
     </div>
 
-    <div class="box">
-      <div class="boxhead">
+    <div>
+      <div class="zhead">
         <span class="boxttl jump">{m.admin_runway_refs()}</span>
-        <span class="boxstate">{runwayState}</span>
+        <button class="addzone" onclick={() => app.addAdminRunway()}>{m.admin_add_runway()}</button>
       </div>
-      <div class="trow">
-        <button
-          class="tool jumptool"
-          class:on={app.adminTool === 'runway'}
-          onclick={() => app.setAdminTool('runway')}>{m.admin_draw_runway()}</button
-        >
-        <button class="ghost" onclick={() => app.patchDraft({ runway: null, jrRefs: [] })}>{m.admin_clear()}</button>
-      </div>
-      {#if hasRunway}
-        <div class="sub">{m.admin_jrrefs()}</div>
-        {#each D.jrRefs as rf, i}
-          <div class="refrow">
+      <div class="sub">{m.admin_runways_hint()}</div>
+      {#each D.runways as rw, i}
+        <div class="zone">
+          <div class="zrow">
             <input
               class="field small"
-              placeholder={m.admin_ref_name_ph()}
-              value={rf.name}
-              oninput={(e) => patchRef(i, e.currentTarget.value)}
+              placeholder={m.admin_runway_name_ph()}
+              value={rw.name}
+              oninput={(e) => app.patchRunway(i, { name: e.currentTarget.value })}
             />
-            <button
-              class="iconbtn"
-              class:on={app.adminTool === 'jrmove' && app.adminMoveIdx === i}
-              title={m.admin_move_ref()}
-              onclick={() => moveRef(i)}>⊕</button
-            >
-            <button class="iconbtn" aria-label={m.close()} onclick={() => removeRef(i)}>×</button>
+            <span class="zcount" class:ok={!!(rw.a && rw.b)}>{rwState(rw)}</span>
+            <button class="iconbtn" aria-label={m.close()} onclick={() => app.removeAdminRunway(i)}>×</button>
           </div>
-        {/each}
-        <button
-          class="tool jumptool"
-          class:on={app.adminTool === 'jrref'}
-          onclick={() => app.setAdminTool('jrref')}>{m.admin_add_ref()}</button
-        >
-      {/if}
+          <div class="zbtns">
+            <button
+              class="tool jumptool draw"
+              class:on={app.adminActiveRunway === i && app.adminTool === 'runway'}
+              onclick={() => app.setAdminTool('runway', i)}>{m.admin_draw_runway()}</button
+            >
+            <button class="ghost" onclick={() => app.patchRunway(i, { a: null, b: null })}>{m.admin_clear()}</button>
+          </div>
+        </div>
+      {/each}
     </div>
 
     <div>
@@ -337,10 +311,6 @@
   .jumptool {
     margin-top: 6px;
   }
-  .trow {
-    display: flex;
-    gap: 6px;
-  }
   .ghost {
     cursor: pointer;
     border: 1px solid var(--line);
@@ -357,11 +327,6 @@
     text-transform: uppercase;
     color: var(--muted);
     margin: 8px 0 5px;
-  }
-  .refrow {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 5px;
   }
   .field.small {
     flex: 1;
@@ -381,10 +346,6 @@
     background: transparent;
     cursor: pointer;
     font: 700 14px/1 var(--font-display);
-  }
-  .iconbtn.on {
-    border-color: var(--jump);
-    color: var(--jump);
   }
   .zhead {
     display: flex;

@@ -14,6 +14,7 @@ export interface AdminZone {
 }
 
 export interface AdminRunway {
+  name: string;
   a: LatLng | null;
   b: LatLng | null;
 }
@@ -30,12 +31,11 @@ export interface AdminDraft {
   lng: number;
   landingDir: number | null;
   zones: AdminZone[];
-  runway: AdminRunway | null;
-  jrRefs: AdminJrRef[];
+  runways: AdminRunway[];
 }
 
 export type AdminMode = 'add' | 'edit';
-export type AdminTool = 'target' | 'runway' | 'jrref' | 'jrmove' | 'zone' | 'none';
+export type AdminTool = 'target' | 'runway' | 'zone' | 'none';
 
 export function emptyDraft(partial: Partial<AdminDraft> = {}): AdminDraft {
   return {
@@ -45,8 +45,7 @@ export function emptyDraft(partial: Partial<AdminDraft> = {}): AdminDraft {
     lng: 2.5,
     landingDir: null,
     zones: [],
-    runway: null,
-    jrRefs: [],
+    runways: [],
     ...partial,
   };
 }
@@ -69,17 +68,35 @@ export function seuilNum(b: number): string {
 }
 
 /**
- * Auto jump-run refs for a freshly drawn runway a→b: mid + the two thresholds.
- * A threshold's number is the runway heading flown when departing from it, i.e.
- * the bearing from that threshold TOWARD the opposite end.
+ * Auto jump-run refs for a runway a→b: mid + the two thresholds. A threshold's
+ * number is the runway heading flown when departing from it (bearing from that
+ * threshold TOWARD the opposite end). An optional prefix labels the runway.
  */
-export function runwayRefs(a: LatLng, b: LatLng): AdminJrRef[] {
+export function runwayRefs(a: LatLng, b: LatLng, prefix = ''): AdminJrRef[] {
   const mid: LatLng = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  const p = prefix ? prefix + ' · ' : '';
   return [
-    { name: 'mid runway', ll: mid },
-    { name: 'seuil ' + seuilNum(bearingDeg(a, b)), ll: [a[0], a[1]] },
-    { name: 'seuil ' + seuilNum(bearingDeg(b, a)), ll: [b[0], b[1]] },
+    { name: p + (prefix ? 'mid' : 'mid runway'), ll: mid },
+    { name: p + 'seuil ' + seuilNum(bearingDeg(a, b)), ll: [a[0], a[1]] },
+    { name: p + 'seuil ' + seuilNum(bearingDeg(b, a)), ll: [b[0], b[1]] },
   ];
+}
+
+/** Display label for a runway's references: its name, else "Piste N" when many. */
+export function runwayLabel(rw: AdminRunway, i: number, total: number): string {
+  const n = rw.name?.trim();
+  if (n) return n;
+  return total > 1 ? `Piste ${i + 1}` : '';
+}
+
+/** All jump-run references derived from the (completed) runways of a draft. */
+export function draftJrRefs(runways: AdminRunway[]): AdminJrRef[] {
+  const refs: AdminJrRef[] = [];
+  runways.forEach((rw, i) => {
+    if (!rw.a || !rw.b) return;
+    refs.push(...runwayRefs(rw.a, rw.b, runwayLabel(rw, i, runways.length)));
+  });
+  return refs;
 }
 
 const r6 = (v: number): number => +v.toFixed(6);
@@ -96,13 +113,17 @@ export function buildProposal(d: AdminDraft, mode: AdminMode, today: string) {
         color: z.color || '#36c2d6',
         polygon: z.polygon.map((p) => [r6(p[0]), r6(p[1])]),
       })),
-    runway:
-      d.runway && d.runway.a && d.runway.b
-        ? { a: [r6(d.runway.a[0]), r6(d.runway.a[1])], b: [r6(d.runway.b[0]), r6(d.runway.b[1])] }
-        : null,
-    jrRefs: d.jrRefs
-      .filter((r) => r && r.ll)
-      .map((r) => ({ name: r.name || 'repère', ll: [r6(r.ll[0]), r6(r.ll[1])] })),
+    runways: d.runways
+      .filter((rw) => rw.a && rw.b)
+      .map((rw) => ({
+        ...(rw.name?.trim() ? { name: rw.name.trim() } : {}),
+        a: [r6(rw.a![0]), r6(rw.a![1])],
+        b: [r6(rw.b![0]), r6(rw.b![1])],
+      })),
+    jrRefs: draftJrRefs(d.runways).map((r) => ({
+      name: r.name || 'repère',
+      ll: [r6(r.ll[0]), r6(r.ll[1])],
+    })),
   };
   return {
     _proposition: { type: mode === 'edit' ? 'modification' : 'ajout', date: today },

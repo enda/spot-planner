@@ -173,5 +173,8 @@
   "circuit_unlock": "click to unlock",
   "legend_label": "Legend",
   "install_app": "Install",
-  "leg_refs": "References"
+  "leg_refs": "References",
+  "admin_add_runway": "+ runway",
+  "admin_runway_name_ph": "Runway name (optional)",
+  "admin_runways_hint": "Each runway adds its mid + two thresholds as jump-run points."
 }

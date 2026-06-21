@@ -2,6 +2,7 @@
 // runways and jump-run reference points, keyed by exact DZ name).
 
 import { base } from '$app/paths';
+import { draftJrRefs } from './admin';
 
 export type LatLng = [number, number];
 
@@ -17,6 +18,7 @@ export interface JrRef {
 }
 
 export interface Runway {
+  name?: string;
   a: LatLng;
   b: LatLng;
 }
@@ -25,6 +27,7 @@ export interface Runway {
 interface RawEntry {
   landingDir?: number | null;
   zones?: PosingZone[];
+  runways?: Array<{ name?: string; a?: LatLng; b?: LatLng }>;
   runway?: { a?: LatLng; b?: LatLng; jrRef?: LatLng };
   jrRefs?: Array<{ name?: string; ll?: LatLng } | LatLng>;
   jrRef?: LatLng;
@@ -34,8 +37,21 @@ interface RawEntry {
 export interface DzEntry {
   landingDir: number | null;
   zones: PosingZone[];
-  runway: Runway | null;
+  runways: Runway[];
   jrRefs: JrRef[];
+}
+
+/** Collect runways from the new `runways` array or the legacy single `runway`. */
+function entryRunways(raw: RawEntry): Runway[] {
+  if (Array.isArray(raw.runways)) {
+    return raw.runways
+      .filter((r) => r.a && r.b)
+      .map((r) => ({ name: r.name, a: r.a as LatLng, b: r.b as LatLng }));
+  }
+  if (raw.runway && raw.runway.a && raw.runway.b) {
+    return [{ a: raw.runway.a, b: raw.runway.b }];
+  }
+  return [];
 }
 
 let cache: Record<string, RawEntry> | null = null;
@@ -51,8 +67,12 @@ export async function loadLandingZones(): Promise<Record<string, RawEntry>> {
   return json;
 }
 
-/** Derive the jump-run reference points, falling back to mid-runway. */
-export function normalizeJrRefs(entry: RawEntry | undefined): JrRef[] {
+/**
+ * Jump-run reference points: explicit `jrRefs` when present (preserving custom
+ * names), else derived from the runways (mid + two thresholds each), else the
+ * legacy single jrRef.
+ */
+export function normalizeJrRefs(entry: RawEntry | undefined, runways: Runway[]): JrRef[] {
   if (!entry) return [];
   if (Array.isArray(entry.jrRefs) && entry.jrRefs.length) {
     return entry.jrRefs.map((r, i) => {
@@ -60,14 +80,11 @@ export function normalizeJrRefs(entry: RawEntry | undefined): JrRef[] {
       return { name: r.name ?? `repère ${i + 1}`, ll: (r.ll ?? [0, 0]) as LatLng };
     });
   }
-  const refs: JrRef[] = [];
-  const rw = entry.runway;
-  const first =
-    entry.jrRef ??
-    rw?.jrRef ??
-    (rw?.a && rw?.b ? ([(rw.a[0] + rw.b[0]) / 2, (rw.a[1] + rw.b[1]) / 2] as LatLng) : null);
-  if (first) refs.push({ name: entry.jrName ?? 'mid runway', ll: first });
-  return refs;
+  if (runways.length) {
+    return draftJrRefs(runways.map((rw) => ({ name: rw.name ?? '', a: rw.a, b: rw.b })));
+  }
+  const first = entry.jrRef ?? entry.runway?.jrRef ?? null;
+  return first ? [{ name: entry.jrName ?? 'mid runway', ll: first }] : [];
 }
 
 /** Normalise a single DZ entry into a stable shape, or null when unknown. */
@@ -75,14 +92,11 @@ export function getDzEntry(db: Record<string, RawEntry> | null, name: string): D
   if (!db) return null;
   const raw = db[name];
   if (!raw) return null;
-  const rw =
-    raw.runway && raw.runway.a && raw.runway.b
-      ? ({ a: raw.runway.a, b: raw.runway.b } as Runway)
-      : null;
+  const runways = entryRunways(raw);
   return {
     landingDir: typeof raw.landingDir === 'number' ? raw.landingDir : null,
     zones: raw.zones ?? [],
-    runway: rw,
-    jrRefs: normalizeJrRefs(raw),
+    runways,
+    jrRefs: normalizeJrRefs(raw, runways),
   };
 }

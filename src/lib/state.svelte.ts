@@ -38,7 +38,6 @@ import {
   ADMIN_SWATCHES,
   buildProposal,
   emptyDraft,
-  runwayRefs,
   type AdminDraft,
   type AdminMode,
   type AdminTool,
@@ -140,6 +139,7 @@ class AppState {
   adminMode = $state<AdminMode>('add');
   adminTool = $state<AdminTool>('target');
   adminActiveZone = $state<number | null>(null);
+  adminActiveRunway = $state<number | null>(null);
   adminMoveIdx = $state<number | null>(null);
   adminResult = $state<string | null>(null);
   adminDraft = $state<AdminDraft>(emptyDraft());
@@ -170,8 +170,8 @@ class AppState {
     return getDzEntry(this.db as never, this.target.name);
   }
 
-  get runway(): Runway | null {
-    return this.entry?.runway ?? null;
+  get runways(): Runway[] {
+    return this.entry?.runways ?? [];
   }
 
   get jrRefs() {
@@ -210,7 +210,7 @@ class AppState {
     const refs = this.jrRefs;
     const r = refs[Math.min(this.jumpRefIdx || 0, Math.max(0, refs.length - 1))];
     if (r?.name) return r.name;
-    if (this.runway) return 'mid runway';
+    if (this.runways.length) return 'mid runway';
     return 'cible';
   }
 
@@ -565,6 +565,7 @@ class AppState {
     } else {
       this.adminTool = 'target';
       this.adminActiveZone = null;
+      this.adminActiveRunway = null;
       this.adminDraft = emptyDraft({
         country: t?.country || 'France',
         lat: t?.lat ?? 46.6,
@@ -577,6 +578,7 @@ class AppState {
     this.adminOpen = false;
     this.adminTool = 'target';
     this.adminActiveZone = null;
+    this.adminActiveRunway = null;
     this.adminMoveIdx = null;
   }
 
@@ -596,13 +598,17 @@ class AppState {
             polygon: z.polygon.map((p) => [p[0], p[1]] as LatLng),
           }))
         : [],
-      runway: entry?.runway
-        ? { a: [entry.runway.a[0], entry.runway.a[1]], b: [entry.runway.b[0], entry.runway.b[1]] }
-        : null,
-      jrRefs: entry ? entry.jrRefs.map((r) => ({ name: r.name, ll: [r.ll[0], r.ll[1]] })) : [],
+      runways: entry
+        ? entry.runways.map((rw) => ({
+            name: rw.name ?? '',
+            a: [rw.a[0], rw.a[1]] as LatLng,
+            b: [rw.b[0], rw.b[1]] as LatLng,
+          }))
+        : [],
     };
     this.adminTool = 'target';
     this.adminActiveZone = null;
+    this.adminActiveRunway = null;
     this.adminResult = null;
   }
 
@@ -633,10 +639,37 @@ class AppState {
     this.adminResult = null;
   }
 
-  setAdminTool(tool: AdminTool, zoneIdx: number | null = null): void {
+  patchRunway(i: number, patch: Partial<AdminDraft['runways'][number]>): void {
+    const runways = this.adminDraft.runways.map((rw, idx) => (idx === i ? { ...rw, ...patch } : rw));
+    this.patchDraft({ runways });
+  }
+
+  /** Add a runway and arm the runway tool to draw its two ends. */
+  addAdminRunway(): void {
+    const runways = [...this.adminDraft.runways, { name: '', a: null, b: null }];
+    this.adminDraft = { ...this.adminDraft, runways };
+    this.adminActiveRunway = runways.length - 1;
+    this.adminTool = 'runway';
+    this.adminResult = null;
+  }
+
+  removeAdminRunway(i: number): void {
+    const runways = this.adminDraft.runways.filter((_, idx) => idx !== i);
+    this.adminDraft = { ...this.adminDraft, runways };
+    this.adminActiveRunway = null;
+    this.adminTool = 'none';
+    this.adminResult = null;
+  }
+
+  setAdminTool(tool: AdminTool, idx: number | null = null): void {
     this.adminTool = tool;
-    if (tool !== 'zone') this.adminActiveZone = zoneIdx;
-    else if (zoneIdx != null) this.adminActiveZone = zoneIdx;
+    if (tool === 'zone') {
+      if (idx != null) this.adminActiveZone = idx;
+    } else if (tool === 'runway') {
+      this.adminActiveRunway = idx;
+    } else {
+      this.adminActiveZone = idx;
+    }
   }
 
   /** Map click while the admin drawer is open — depends on the active tool. */
@@ -647,29 +680,18 @@ class AppState {
     if (tool === 'target') {
       this.patchDraft({ lat: ll[0], lng: ll[1] });
       void this.refreshWinds();
-    } else if (tool === 'runway') {
-      const rw = d.runway;
-      if (!rw || !rw.a || (rw.a && rw.b)) {
-        this.patchDraft({ runway: { a: ll, b: null } });
+    } else if (tool === 'runway' && this.adminActiveRunway != null) {
+      const i = this.adminActiveRunway;
+      const rw = d.runways[i];
+      if (!rw) return;
+      if (!rw.a || (rw.a && rw.b)) {
+        // First click (or restart): set the first threshold, clear the second.
+        this.patchRunway(i, { a: ll, b: null });
       } else {
-        const refs = d.jrRefs.length ? d.jrRefs.slice() : runwayRefs(rw.a, ll);
-        this.patchDraft({ runway: { a: rw.a, b: ll }, jrRefs: refs });
+        // Second click: complete the runway; its refs derive automatically.
+        this.patchRunway(i, { b: ll });
         this.adminTool = 'none';
       }
-    } else if (tool === 'jrref') {
-      const refs = d.jrRefs.slice();
-      refs.push({ name: 'repère ' + (refs.length + 1), ll });
-      this.patchDraft({ jrRefs: refs });
-      this.adminTool = 'none';
-    } else if (tool === 'jrmove') {
-      const refs = d.jrRefs.slice();
-      const mi = this.adminMoveIdx;
-      if (mi != null && refs[mi]) {
-        refs[mi] = { ...refs[mi], ll };
-        this.patchDraft({ jrRefs: refs });
-      }
-      this.adminTool = 'none';
-      this.adminMoveIdx = null;
     } else if (tool === 'zone' && this.adminActiveZone != null) {
       const i = this.adminActiveZone;
       const zones = d.zones.map((z, idx) =>

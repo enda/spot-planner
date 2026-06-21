@@ -173,5 +173,8 @@
   "circuit_unlock": "clicca per sbloccare",
   "legend_label": "Legenda",
   "install_app": "Installa",
-  "leg_refs": "Riferimenti"
+  "leg_refs": "Riferimenti",
+  "admin_add_runway": "+ pista",
+  "admin_runway_name_ph": "Nome pista (opz.)",
+  "admin_runways_hint": "Ogni pista aggiunge centro + 2 soglie come riferimenti."
 }

@@ -173,5 +173,8 @@
   "circuit_unlock": "clique pour débloquer",
   "legend_label": "Légende",
   "install_app": "Installer",
-  "leg_refs": "Repères"
+  "leg_refs": "Repères",
+  "admin_add_runway": "+ piste",
+  "admin_runway_name_ph": "Nom de piste (optionnel)",
+  "admin_runways_hint": "Chaque piste ajoute son milieu + 2 seuils comme repères d’axe."
 }

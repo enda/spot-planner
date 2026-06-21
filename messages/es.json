@@ -173,5 +173,8 @@
   "circuit_unlock": "clic para desbloquear",
   "legend_label": "Leyenda",
   "install_app": "Instalar",
-  "leg_refs": "Referencias"
+  "leg_refs": "Referencias",
+  "admin_add_runway": "+ pista",
+  "admin_runway_name_ph": "Nombre pista (opc.)",
+  "admin_runways_hint": "Cada pista añade su centro + 2 umbrales como referencias."
 }

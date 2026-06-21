@@ -173,5 +173,8 @@
   "circuit_unlock": "klicken zum Entsperren",
   "legend_label": "Legende",
   "install_app": "Installieren",
-  "leg_refs": "Marken"
+  "leg_refs": "Marken",
+  "admin_add_runway": "+ Bahn",
+  "admin_runway_name_ph": "Bahnname (optional)",
+  "admin_runways_hint": "Jede Bahn fügt Mitte + 2 Schwellen als Absetzpunkte hinzu."
 }
