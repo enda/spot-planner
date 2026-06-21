@@ -1,6 +1,6 @@
 {
-  "name": "Spot Planner",
-  "short_name": "Spot Planner",
+  "name": "SpotPlanner",
+  "short_name": "SpotPlanner",
   "description": "Skydiving landing-circuit planner: live winds, canopy glide, jump run.",
   "lang": "en",
   "dir": "ltr",
