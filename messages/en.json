@@ -137,7 +137,7 @@
   "admin_runway_state_none": "not drawn",
   "admin_draw_runway": "✎ Draw the runway",
   "admin_clear": "Clear",
-  "admin_jrrefs": "Jump-run references",
+  "admin_jrrefs": "Reference points",
   "admin_ref_name_ph": "Reference name",
   "admin_move_ref": "Move (click the map)",
   "admin_add_ref": "⊕ Add a reference (click the map)",
@@ -157,7 +157,7 @@
   "admin_b_target_sub": "Click the map to drop the target",
   "admin_b_runway_main": "Drawing the runway",
   "admin_b_runway_sub": "Click the start then the end of the runway",
-  "admin_b_ref_main": "Jump-run reference",
+  "admin_b_ref_main": "Reference point",
   "admin_b_ref_sub": "Click the map to place it",
   "admin_b_zone_main": "Drawing: {name}",
   "admin_b_zone_sub": "Click to add vertices · {count} point(s)",
@@ -176,5 +176,6 @@
   "leg_refs": "References",
   "admin_add_runway": "+ runway",
   "admin_runway_name_ph": "Runway name (optional)",
-  "admin_runways_hint": "Each runway adds its mid + two thresholds as jump-run points."
+  "admin_runways_hint": "Each runway adds its mid + two thresholds as jump-run points.",
+  "admin_jrrefs_hint": "Shown on the map (windsock, hazard…) and usable as a jump-run anchor."
 }

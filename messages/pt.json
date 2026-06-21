@@ -137,7 +137,7 @@
   "admin_runway_state_none": "não traçada",
   "admin_draw_runway": "✎ Traçar a pista",
   "admin_clear": "Limpar",
-  "admin_jrrefs": "Referências de lançamento",
+  "admin_jrrefs": "Referências",
   "admin_ref_name_ph": "Nome da referência",
   "admin_move_ref": "Mover (clique no mapa)",
   "admin_add_ref": "⊕ Adicionar uma referência (clique no mapa)",
@@ -157,7 +157,7 @@
   "admin_b_target_sub": "Clica no mapa para pousar o alvo",
   "admin_b_runway_main": "Traçado da pista",
   "admin_b_runway_sub": "Clica o início e depois o fim da pista",
-  "admin_b_ref_main": "Referência de lançamento",
+  "admin_b_ref_main": "Referência",
   "admin_b_ref_sub": "Clica no mapa para a colocar",
   "admin_b_zone_main": "Desenho: {name}",
   "admin_b_zone_sub": "Clica para adicionar os vértices · {count} ponto(s)",
@@ -176,5 +176,6 @@
   "leg_refs": "Referências",
   "admin_add_runway": "+ pista",
   "admin_runway_name_ph": "Nome da pista (opc.)",
-  "admin_runways_hint": "Cada pista adiciona o centro + 2 cabeceiras como referências."
+  "admin_runways_hint": "Cada pista adiciona o centro + 2 cabeceiras como referências.",
+  "admin_jrrefs_hint": "Mostrados no mapa (biruta…) e utilizáveis como ponto do eixo de salto."
 }

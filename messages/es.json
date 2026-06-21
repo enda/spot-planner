@@ -137,7 +137,7 @@
   "admin_runway_state_none": "no trazada",
   "admin_draw_runway": "✎ Trazar la pista",
   "admin_clear": "Vaciar",
-  "admin_jrrefs": "Referencias de lanzamiento",
+  "admin_jrrefs": "Referencias",
   "admin_ref_name_ph": "Nombre de la referencia",
   "admin_move_ref": "Mover (clic en el mapa)",
   "admin_add_ref": "⊕ Añadir una referencia (clic en el mapa)",
@@ -157,7 +157,7 @@
   "admin_b_target_sub": "Clica en el mapa para posar el objetivo",
   "admin_b_runway_main": "Trazado de la pista",
   "admin_b_runway_sub": "Clica el inicio y luego el final de la pista",
-  "admin_b_ref_main": "Referencia de lanzamiento",
+  "admin_b_ref_main": "Referencia",
   "admin_b_ref_sub": "Clica en el mapa para colocarla",
   "admin_b_zone_main": "Dibujo: {name}",
   "admin_b_zone_sub": "Clica para añadir los vértices · {count} punto(s)",
@@ -176,5 +176,6 @@
   "leg_refs": "Referencias",
   "admin_add_runway": "+ pista",
   "admin_runway_name_ph": "Nombre pista (opc.)",
-  "admin_runways_hint": "Cada pista añade su centro + 2 umbrales como referencias."
+  "admin_runways_hint": "Cada pista añade su centro + 2 umbrales como referencias.",
+  "admin_jrrefs_hint": "Se muestran en el mapa (manga de viento…) y sirven como punto del eje de salto."
 }

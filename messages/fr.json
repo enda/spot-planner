@@ -137,7 +137,7 @@
   "admin_runway_state_none": "non tracée",
   "admin_draw_runway": "✎ Tracer la piste",
   "admin_clear": "Vider",
-  "admin_jrrefs": "Repères de largage",
+  "admin_jrrefs": "Repères",
   "admin_ref_name_ph": "Nom du repère",
   "admin_move_ref": "Déplacer (clic sur la carte)",
   "admin_add_ref": "⊕ Ajouter un repère (clic sur la carte)",
@@ -157,7 +157,7 @@
   "admin_b_target_sub": "Clique sur la carte pour poser la cible",
   "admin_b_runway_main": "Tracé de la piste",
   "admin_b_runway_sub": "Clique le début puis la fin de la piste",
-  "admin_b_ref_main": "Repère de largage",
+  "admin_b_ref_main": "Repère",
   "admin_b_ref_sub": "Clique sur la carte pour le placer",
   "admin_b_zone_main": "Dessin : {name}",
   "admin_b_zone_sub": "Clique pour ajouter les sommets · {count} point(s)",
@@ -176,5 +176,6 @@
   "leg_refs": "Repères",
   "admin_add_runway": "+ piste",
   "admin_runway_name_ph": "Nom de piste (optionnel)",
-  "admin_runways_hint": "Chaque piste ajoute son milieu + 2 seuils comme repères d’axe."
+  "admin_runways_hint": "Chaque piste ajoute son milieu + 2 seuils comme repères d’axe.",
+  "admin_jrrefs_hint": "Affichés sur la carte (manche à air, danger…) et utilisables comme point de l’axe de largage."
 }

@@ -137,7 +137,7 @@
   "admin_runway_state_none": "non tracciata",
   "admin_draw_runway": "✎ Traccia la pista",
   "admin_clear": "Svuota",
-  "admin_jrrefs": "Riferimenti di lancio",
+  "admin_jrrefs": "Riferimenti",
   "admin_ref_name_ph": "Nome del riferimento",
   "admin_move_ref": "Sposta (clic sulla mappa)",
   "admin_add_ref": "⊕ Aggiungi un riferimento (clic sulla mappa)",
@@ -157,7 +157,7 @@
   "admin_b_target_sub": "Clicca sulla mappa per posare il bersaglio",
   "admin_b_runway_main": "Tracciamento della pista",
   "admin_b_runway_sub": "Clicca l'inizio poi la fine della pista",
-  "admin_b_ref_main": "Riferimento di lancio",
+  "admin_b_ref_main": "Riferimento",
   "admin_b_ref_sub": "Clicca sulla mappa per posizionarlo",
   "admin_b_zone_main": "Disegno: {name}",
   "admin_b_zone_sub": "Clicca per aggiungere i vertici · {count} punto(i)",
@@ -176,5 +176,6 @@
   "leg_refs": "Riferimenti",
   "admin_add_runway": "+ pista",
   "admin_runway_name_ph": "Nome pista (opz.)",
-  "admin_runways_hint": "Ogni pista aggiunge centro + 2 soglie come riferimenti."
+  "admin_runways_hint": "Ogni pista aggiunge centro + 2 soglie come riferimenti.",
+  "admin_jrrefs_hint": "Mostrati sulla mappa (manica a vento…) e usabili come punto dell’asse di lancio."
 }

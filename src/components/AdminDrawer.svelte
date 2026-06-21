@@ -156,6 +156,7 @@
           onclick={() => app.setAdminTool('jrref')}>{m.admin_add_ref()}</button
         >
       </div>
+      <div class="sub">{m.admin_jrrefs_hint()}</div>
       {#each D.jrRefs as rf, i}
         <div class="zrow refrow">
           <input

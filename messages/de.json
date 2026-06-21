@@ -137,7 +137,7 @@
   "admin_runway_state_none": "nicht gezeichnet",
   "admin_draw_runway": "✎ Piste zeichnen",
   "admin_clear": "Leeren",
-  "admin_jrrefs": "Absetz-Referenzen",
+  "admin_jrrefs": "Markierungen",
   "admin_ref_name_ph": "Name der Referenz",
   "admin_move_ref": "Verschieben (Klick auf die Karte)",
   "admin_add_ref": "⊕ Referenz hinzufügen (Klick auf die Karte)",
@@ -157,7 +157,7 @@
   "admin_b_target_sub": "Klicke auf die Karte, um das Ziel zu setzen",
   "admin_b_runway_main": "Piste zeichnen",
   "admin_b_runway_sub": "Klicke Anfang und dann Ende der Piste",
-  "admin_b_ref_main": "Absetz-Referenz",
+  "admin_b_ref_main": "Markierung",
   "admin_b_ref_sub": "Klicke auf die Karte, um sie zu platzieren",
   "admin_b_zone_main": "Zeichnen: {name}",
   "admin_b_zone_sub": "Klicke, um Eckpunkte hinzuzufügen · {count} Punkt(e)",
@@ -176,5 +176,6 @@
   "leg_refs": "Marken",
   "admin_add_runway": "+ Bahn",
   "admin_runway_name_ph": "Bahnname (optional)",
-  "admin_runways_hint": "Jede Bahn fügt Mitte + 2 Schwellen als Absetzpunkte hinzu."
+  "admin_runways_hint": "Jede Bahn fügt Mitte + 2 Schwellen als Absetzpunkte hinzu.",
+  "admin_jrrefs_hint": "Auf der Karte sichtbar (Windsack …) und als Absetzachsen-Punkt nutzbar."
 }
