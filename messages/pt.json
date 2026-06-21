@@ -177,5 +177,6 @@
   "admin_add_runway": "+ pista",
   "admin_runway_name_ph": "Nome da pista (opc.)",
   "admin_runways_hint": "Cada pista adiciona o centro + 2 cabeceiras como referências.",
-  "admin_jrrefs_hint": "Mostrados no mapa (biruta…) e utilizáveis como ponto do eixo de salto."
+  "admin_jrrefs_hint": "Mostrados no mapa (biruta…) e utilizáveis como ponto do eixo de salto.",
+  "leg_zones": "Zonas"
 }

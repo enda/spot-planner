@@ -177,5 +177,6 @@
   "admin_add_runway": "+ pista",
   "admin_runway_name_ph": "Nombre pista (opc.)",
   "admin_runways_hint": "Cada pista añade su centro + 2 umbrales como referencias.",
-  "admin_jrrefs_hint": "Se muestran en el mapa (manga de viento…) y sirven como punto del eje de salto."
+  "admin_jrrefs_hint": "Se muestran en el mapa (manga de viento…) y sirven como punto del eje de salto.",
+  "leg_zones": "Zonas"
 }

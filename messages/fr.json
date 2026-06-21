@@ -177,5 +177,6 @@
   "admin_add_runway": "+ piste",
   "admin_runway_name_ph": "Nom de piste (optionnel)",
   "admin_runways_hint": "Chaque piste ajoute son milieu + 2 seuils comme repères d’axe.",
-  "admin_jrrefs_hint": "Affichés sur la carte (manche à air, danger…) et utilisables comme point de l’axe de largage."
+  "admin_jrrefs_hint": "Affichés sur la carte (manche à air, danger…) et utilisables comme point de l’axe de largage.",
+  "leg_zones": "Zones"
 }

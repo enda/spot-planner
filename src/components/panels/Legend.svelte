@@ -34,6 +34,9 @@
   <button class:off={!app.showJrRefs} onclick={() => (app.showJrRefs = !app.showJrRefs)}>
     <span class="refdot"></span>{m.leg_refs()}
   </button>
+  <button class:off={!app.showZones} onclick={() => (app.showZones = !app.showZones)}>
+    <span class="zonebox"></span>{m.leg_zones()}
+  </button>
   <button class:off={!app.showLegs} onclick={() => (app.showLegs = !app.showLegs)}>
     <span class="legbox"></span>{m.leg_legs()}
   </button>
@@ -118,6 +121,14 @@
     border-radius: 2px;
     background: rgba(242, 164, 12, 0.55);
     border: 1.5px solid var(--accent);
+    display: inline-block;
+  }
+  .zonebox {
+    width: 14px;
+    height: 11px;
+    border-radius: 2px;
+    background: rgba(63, 208, 122, 0.28);
+    border: 1.5px solid #3fd07a;
     display: inline-block;
   }
   .tbox {

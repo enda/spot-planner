@@ -177,5 +177,6 @@
   "admin_add_runway": "+ Bahn",
   "admin_runway_name_ph": "Bahnname (optional)",
   "admin_runways_hint": "Jede Bahn fügt Mitte + 2 Schwellen als Absetzpunkte hinzu.",
-  "admin_jrrefs_hint": "Auf der Karte sichtbar (Windsack …) und als Absetzachsen-Punkt nutzbar."
+  "admin_jrrefs_hint": "Auf der Karte sichtbar (Windsack …) und als Absetzachsen-Punkt nutzbar.",
+  "leg_zones": "Zonen"
 }

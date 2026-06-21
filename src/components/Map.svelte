@@ -359,7 +359,7 @@
     if (!map || !ready) return;
     zoneLayers.forEach((l) => map.removeLayer(l));
     zoneLayers = [];
-    if (!entry || !entry.zones) return;
+    if (!app.showZones || !entry || !entry.zones) return;
     for (const zn of entry.zones) {
       const c = zn.color || '#36c2d6';
       const poly = L.polygon(zn.polygon, {
@@ -542,6 +542,7 @@
       app.jumpRefIdx,
       app.showOpenZone,
       app.showJrRefs,
+      app.showZones,
       app.altUnit,
     ];
     const entry = app.entry;
