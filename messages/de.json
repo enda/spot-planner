@@ -171,5 +171,6 @@
   "qr_link": "Oder diesen Link teilen",
   "circuit_locked": "Vorgegebener Kreis",
   "circuit_unlock": "klicken zum Entsperren",
-  "legend_label": "Legende"
+  "legend_label": "Legende",
+  "install_app": "Installieren"
 }

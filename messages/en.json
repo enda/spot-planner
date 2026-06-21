@@ -171,5 +171,6 @@
   "qr_link": "Or share this link",
   "circuit_locked": "Imposed circuit",
   "circuit_unlock": "click to unlock",
-  "legend_label": "Legend"
+  "legend_label": "Legend",
+  "install_app": "Install"
 }

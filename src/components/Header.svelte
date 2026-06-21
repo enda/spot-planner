@@ -5,6 +5,7 @@
   import EmbedDialog from './EmbedDialog.svelte';
   import QrDialog from './QrDialog.svelte';
   import LanguageSwitcher from './LanguageSwitcher.svelte';
+  import InstallButton from './InstallButton.svelte';
 
   let embedOpen = $state(false);
   let qrOpen = $state(false);
@@ -42,6 +43,7 @@
       <button class:on={app.altUnit === 'ft'} onclick={() => (app.altUnit = 'ft')}>ft</button>
     </div>
     <LanguageSwitcher />
+    <InstallButton />
   </div>
 </header>
 
