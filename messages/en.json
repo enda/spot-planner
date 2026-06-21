@@ -131,7 +131,7 @@
   "admin_target": "Target",
   "admin_not_placed": "not placed",
   "admin_place_target": "⌖ Place the target on the map",
-  "admin_runway_refs": "Runway & jump-run refs",
+  "admin_runway_refs": "Runways",
   "admin_runway_state_done": "runway + ref",
   "admin_runway_state_half": "click the end…",
   "admin_runway_state_none": "not drawn",
