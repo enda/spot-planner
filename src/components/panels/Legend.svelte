@@ -14,7 +14,16 @@
     <span class="dot-dash"></span>{m.leg_jump()}
   </button>
   <button class:off={!app.showWindLayer} onclick={() => (app.showWindLayer = !app.showWindLayer)}>
-    <span class="wind">↑</span>{m.leg_wind()}
+    <svg class="wind" viewBox="-8 -8 16 16" aria-hidden="true">
+      <defs>
+        <linearGradient id="windgrad" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#3fd07a" />
+          <stop offset="0.5" stop-color="#f2a40c" />
+          <stop offset="1" stop-color="#ff6b5e" />
+        </linearGradient>
+      </defs>
+      <path d="M0 -6.5 L4 3.4 L0 1 L-4 3.4 Z" fill="url(#windgrad)" transform="rotate(35)" />
+    </svg>{m.leg_wind()}
   </button>
   <button class:off={!app.showCompass} onclick={() => (app.showCompass = !app.showCompass)}>
     <span class="ring"></span>{m.leg_compass()}
@@ -79,12 +88,11 @@
     display: inline-block;
   }
   .wind {
-    width: 13px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font: 700 13px/1 var(--font-mono);
-    color: var(--accent2);
+    width: 15px;
+    height: 15px;
+    flex: none;
+    display: inline-block;
+    overflow: visible;
   }
   .ring2 {
     width: 14px;

@@ -1,8 +1,8 @@
 {
-  "name": "Circuit · vents & plané",
-  "short_name": "Circuit",
-  "description": "Préparation de circuit parachutisme — vents réels, plané sous voile, axe de largage.",
-  "lang": "fr",
+  "name": "Spot Planner",
+  "short_name": "Spot Planner",
+  "description": "Skydiving landing-circuit planner: live winds, canopy glide, jump run.",
+  "lang": "en",
   "dir": "ltr",
   "display": "standalone",
   "orientation": "any",
