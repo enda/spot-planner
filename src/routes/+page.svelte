@@ -42,7 +42,9 @@
   <section class="col left">
     <DropzonePanel />
     <CanopyPanel />
-    {#if !xxl}
+    {#if xxl}
+      <RangePanel />
+    {:else}
       <CircuitPanel />
       <JumpRunPanel />
     {/if}
@@ -62,7 +64,6 @@
     {#if xxl}
       <CircuitPanel />
       <JumpRunPanel />
-      <RangePanel />
     {:else}
       <CanopyGlideTable />
       <WindsAloftTable />
