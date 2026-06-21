@@ -135,7 +135,7 @@ export const DROPZONES: Dropzone[] = [
   { name: 'Royan-Médis', country: 'France', lat: 45.628101, lng: -0.9725 },
   { name: 'Saumur-Saint-Florent', country: 'France', lat: 47.256802, lng: -0.115142 },
   { name: 'Sisteron-Vaumeilh', country: 'France', lat: 44.286471, lng: 5.929086 },
-  { name: 'Skydive Frétoy', country: 'France', lat: 49.665904, lng: 2.969248 },
+  { name: 'Skydive Frétoy', country: 'France', lat: 49.665904, lng: 2.969232 },
   { name: 'Soissons-Courmelles', country: 'France', lat: 49.344978, lng: 3.282681 },
   { name: 'Valence-Chabeuil', country: 'France', lat: 44.9216, lng: 4.9699 },
   { name: 'Vannes-Meucon', country: 'France', lat: 47.723301, lng: -2.71856 },
