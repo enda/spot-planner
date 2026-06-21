@@ -172,5 +172,6 @@
   "circuit_locked": "Circuito impuesto",
   "circuit_unlock": "clic para desbloquear",
   "legend_label": "Leyenda",
-  "install_app": "Instalar"
+  "install_app": "Instalar",
+  "leg_refs": "Referencias"
 }

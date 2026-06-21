@@ -31,6 +31,9 @@
   <button class:off={!app.showOpenZone} onclick={() => (app.showOpenZone = !app.showOpenZone)}>
     <span class="ring2"></span>{m.leg_zone()}
   </button>
+  <button class:off={!app.showJrRefs} onclick={() => (app.showJrRefs = !app.showJrRefs)}>
+    <span class="refdot"></span>{m.leg_refs()}
+  </button>
   <button class:off={!app.showLegs} onclick={() => (app.showLegs = !app.showLegs)}>
     <span class="legbox"></span>{m.leg_legs()}
   </button>
@@ -99,6 +102,14 @@
     height: 14px;
     border-radius: 50%;
     border: 2px dotted var(--accent2);
+    display: inline-block;
+  }
+  .refdot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #0c1014;
+    border: 2px solid var(--jump);
     display: inline-block;
   }
   .legbox {

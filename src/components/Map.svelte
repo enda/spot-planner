@@ -61,6 +61,7 @@
   let lLegs: any[] = [];
   let zoneRing: any = null;
   let zoneLayers: any[] = [];
+  let refLayers: any[] = [];
   let adminLayer: any = null;
   let dragMoved = false;
 
@@ -379,6 +380,33 @@
     }
   }
 
+  /** Jump-run reference points (mid runway / thresholds) as toggleable markers. */
+  function drawRefs(entry: DzEntry | null) {
+    if (!map || !ready) return;
+    refLayers.forEach((l) => map.removeLayer(l));
+    refLayers = [];
+    if (!app.showJrRefs || !entry || !entry.jrRefs) return;
+    entry.jrRefs.forEach((r) => {
+      const mk = L.circleMarker(r.ll, {
+        renderer,
+        interactive: false,
+        radius: 4,
+        color: '#c77dff',
+        weight: 2,
+        fillColor: '#0c1014',
+        fillOpacity: 1,
+      }).addTo(map);
+      if (app.showLabels)
+        mk.bindTooltip(r.name || 'repère', {
+          permanent: true,
+          direction: 'right',
+          offset: [6, 0],
+          className: 'zone-tip',
+        });
+      refLayers.push(mk);
+    });
+  }
+
   function drawOpenZone(s: PhysState, tgt: Target) {
     if (!map || !ready) return;
     if (!app.showOpenZone) {
@@ -487,6 +515,7 @@
       if (!lCircuit) buildLayers();
       updateOverlays(app.phys, tgt);
       drawZones(app.entry);
+      drawRefs(app.entry);
       drawOpenZone(app.phys, tgt);
     }
     drawAdmin();
@@ -509,6 +538,7 @@
       app.jumpRunOffset,
       app.jumpRefIdx,
       app.showOpenZone,
+      app.showJrRefs,
       app.altUnit,
     ];
     const entry = app.entry;
@@ -521,6 +551,7 @@
     if (!lCircuit) buildLayers();
     updateOverlays(s, tgt);
     drawZones(entry);
+    drawRefs(entry);
     drawOpenZone(s, tgt);
   });
 

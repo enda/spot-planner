@@ -172,5 +172,6 @@
   "circuit_locked": "Imposed circuit",
   "circuit_unlock": "click to unlock",
   "legend_label": "Legend",
-  "install_app": "Install"
+  "install_app": "Install",
+  "leg_refs": "References"
 }

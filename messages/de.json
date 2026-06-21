@@ -172,5 +172,6 @@
   "circuit_locked": "Vorgegebener Kreis",
   "circuit_unlock": "klicken zum Entsperren",
   "legend_label": "Legende",
-  "install_app": "Installieren"
+  "install_app": "Installieren",
+  "leg_refs": "Marken"
 }
