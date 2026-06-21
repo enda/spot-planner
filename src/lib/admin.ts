@@ -32,10 +32,13 @@ export interface AdminDraft {
   landingDir: number | null;
   zones: AdminZone[];
   runways: AdminRunway[];
+  // Jump-run reference points. Drawing a runway appends its mid + thresholds
+  // here; the list stays freely editable (rename, move, remove, add custom).
+  jrRefs: AdminJrRef[];
 }
 
 export type AdminMode = 'add' | 'edit';
-export type AdminTool = 'target' | 'runway' | 'zone' | 'none';
+export type AdminTool = 'target' | 'runway' | 'jrref' | 'zone' | 'none';
 
 export function emptyDraft(partial: Partial<AdminDraft> = {}): AdminDraft {
   return {
@@ -46,6 +49,7 @@ export function emptyDraft(partial: Partial<AdminDraft> = {}): AdminDraft {
     landingDir: null,
     zones: [],
     runways: [],
+    jrRefs: [],
     ...partial,
   };
 }
@@ -120,10 +124,9 @@ export function buildProposal(d: AdminDraft, mode: AdminMode, today: string) {
         a: [r6(rw.a![0]), r6(rw.a![1])],
         b: [r6(rw.b![0]), r6(rw.b![1])],
       })),
-    jrRefs: draftJrRefs(d.runways).map((r) => ({
-      name: r.name || 'repère',
-      ll: [r6(r.ll[0]), r6(r.ll[1])],
-    })),
+    jrRefs: d.jrRefs
+      .filter((r) => r && r.ll)
+      .map((r) => ({ name: r.name || 'repère', ll: [r6(r.ll[0]), r6(r.ll[1])] })),
   };
   return {
     _proposition: { type: mode === 'edit' ? 'modification' : 'ajout', date: today },

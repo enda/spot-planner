@@ -149,6 +149,28 @@
 
     <div>
       <div class="zhead">
+        <span class="boxttl jump">{m.admin_jrrefs()}</span>
+        <button
+          class="addzone"
+          class:on={app.adminTool === 'jrref'}
+          onclick={() => app.setAdminTool('jrref')}>{m.admin_add_ref()}</button
+        >
+      </div>
+      {#each D.jrRefs as rf, i}
+        <div class="zrow refrow">
+          <input
+            class="field small"
+            placeholder={m.admin_ref_name_ph()}
+            value={rf.name}
+            oninput={(e) => app.patchRef(i, { name: e.currentTarget.value })}
+          />
+          <button class="iconbtn" aria-label={m.close()} onclick={() => app.removeRef(i)}>×</button>
+        </div>
+      {/each}
+    </div>
+
+    <div>
+      <div class="zhead">
         <span class="boxttl accent">{m.admin_zones()}</span>
         <button class="addzone" onclick={() => app.addAdminZone()}>{m.admin_add_zone()}</button>
       </div>
@@ -359,6 +381,12 @@
     border: none;
     font: 600 11px/1 var(--font-display);
     color: var(--accent2);
+  }
+  .addzone.on {
+    color: var(--jump);
+  }
+  .refrow {
+    margin-bottom: 6px;
   }
   .zone {
     border: 1px solid var(--line);

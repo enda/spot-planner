@@ -10,7 +10,6 @@
     type PhysState,
   } from '$lib/physics';
   import { fmtAlt } from '$lib/units';
-  import { draftJrRefs } from '$lib/admin';
   import * as m from '$lib/paraglide/messages';
   import type { Target } from '$lib/dropzones';
   import type { DzEntry } from '$lib/landingZones';
@@ -31,6 +30,8 @@
       return { main: m.admin_b_target_main(), sub: m.admin_b_target_sub(), dot: 'var(--accent)' };
     if (tool === 'runway')
       return { main: m.admin_b_runway_main(), sub: m.admin_b_runway_sub(), dot: 'var(--jump)' };
+    if (tool === 'jrref')
+      return { main: m.admin_b_ref_main(), sub: m.admin_b_ref_sub(), dot: 'var(--jump)' };
     if (tool === 'zone' && zi != null) {
       const z = d.zones[zi];
       return {
@@ -494,7 +495,7 @@
           }).addTo(adminLayer);
       });
     });
-    draftJrRefs(d.runways).forEach((r) => {
+    d.jrRefs.forEach((r) => {
       if (r && r.ll)
         L.circleMarker(r.ll, {
           renderer,

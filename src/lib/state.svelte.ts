@@ -38,6 +38,8 @@ import {
   ADMIN_SWATCHES,
   buildProposal,
   emptyDraft,
+  runwayRefs,
+  runwayLabel,
   type AdminDraft,
   type AdminMode,
   type AdminTool,
@@ -605,6 +607,7 @@ class AppState {
             b: [rw.b[0], rw.b[1]] as LatLng,
           }))
         : [],
+      jrRefs: entry ? entry.jrRefs.map((r) => ({ name: r.name, ll: [r.ll[0], r.ll[1]] as LatLng })) : [],
     };
     this.adminTool = 'target';
     this.adminActiveZone = null;
@@ -661,6 +664,16 @@ class AppState {
     this.adminResult = null;
   }
 
+  patchRef(i: number, patch: Partial<AdminDraft['jrRefs'][number]>): void {
+    const jrRefs = this.adminDraft.jrRefs.map((r, idx) => (idx === i ? { ...r, ...patch } : r));
+    this.patchDraft({ jrRefs });
+  }
+
+  removeRef(i: number): void {
+    const jrRefs = this.adminDraft.jrRefs.filter((_, idx) => idx !== i);
+    this.patchDraft({ jrRefs });
+  }
+
   setAdminTool(tool: AdminTool, idx: number | null = null): void {
     this.adminTool = tool;
     if (tool === 'zone') {
@@ -688,10 +701,18 @@ class AppState {
         // First click (or restart): set the first threshold, clear the second.
         this.patchRunway(i, { a: ll, b: null });
       } else {
-        // Second click: complete the runway; its refs derive automatically.
-        this.patchRunway(i, { b: ll });
+        // Second click: complete the runway and append its mid + thresholds to
+        // the editable reference list (still freely tweakable afterwards).
+        const runways = d.runways.map((r2, idx) => (idx === i ? { ...r2, b: ll } : r2));
+        const label = runwayLabel({ ...rw, b: ll }, i, runways.length);
+        const jrRefs = [...d.jrRefs, ...runwayRefs(rw.a, ll, label)];
+        this.patchDraft({ runways, jrRefs });
         this.adminTool = 'none';
       }
+    } else if (tool === 'jrref') {
+      const jrRefs = [...d.jrRefs, { name: 'repère ' + (d.jrRefs.length + 1), ll }];
+      this.patchDraft({ jrRefs });
+      this.adminTool = 'none';
     } else if (tool === 'zone' && this.adminActiveZone != null) {
       const i = this.adminActiveZone;
       const zones = d.zones.map((z, idx) =>
