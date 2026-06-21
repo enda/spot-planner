@@ -4,6 +4,8 @@ Skydiving landing-circuit planner: **front-only SvelteKit (SPA, `adapter-static`
 Flight maths (glide, drift, opening zone, circuit, jump run) in pure TypeScript, UI in Svelte 5
 components, available in **6 languages** (English default + FR, IT, ES, PT, DE).
 
+**▶ Live app: <https://spotplanner.mslk.me/>**
+
 ## Stack
 
 - **SvelteKit 2** + `adapter-static` (`fallback: 404.html`, `ssr = false`, `prerender = true`) — 100% front, no server.
