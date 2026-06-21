@@ -272,7 +272,7 @@
         opacity: app.showCircuit ? 1 : 0,
         fillOpacity: app.showCircuit ? 1 : 0,
       });
-      if (app.showLabels) {
+      if (app.showLabels && app.showCircuit) {
         if (!m.getTooltip())
           m.bindTooltip('', { permanent: true, direction: 'right', offset: [8, 0], className: 'dz-tip' });
         m.setTooltipContent(n[1]);
