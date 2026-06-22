@@ -4,6 +4,9 @@
 </script>
 
 <div class="legend">
+  <button class:off={!app.showTarget} onclick={() => (app.showTarget = !app.showTarget)}>
+    <span class="targetdot"></span>{m.leg_target()}
+  </button>
   <button class:off={!app.showCircuit} onclick={() => (app.showCircuit = !app.showCircuit)}>
     <span class="bar" style="background:var(--accent)"></span>{m.leg_circuit()}
   </button>
@@ -113,6 +116,14 @@
     border-radius: 50%;
     background: #0c1014;
     border: 2px solid var(--jump);
+    display: inline-block;
+  }
+  .targetdot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(242, 164, 12, 0.25);
+    border: 2.5px solid var(--accent);
     display: inline-block;
   }
   .legbox {

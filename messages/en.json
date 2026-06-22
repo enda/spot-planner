@@ -178,5 +178,6 @@
   "admin_runway_name_ph": "Runway name (optional)",
   "admin_runways_hint": "Each runway adds its mid + two thresholds as jump-run points.",
   "admin_jrrefs_hint": "Shown on the map (windsock, hazard…) and usable as a jump-run anchor.",
-  "leg_zones": "Zones"
+  "leg_zones": "Zones",
+  "leg_target": "Target"
 }

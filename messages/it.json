@@ -178,5 +178,6 @@
   "admin_runway_name_ph": "Nome pista (opz.)",
   "admin_runways_hint": "Ogni pista aggiunge centro + 2 soglie come riferimenti.",
   "admin_jrrefs_hint": "Mostrati sulla mappa (manica a vento…) e usabili come punto dell’asse di lancio.",
-  "leg_zones": "Zone"
+  "leg_zones": "Zone",
+  "leg_target": "Bersaglio"
 }

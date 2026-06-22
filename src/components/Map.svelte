@@ -299,8 +299,9 @@
     });
 
     if (markerT) {
+      markerT.setOpacity(app.showTarget ? 1 : 0);
       const tt = markerT.getTooltip();
-      if (app.showLabels) {
+      if (app.showLabels && app.showTarget) {
         if (!tt)
           markerT.bindTooltip('Cible', {
             permanent: true,
@@ -543,6 +544,7 @@
       app.showOpenZone,
       app.showJrRefs,
       app.showZones,
+      app.showTarget,
       app.altUnit,
     ];
     const entry = app.entry;

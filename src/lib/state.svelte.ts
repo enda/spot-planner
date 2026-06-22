@@ -77,6 +77,7 @@ interface PersistedSettings {
   showOpenZone: boolean;
   showJrRefs: boolean;
   showZones: boolean;
+  showTarget: boolean;
   showWind: boolean;
   showWindLayer: boolean;
   lastDz: string | null;
@@ -113,6 +114,7 @@ class AppState {
   showOpenZone = $state(false);
   showJrRefs = $state(false); // jump-run reference points (mid runway / seuils) on the map
   showZones = $state(true); // hand-traced posing zones (polygons)
+  showTarget = $state(true); // the target / cible marker
   showWind = $state(false); // widget expanded (vs. collapsed chip); collapsed by default
   showWindLayer = $state(true); // whole wind layer visible (arrows + widget)
   lastDz = $state<string | null>(null);
@@ -246,6 +248,7 @@ class AppState {
       showOpenZone: this.showOpenZone,
       showJrRefs: this.showJrRefs,
       showZones: this.showZones,
+      showTarget: this.showTarget,
       showWind: this.showWind,
       showWindLayer: this.showWindLayer,
       lastDz: this.lastDz,
