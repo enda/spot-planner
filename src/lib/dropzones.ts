@@ -147,7 +147,7 @@ export const DROPZONES: Dropzone[] = [
   { name: 'Skydive Thiene (Vicenza)', country: 'Italie', lat: 45.67783, lng: 11.496306 },
   { name: 'Skydive Venice (San Stino)', country: 'Italie', lat: 45.700009, lng: 12.763909 },
   // — Maroc
-  { name: 'Beni Mellal', country: 'Maroc', lat: 32.394344, lng: -6.329198 },
+  { name: 'Beni Mellal', country: 'Maroc', lat: 32.394218, lng: -6.328007 },
   { name: 'Skydive Atlas (Taroudant)', country: 'Maroc', lat: 30.503487, lng: -8.821549 },
   // — Norvège
   { name: 'Skydive Voss (Bømoen)', country: 'Norvège', lat: 60.638098, lng: 6.499786 },
