@@ -38,7 +38,7 @@ export const DROPZONES: Dropzone[] = [
   { name: 'Skydive Wels', country: 'Autriche', lat: 48.182513, lng: 14.039283 },
   { name: 'Austrian Skydive (Wiener Neustadt)', country: 'Autriche', lat: 47.836933, lng: 16.221838 },
   // — Belgique
-  { name: 'Para-Club Namur (Temploux)', country: 'Belgique', lat: 50.48947, lng: 4.772508 },
+  { name: 'Para-Club Namur (Temploux)', country: 'Belgique', lat: 50.489473, lng: 4.772497 },
   { name: 'Skydive Cerfontaine', country: 'Belgique', lat: 50.152802, lng: 4.38722 },
   { name: 'Skydive Spa (La Sauvenière)', country: 'Belgique', lat: 50.482006, lng: 5.913434 },
   { name: 'Skydive Zwartberg (Genk)', country: 'Belgique', lat: 51.0154, lng: 5.52647 },
