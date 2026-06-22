@@ -10,23 +10,20 @@
   // map at screen angle (β + bearing), so orient the group to (blow + bearing).
   const rot = $derived((((sw.dir + 180 + app.bearing) % 360) + 360) % 360);
 
-  // Sleek filled arrow (pointing up) with a flat tail, built once.
-  const L = 20; // half-length
-  const headLen = 12;
-  const headW = 6.6;
-  const shaftW = 2.1;
-  const stagger = 11; // middle arrow leads; the two sides sit back (V formation)
-  const gap = 21;
+  // Filled "dart" arrow (pointing up), matching the legend arrow shape, scaled up.
+  // Legend path: M0 -6.5 L4 3.4 L0 1 L-4 3.4 Z  → here ×3.
+  const tip = -13; // tip distance from centre
+  const wingY = 6.8; // y of the two trailing wings
+  const notch = 2; // y of the inner notch (tail)
+  const headW = 8; // half-width at the wings
+  const stagger = 8; // middle arrow leads; the two sides sit back (V formation)
+  const gap = 17;
 
   const arrows = [-1, 0, 1].map((k) => {
     const x = k * gap;
     const dy = Math.abs(k) * stagger; // +y is "behind" (arrows point up)
     const p = (px: number, py: number) => `${(px + x).toFixed(1)} ${(py + dy).toFixed(1)}`;
-    const d =
-      `M ${p(0, -L)} L ${p(headW, -L + headLen)} L ${p(shaftW, -L + headLen)} ` +
-      `L ${p(shaftW, L)} L ${p(-shaftW, L)} ` +
-      `L ${p(-shaftW, -L + headLen)} L ${p(-headW, -L + headLen)} Z`;
-    return d;
+    return `M ${p(0, tip)} L ${p(headW, wingY)} L ${p(0, notch)} L ${p(-headW, wingY)} Z`;
   });
 </script>
 

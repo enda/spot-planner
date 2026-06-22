@@ -21,8 +21,7 @@
       <div class="north" style="transform:rotate({northRot}deg)"><span>N</span></div>
       <div class="arrow" style="transform:rotate({arrowRot}deg);color:{col}">
         <svg width="26" height="26" viewBox="0 0 28 28">
-          <line x1="14" y1="23" x2="14" y2="9" stroke="currentColor" stroke-width="3" />
-          <path d="M14 5 L19 13 L9 13 Z" fill="currentColor" />
+          <path d="M14 2.5 L21 20 L14 16 L7 20 Z" fill="currentColor" />
         </svg>
       </div>
     </div>
@@ -46,8 +45,7 @@
       <div class="north" style="transform:rotate({northRot}deg)"><span>N</span></div>
       <div class="arrow" style="transform:rotate({arrowRot}deg);color:{col}">
         <svg width="19" height="19" viewBox="0 0 28 28">
-          <line x1="14" y1="23" x2="14" y2="9" stroke="currentColor" stroke-width="3.4" />
-          <path d="M14 5 L19 13 L9 13 Z" fill="currentColor" />
+          <path d="M14 2.5 L21 20 L14 16 L7 20 Z" fill="currentColor" />
         </svg>
       </div>
     </div>
