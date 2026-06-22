@@ -78,11 +78,12 @@ export function seuilNum(b: number): string {
  */
 export function runwayRefs(a: LatLng, b: LatLng, prefix = ''): AdminJrRef[] {
   const mid: LatLng = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-  const p = prefix ? prefix + ' · ' : '';
+  // Only the mid carries the runway name (to disambiguate several runways); the
+  // thresholds already read "seuil XX", no need to repeat the runway.
   return [
-    { name: p + (prefix ? 'mid' : 'mid runway'), ll: mid },
-    { name: p + 'seuil ' + seuilNum(bearingDeg(a, b)), ll: [a[0], a[1]] },
-    { name: p + 'seuil ' + seuilNum(bearingDeg(b, a)), ll: [b[0], b[1]] },
+    { name: prefix ? `${prefix} · mid` : 'mid runway', ll: mid },
+    { name: 'seuil ' + seuilNum(bearingDeg(a, b)), ll: [a[0], a[1]] },
+    { name: 'seuil ' + seuilNum(bearingDeg(b, a)), ll: [b[0], b[1]] },
   ];
 }
 
