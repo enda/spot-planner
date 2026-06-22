@@ -102,7 +102,7 @@ export const DROPZONES: Dropzone[] = [
   { name: 'Dole-Tavaux', country: 'France', lat: 47.038955, lng: 5.427589 },
   { name: 'Étampes-Mondésir', country: 'France', lat: 48.381901, lng: 2.07528 },
   { name: 'Figeac-Livernon', country: 'France', lat: 44.673302, lng: 1.78917 },
-  { name: 'Gap-Tallard', country: 'France', lat: 44.455667, lng: 6.035909 },
+  { name: 'Gap-Tallard', country: 'France', lat: 44.455694, lng: 6.035925 },
   { name: 'Graulhet-Montdragon', country: 'France', lat: 43.771099, lng: 2.01083 },
   { name: 'Grenoble-Le Versoud', country: 'France', lat: 45.218047, lng: 5.848317 },
   { name: 'Guiscriff-Scaër', country: 'France', lat: 48.052502, lng: -3.66472 },
