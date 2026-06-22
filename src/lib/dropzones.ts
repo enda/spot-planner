@@ -126,7 +126,7 @@ export const DROPZONES: Dropzone[] = [
   { name: 'Ariège Parachutisme (Pamiers)', country: 'France', lat: 43.090599, lng: 1.69583 },
   { name: 'Orléans-Saint-Denis-de-l’Hôtel', country: 'France', lat: 47.897758, lng: 2.164478 },
   { name: 'Périgueux-Bassillac', country: 'France', lat: 45.198101, lng: 0.815556 },
-  { name: 'Péronne-Saint-Quentin', country: 'France', lat: 49.868871, lng: 3.029566 },
+  { name: 'Péronne-Saint-Quentin', country: 'France', lat: 49.869852, lng: 3.03692 },
   { name: 'Pontoise-Cormeilles', country: 'France', lat: 49.096064, lng: 2.035543 },
   { name: 'Quiberon', country: 'France', lat: 47.482201, lng: -3.1 },
   { name: 'Reims-Prunay', country: 'France', lat: 49.208698, lng: 4.15658 },
