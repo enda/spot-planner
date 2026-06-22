@@ -40,6 +40,8 @@ import {
   emptyDraft,
   runwayRefs,
   runwayLabel,
+  seuilNum,
+  bearingDeg,
   type AdminDraft,
   type AdminMode,
   type AdminTool,
@@ -723,11 +725,16 @@ class AppState {
         // First click (or restart): set the first threshold, clear the second.
         this.patchRunway(i, { a: ll, b: null });
       } else {
-        // Second click: complete the runway and append its mid + thresholds to
-        // the editable reference list (still freely tweakable afterwards).
-        const runways = d.runways.map((r2, idx) => (idx === i ? { ...r2, b: ll } : r2));
-        const label = runwayLabel({ ...rw, b: ll }, i, runways.length);
-        const jrRefs = [...d.jrRefs, ...runwayRefs(rw.a, ll, label)];
+        // Second click: complete the runway. Default its name to "XX/YY" (its two
+        // threshold numbers) when unnamed, then append mid + thresholds to the
+        // editable reference list (all still freely tweakable afterwards).
+        const a = rw.a;
+        const name = rw.name?.trim()
+          ? rw.name.trim()
+          : `${seuilNum(bearingDeg(a, ll))}/${seuilNum(bearingDeg(ll, a))}`;
+        const runways = d.runways.map((r2, idx) => (idx === i ? { ...r2, b: ll, name } : r2));
+        const label = runwayLabel({ ...rw, b: ll, name }, i, runways.length);
+        const jrRefs = [...d.jrRefs, ...runwayRefs(a, ll, label)];
         this.patchDraft({ runways, jrRefs });
         this.adminTool = 'none';
       }
