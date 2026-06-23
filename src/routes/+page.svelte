@@ -15,6 +15,9 @@
   import WindsAloftTable from '$components/panels/WindsAloftTable.svelte';
   import GroundGlideTable from '$components/panels/GroundGlideTable.svelte';
   import AdminDrawer from '$components/AdminDrawer.svelte';
+  import ConsentBanner from '$components/ConsentBanner.svelte';
+  import { initAnalytics, setAnalyticsContext } from '$lib/analytics';
+  import { getLocale } from '$lib/i18n';
   import * as m from '$lib/paraglide/messages';
 
   // XXL (3-column) only: move Circuit + jump run to the top of the right column
@@ -23,10 +26,20 @@
 
   onMount(() => {
     void app.init();
+    initAnalytics();
     const mq = window.matchMedia('(min-width: 1290px)');
     const onChange = (e: MediaQueryListEvent) => (xxl = e.matches);
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
+  });
+
+  // Keep the active DZ / country / language attached to every analytics event.
+  $effect(() => {
+    setAnalyticsContext({
+      dz_name: app.target?.name,
+      dz_country: app.target?.country,
+      lang: getLocale(),
+    });
   });
 </script>
 
@@ -35,6 +48,8 @@
 </svelte:head>
 
 <Header />
+
+<ConsentBanner />
 
 {#if app.adminOpen}<AdminDrawer />{/if}
 
@@ -84,6 +99,8 @@
     <a href="https://www.linkedin.com/in/jeromemusialak/" target="_blank" rel="noopener">
       {m.footer_by()}
     </a>
+    &nbsp;·&nbsp;
+    <button class="cookies" onclick={() => (app.consentOpen = true)}>{m.consent_cookies()}</button>
   </footer>
 </main>
 
@@ -145,6 +162,14 @@
     color: var(--accent2);
     text-decoration: none;
     font-weight: 700;
+  }
+  footer .cookies {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--accent2);
+    font: 700 11px/1.6 var(--font-mono);
   }
 
   /* Above mobile (≥701px): glide cards (3rd) and footprint (4th) move above the

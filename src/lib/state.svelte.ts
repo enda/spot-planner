@@ -13,6 +13,7 @@ import {
 import type { AltUnit, WindUnit } from './units';
 import type { Handed, LandingMode, PhysState, Wind, Vec } from './physics';
 import { windAt, landingHeading } from './physics';
+import { track } from './analytics';
 import {
   DROPZONES,
   dzToTarget,
@@ -144,6 +145,7 @@ class AppState {
   windsSource = $state('');
   legendHidden = $state(true);
   fullscreen = $state(false);
+  consentOpen = $state(false); // re-opened cookie/consent banner
   db = $state<Record<string, unknown> | null>(null);
   private dbVersion = $state(0);
   private booted = false;
@@ -522,6 +524,7 @@ class AppState {
   selectDz(dz: Dropzone, opts: { keepMessage?: boolean } = {}): void {
     this.target = dzToTarget(dz);
     this.lastDz = dz.name;
+    track('select_dz', { dz_name: dz.name, dz_country: dz.country });
     // Switching DZ releases an imposed "circuit of the day".
     this.circuitLocked = false;
     if (!opts.keepMessage) this.geoMsg = '';
@@ -595,6 +598,7 @@ class AppState {
 
   openAdmin(mode: AdminMode): void {
     const t = this.target;
+    track('admin_open', { mode });
     this.adminOpen = true;
     this.adminMode = mode;
     this.adminResult = null;
@@ -715,6 +719,7 @@ class AppState {
   }
 
   addAdminZone(): void {
+    track('use_tool', { tool: 'zone' });
     const sw = ADMIN_SWATCHES;
     const n = this.adminDraft.zones.length;
     const zones = [...this.adminDraft.zones, { name: 'Zone ' + (n + 1), color: sw[n % sw.length], polygon: [] }];
@@ -738,6 +743,7 @@ class AppState {
 
   /** Add a runway and arm the runway tool to draw its two ends. */
   addAdminRunway(): void {
+    track('use_tool', { tool: 'runway' });
     const runways = [...this.adminDraft.runways, { name: '', a: null, b: null }];
     this.adminDraft = { ...this.adminDraft, runways };
     this.adminActiveRunway = runways.length - 1;
@@ -794,6 +800,7 @@ class AppState {
   }
 
   setAdminTool(tool: AdminTool, idx: number | null = null): void {
+    if (tool !== 'none') track('use_tool', { tool });
     this.adminTool = tool;
     if (tool === 'zone') {
       if (idx != null) this.adminActiveZone = idx;

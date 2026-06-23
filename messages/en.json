@@ -200,5 +200,11 @@
   "fs_alt_dw": "Downwind",
   "fs_alt_base": "Base",
   "fs_alt_final": "Final",
-  "circuit_reset": "↺ Reset circuit"
+  "circuit_reset": "↺ Reset circuit",
+  "consent_text": "We use cookies only to measure site audience. No ads, no data resale.",
+  "consent_more": "Learn more",
+  "consent_policy": "This site uses Google Analytics (via Google Tag Manager) for aggregated audience measurement: page views, dropzones consulted, features used and language. No measurement cookie is set until you accept; you can change your mind anytime via the “Cookies” link at the bottom of the page. No advertising, no data resale.",
+  "consent_accept": "Accept",
+  "consent_refuse": "Decline",
+  "consent_cookies": "Cookies"
 }

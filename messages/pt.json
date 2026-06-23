@@ -200,5 +200,11 @@
   "fs_alt_dw": "Vento",
   "fs_alt_base": "Base",
   "fs_alt_final": "Final",
-  "circuit_reset": "↺ Repor o circuito"
+  "circuit_reset": "↺ Repor o circuito",
+  "consent_text": "Usamos cookies apenas para medir a audiência do site. Sem anúncios, sem revenda de dados.",
+  "consent_more": "Saber mais",
+  "consent_policy": "Este site usa o Google Analytics (via Google Tag Manager) para medição agregada: páginas vistas, dropzones consultadas, funções usadas e idioma. Nenhum cookie de medição é definido até aceitares; podes mudar de ideias a qualquer momento pelo link «Cookies» no rodapé. Sem publicidade, sem revenda de dados.",
+  "consent_accept": "Aceitar",
+  "consent_refuse": "Recusar",
+  "consent_cookies": "Cookies"
 }

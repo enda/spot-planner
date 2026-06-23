@@ -200,5 +200,11 @@
   "fs_alt_dw": "Gegenanf.",
   "fs_alt_base": "Quer",
   "fs_alt_final": "Final",
-  "circuit_reset": "↺ Kreis zurücksetzen"
+  "circuit_reset": "↺ Kreis zurücksetzen",
+  "consent_text": "Wir verwenden Cookies nur zur Reichweitenmessung der Seite. Keine Werbung, kein Datenverkauf.",
+  "consent_more": "Mehr erfahren",
+  "consent_policy": "Diese Seite nutzt Google Analytics (über Google Tag Manager) zur aggregierten Reichweitenmessung: Seitenaufrufe, besuchte Dropzones, genutzte Funktionen und Sprache. Es wird kein Mess-Cookie gesetzt, bis du zustimmst; du kannst deine Wahl jederzeit über den Link „Cookies“ am Seitenende ändern. Keine Werbung, kein Datenverkauf.",
+  "consent_accept": "Akzeptieren",
+  "consent_refuse": "Ablehnen",
+  "consent_cookies": "Cookies"
 }
