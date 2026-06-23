@@ -7,6 +7,7 @@
     metersLatLng,
     rad,
     finalHeadingBearing,
+    legTrack,
     type Geom,
     type PhysState,
     type Vec,
@@ -457,17 +458,18 @@
     const tgtLL: [number, number] = [o.lat, o.lng];
     const FLL = LL(g.F);
     const BLL = LL(g.B);
-    // Keep a handle magnetically on its glide-imposed arc (radius = leg length).
-    const snap = (anchor: [number, number], radius: number, p: { lat: number; lng: number }) => {
-      const dn = p.lat - anchor[0];
-      const de = (p.lng - anchor[1]) * Math.cos(rad(anchor[0]));
-      const mag = Math.hypot(de, dn) || 1;
-      return metersLatLng({ lat: anchor[0], lng: anchor[1] }, (de / mag) * radius, (dn / mag) * radius);
+    // Snap a handle to its true reachable locus for the dragged direction — the
+    // leg length is re-solved per direction (drift varies), not a fixed radius.
+    const snap = (anchor: [number, number], aTop: number, aBot: number, p: { lat: number; lng: number }) => {
+      const d = circuitDir(anchor, p);
+      const tr = legTrack(s, aTop, aBot, d);
+      return metersLatLng({ lat: anchor[0], lng: anchor[1] }, -tr.e, -tr.n);
     };
     const mk = (
       pos: [number, number],
       anchor: [number, number],
-      radius: number,
+      aTop: number,
+      aBot: number,
       leg: 'dw' | 'base' | 'final',
     ) => {
       const html =
@@ -475,7 +477,7 @@
         'border:2.5px solid #f2a40c;box-shadow:0 0 0 1.5px rgba(0,0,0,.5);cursor:grab"></div>';
       const icon = L.divIcon({ className: '', html, iconSize: [15, 15], iconAnchor: [7.5, 7.5] });
       const m = L.marker(pos, { draggable: true, autoPan: false, keyboard: false, icon }).addTo(map);
-      m.on('drag', () => m.setLatLng(snap(anchor, radius, m.getLatLng())));
+      m.on('drag', () => m.setLatLng(snap(anchor, aTop, aBot, m.getLatLng())));
       m.on('dragend', () => {
         const d = circuitDir(anchor, m.getLatLng());
         if (leg === 'final') {
@@ -489,9 +491,9 @@
       });
       handleLayers.push(m);
     };
-    mk(FLL, tgtLL, g.finalDist, 'final');
-    mk(BLL, FLL, g.baseDist, 'base');
-    mk(LL(g.D), BLL, g.dwDist, 'dw');
+    mk(FLL, tgtLL, s.finalAlt, 0, 'final');
+    mk(BLL, FLL, s.baseAlt, s.finalAlt, 'base');
+    mk(LL(g.D), BLL, s.dwAlt, s.baseAlt, 'dw');
   }
 
   /** Canopy-heading arrows on each circuit node (direction faced, before drift). */

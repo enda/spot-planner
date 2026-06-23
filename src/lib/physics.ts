@@ -247,6 +247,22 @@ export function finalHeadingBearing(s: PhysState, d: Vec): number {
   return ((Math.atan2(h.e, h.n) * 180) / Math.PI + 360) % 360;
 }
 
+/**
+ * Ground-track vector for a leg over [aBot, aTop] constrained to direction `d`
+ * (unit). Length is re-solved for that direction (canopy reach + wind drift),
+ * matching geomMeters' override — used to snap a dragged node to its true locus.
+ */
+export function legTrack(s: PhysState, aTop: number, aBot: number, d: Vec): Vec {
+  const fwd = getFwd(s);
+  const desc = Math.max(0.5, getDesc(s));
+  const w = glegVec(s, aTop, aBot, { e: 0, n: 0 });
+  const fwt = fwd * ((aTop - aBot) / desc);
+  const dw = d.e * w.e + d.n * w.n;
+  const disc = dw * dw - (w.e * w.e + w.n * w.n) + fwt * fwt;
+  const lam = dw + Math.sqrt(Math.max(0, disc));
+  return { e: lam * d.e, n: lam * d.n };
+}
+
 /** Along-track ground distance of a leg flown along `track` (used for footprint). */
 export function legDist(s: PhysState, aTop: number, aBot: number, track: Vec): number {
   const fwd = getFwd(s);
