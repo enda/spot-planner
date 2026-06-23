@@ -6,6 +6,7 @@
     openZoneMeters,
     metersLatLng,
     rad,
+    finalHeadingBearing,
     type Geom,
     type PhysState,
     type Vec,
@@ -456,18 +457,41 @@
     const tgtLL: [number, number] = [o.lat, o.lng];
     const FLL = LL(g.F);
     const BLL = LL(g.B);
-    const mk = (pos: [number, number], anchor: [number, number], leg: 'dw' | 'base' | 'final') => {
+    // Keep a handle magnetically on its glide-imposed arc (radius = leg length).
+    const snap = (anchor: [number, number], radius: number, p: { lat: number; lng: number }) => {
+      const dn = p.lat - anchor[0];
+      const de = (p.lng - anchor[1]) * Math.cos(rad(anchor[0]));
+      const mag = Math.hypot(de, dn) || 1;
+      return metersLatLng({ lat: anchor[0], lng: anchor[1] }, (de / mag) * radius, (dn / mag) * radius);
+    };
+    const mk = (
+      pos: [number, number],
+      anchor: [number, number],
+      radius: number,
+      leg: 'dw' | 'base' | 'final',
+    ) => {
       const html =
         '<div style="width:15px;height:15px;border-radius:50%;background:rgba(242,164,12,.2);' +
         'border:2.5px solid #f2a40c;box-shadow:0 0 0 1.5px rgba(0,0,0,.5);cursor:grab"></div>';
       const icon = L.divIcon({ className: '', html, iconSize: [15, 15], iconAnchor: [7.5, 7.5] });
       const m = L.marker(pos, { draggable: true, autoPan: false, keyboard: false, icon }).addTo(map);
-      m.on('dragend', () => app.setLegDir(leg, circuitDir(anchor, m.getLatLng())));
+      m.on('drag', () => m.setLatLng(snap(anchor, radius, m.getLatLng())));
+      m.on('dragend', () => {
+        const d = circuitDir(anchor, m.getLatLng());
+        if (leg === 'final') {
+          // The final approach IS the landing axis → dragging it sets the pose.
+          app.landingMode = 'manual';
+          app.landingDir = Math.round(finalHeadingBearing(app.phys, d));
+          app.circuitDragged = true;
+        } else {
+          app.setLegDir(leg, d);
+        }
+      });
       handleLayers.push(m);
     };
-    mk(FLL, tgtLL, 'final');
-    mk(BLL, FLL, 'base');
-    mk(LL(g.D), BLL, 'dw');
+    mk(FLL, tgtLL, g.finalDist, 'final');
+    mk(BLL, FLL, g.baseDist, 'base');
+    mk(LL(g.D), BLL, g.dwDist, 'dw');
   }
 
   /** Canopy-heading arrows on each circuit node (direction faced, before drift). */
@@ -734,8 +758,8 @@
     {/if}
   </div>
   {#if app.showCompass && !app.adminOpen}<Compass />{/if}
-  {#if app.showWindLayer && !app.adminOpen}
-    <WindArrows />
+  {#if !app.adminOpen}
+    {#if app.showWindLayer}<WindArrows />{/if}
     <WindWidget />
   {/if}
 

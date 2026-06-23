@@ -75,10 +75,6 @@
     <span>{m.stat_crab()} <b style="color:var(--accent2)">{Math.round(Math.abs(crab))}°</b></span>
   </div>
 
-  {#if app.circuitEdited}
-    <button class="reset" onclick={() => app.resetCircuitNodes()}>{m.circuit_reset()}</button>
-  {/if}
-
   <div class="label" id="lbl-hand">{m.circuit_direction()}</div>
   <div class="seg mb" role="group" aria-labelledby="lbl-hand">
     <button class:on={app.handed === 'left'} onclick={() => (app.handed = 'left')}>{m.left_hand()}</button>
@@ -128,6 +124,10 @@
     </button>
   </div>
   <div class="note">{m.circuit_note()}</div>
+
+  {#if app.circuitEdited}
+    <button class="reset" onclick={() => app.resetCircuitNodes()}>{m.circuit_reset()}</button>
+  {/if}
 </div>
 
 <style>
@@ -206,7 +206,7 @@
   }
   .reset {
     width: 100%;
-    margin: 0 0 14px;
+    margin: 12px 0 0;
     cursor: pointer;
     background: var(--surface2);
     border: 1px solid var(--accent);

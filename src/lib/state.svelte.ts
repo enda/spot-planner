@@ -179,19 +179,26 @@ class AppState {
     };
   }
 
+  // Set true whenever any circuit node is dragged (the final drag changes the
+  // landing axis rather than legDirs, so this flag tracks edits uniformly).
+  circuitDragged = $state(false);
+
   /** Set/clear a circuit leg's ground-track direction override (node drag). */
   setLegDir(leg: 'dw' | 'base' | 'final', dir: Vec | null): void {
     this.legDirs = { ...this.legDirs, [leg]: dir };
+    this.circuitDragged = true;
   }
 
   /** Reset the circuit to its auto-computed shape (clear all node drags). */
   resetCircuitNodes(): void {
     this.legDirs = { dw: null, base: null, final: null };
+    this.landingMode = 'wind';
+    this.circuitDragged = false;
   }
 
   /** Any circuit node has been manually dragged. */
   get circuitEdited(): boolean {
-    return !!(this.legDirs.dw || this.legDirs.base || this.legDirs.final);
+    return this.circuitDragged;
   }
 
   /** Hand-traced entry (zones/runway/jrRefs) for the current target, if any. */

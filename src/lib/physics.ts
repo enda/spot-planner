@@ -164,24 +164,35 @@ export function geomMeters(s: PhysState): Geom {
   const gF0 = glegVec(s, s.finalAlt, 0, tF);
   const gB0 = glegVec(s, s.baseAlt, s.finalAlt, tB);
   const gD0 = glegVec(s, s.dwAlt, s.baseAlt, tD);
-  // A dragged node overrides its leg's ground-track direction, keeping length.
-  const ovDir = (g: Vec, d: Vec | null | undefined): Vec => {
-    if (!d) return g;
-    const len = Math.hypot(g.e, g.n);
-    return { e: d.e * len, n: d.n * len };
+
+  // Wind drift over each band (heading-independent) and the still-air reach.
+  const wF = glegVec(s, s.finalAlt, 0, { e: 0, n: 0 });
+  const wB = glegVec(s, s.baseAlt, s.finalAlt, { e: 0, n: 0 });
+  const wD = glegVec(s, s.dwAlt, s.baseAlt, { e: 0, n: 0 });
+  const fwtF = fwd * (s.finalAlt / desc);
+  const fwtB = fwd * ((s.baseAlt - s.finalAlt) / desc);
+  const fwtD = fwd * ((s.dwAlt - s.baseAlt) / desc);
+
+  // A dragged node overrides its leg's ground-track DIRECTION. The length is then
+  // re-solved for that direction (canopy reach `fwt` + wind drift `w`), so it
+  // depends only on the leg, not on the landing axis: track = λ·d with
+  // |λ·d − w| = fwt.  λ = d·w + √((d·w)² − |w|² + fwt²).
+  const ovTrack = (g0: Vec, w: Vec, fwt: number, d: Vec | null | undefined): Vec => {
+    if (!d) return g0;
+    const dw = d.e * w.e + d.n * w.n;
+    const disc = dw * dw - (w.e * w.e + w.n * w.n) + fwt * fwt;
+    const lam = dw + Math.sqrt(Math.max(0, disc));
+    return { e: lam * d.e, n: lam * d.n };
   };
-  const gF = ovDir(gF0, s.legDirs?.final);
-  const gB = ovDir(gB0, s.legDirs?.base);
-  const gD = ovDir(gD0, s.legDirs?.dw);
+  const gF = ovTrack(gF0, wF, fwtF, s.legDirs?.final);
+  const gB = ovTrack(gB0, wB, fwtB, s.legDirs?.base);
+  const gD = ovTrack(gD0, wD, fwtD, s.legDirs?.dw);
   const F = { e: -gF.e, n: -gF.n };
   const B = { e: F.e - gB.e, n: F.n - gB.n };
   const D = { e: B.e - gD.e, n: B.n - gD.n };
 
-  // Canopy heading per leg = ground track minus the (heading-independent) wind
-  // drift over that band, normalised. Recovers tF/tB/tD when not overridden.
-  const wF = glegVec(s, s.finalAlt, 0, { e: 0, n: 0 });
-  const wB = glegVec(s, s.baseAlt, s.finalAlt, { e: 0, n: 0 });
-  const wD = glegVec(s, s.dwAlt, s.baseAlt, { e: 0, n: 0 });
+  // Canopy heading per leg = ground track minus the wind drift, normalised.
+  // Recovers tF/tB/tD when not overridden.
   const unitV = (e: number, n: number): Vec => {
     const mag = Math.hypot(e, n) || 1;
     return { e: e / mag, n: n / mag };
@@ -217,6 +228,23 @@ export function geomMeters(s: PhysState): Geom {
     dwDist: Math.hypot(gD.e, gD.n),
     driftMag: Math.hypot(dr.e, dr.n),
   };
+}
+
+/**
+ * Landing bearing (°) for a desired final-leg ground-track direction `d` —
+ * the canopy heading that, after wind drift, tracks along `d`. Used when the
+ * final node is dragged: the final approach IS the landing axis.
+ */
+export function finalHeadingBearing(s: PhysState, d: Vec): number {
+  const fwd = getFwd(s);
+  const desc = Math.max(0.5, getDesc(s));
+  const w = glegVec(s, s.finalAlt, 0, { e: 0, n: 0 });
+  const fwt = fwd * (s.finalAlt / desc);
+  const dw = d.e * w.e + d.n * w.n;
+  const disc = dw * dw - (w.e * w.e + w.n * w.n) + fwt * fwt;
+  const lam = dw + Math.sqrt(Math.max(0, disc));
+  const h = { e: lam * d.e - w.e, n: lam * d.n - w.n };
+  return ((Math.atan2(h.e, h.n) * 180) / Math.PI + 360) % 360;
 }
 
 /** Along-track ground distance of a leg flown along `track` (used for footprint). */
