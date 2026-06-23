@@ -7,42 +7,46 @@
   <button class:off={!app.showTarget} onclick={() => (app.showTarget = !app.showTarget)}>
     <span class="targetdot"></span>{m.leg_target()}
   </button>
-  <button class:off={!app.showCircuit} onclick={() => (app.showCircuit = !app.showCircuit)}>
-    <span class="bar" style="background:var(--accent)"></span>{m.leg_circuit()}
-  </button>
-  <button class:off={!app.showIdeal} onclick={() => (app.showIdeal = !app.showIdeal)}>
-    <span class="dash" style="border-color:var(--accent2)"></span>{m.leg_ideal()}
-  </button>
-  <button class:off={!app.jumpRun} onclick={() => (app.jumpRun = !app.jumpRun)}>
-    <span class="dot-dash"></span>{m.leg_jump()}
-  </button>
-  <button class:off={!app.showWindLayer} onclick={() => (app.showWindLayer = !app.showWindLayer)}>
-    <svg class="wind" viewBox="-8 -8 16 16" aria-hidden="true">
-      <defs>
-        <linearGradient id="windgrad" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0" stop-color="#3fd07a" />
-          <stop offset="0.5" stop-color="#f2a40c" />
-          <stop offset="1" stop-color="#ff6b5e" />
-        </linearGradient>
-      </defs>
-      <path d="M0 -6.5 L4 3.4 L0 1 L-4 3.4 Z" fill="url(#windgrad)" transform="rotate(35)" />
-    </svg>{m.leg_wind()}
-  </button>
-  <button class:off={!app.showCompass} onclick={() => (app.showCompass = !app.showCompass)}>
-    <span class="ring"></span>{m.leg_compass()}
-  </button>
-  <button class:off={!app.showOpenZone} onclick={() => (app.showOpenZone = !app.showOpenZone)}>
-    <span class="ring2"></span>{m.leg_zone()}
-  </button>
+  {#if !app.adminOpen}
+    <button class:off={!app.showCircuit} onclick={() => (app.showCircuit = !app.showCircuit)}>
+      <span class="bar" style="background:var(--accent)"></span>{m.leg_circuit()}
+    </button>
+    <button class:off={!app.showIdeal} onclick={() => (app.showIdeal = !app.showIdeal)}>
+      <span class="dash" style="border-color:var(--accent2)"></span>{m.leg_ideal()}
+    </button>
+    <button class:off={!app.jumpRun} onclick={() => (app.jumpRun = !app.jumpRun)}>
+      <span class="dot-dash"></span>{m.leg_jump()}
+    </button>
+    <button class:off={!app.showWindLayer} onclick={() => (app.showWindLayer = !app.showWindLayer)}>
+      <svg class="wind" viewBox="-8 -8 16 16" aria-hidden="true">
+        <defs>
+          <linearGradient id="windgrad" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#3fd07a" />
+            <stop offset="0.5" stop-color="#f2a40c" />
+            <stop offset="1" stop-color="#ff6b5e" />
+          </linearGradient>
+        </defs>
+        <path d="M0 -6.5 L4 3.4 L0 1 L-4 3.4 Z" fill="url(#windgrad)" transform="rotate(35)" />
+      </svg>{m.leg_wind()}
+    </button>
+    <button class:off={!app.showCompass} onclick={() => (app.showCompass = !app.showCompass)}>
+      <span class="ring"></span>{m.leg_compass()}
+    </button>
+    <button class:off={!app.showOpenZone} onclick={() => (app.showOpenZone = !app.showOpenZone)}>
+      <span class="ring2"></span>{m.leg_zone()}
+    </button>
+  {/if}
   <button class:off={!app.showJrRefs} onclick={() => (app.showJrRefs = !app.showJrRefs)}>
     <span class="refdot"></span>{m.leg_refs()}
   </button>
   <button class:off={!app.showZones} onclick={() => (app.showZones = !app.showZones)}>
     <span class="zonebox"></span>{m.leg_zones()}
   </button>
-  <button class:off={!app.showLegs} onclick={() => (app.showLegs = !app.showLegs)}>
-    <span class="legbox"></span>{m.leg_legs()}
-  </button>
+  {#if !app.adminOpen}
+    <button class:off={!app.showLegs} onclick={() => (app.showLegs = !app.showLegs)}>
+      <span class="legbox"></span>{m.leg_legs()}
+    </button>
+  {/if}
   <button class:off={!app.showLabels} onclick={() => (app.showLabels = !app.showLabels)}>
     <span class="tbox">T</span>{m.leg_labels()}
   </button>
