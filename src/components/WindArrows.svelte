@@ -16,12 +16,15 @@
   const wingY = 6.8; // y of the two trailing wings
   const notch = 2; // y of the inner notch (tail)
   const headW = 8; // half-width at the wings
-  const stagger = 8; // middle arrow leads; the two sides sit back (V formation)
-  const gap = 17;
+  const stagger = 50; // middle arrow leads; the two sides sit further back (V formation)
+  const gap = 34;
+  // Centre the whole formation on the map centre: bounding-box midpoint between
+  // the leading middle tip and the trailing side wings sits at y = 0.
+  const forward = (stagger + wingY + tip) / 2;
 
   const arrows = [-1, 0, 1].map((k) => {
     const x = k * gap;
-    const dy = Math.abs(k) * stagger; // +y is "behind" (arrows point up)
+    const dy = Math.abs(k) * stagger - forward; // +y is "behind"; arrows point up
     const p = (px: number, py: number) => `${(px + x).toFixed(1)} ${(py + dy).toFixed(1)}`;
     return `M ${p(0, tip)} L ${p(headW, wingY)} L ${p(0, notch)} L ${p(-headW, wingY)} Z`;
   });
