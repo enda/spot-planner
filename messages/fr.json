@@ -194,5 +194,6 @@
   "jumprun_to_wind_1500": "face au vent (1500 m)",
   "leg_runways": "Pistes",
   "admin_done": "Terminer",
-  "admin_cancel": "Annuler"
+  "admin_cancel": "Annuler",
+  "leg_heading": "Cap voile"
 }

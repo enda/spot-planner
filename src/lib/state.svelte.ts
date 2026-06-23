@@ -80,6 +80,7 @@ interface PersistedSettings {
   showJrRefs: boolean;
   showZones: boolean;
   showRunways: boolean;
+  showHeading: boolean;
   showTarget: boolean;
   showWind: boolean;
   showWindLayer: boolean;
@@ -118,6 +119,7 @@ class AppState {
   showJrRefs = $state(false); // jump-run reference points (mid runway / seuils) on the map
   showZones = $state(true); // hand-traced posing zones (polygons)
   showRunways = $state(false); // runway lines (off by default — big white stroke)
+  showHeading = $state(false); // canopy-heading arrows on each circuit node
   showTarget = $state(true); // the target / cible marker
   showWind = $state(false); // widget expanded (vs. collapsed chip); collapsed by default
   showWindLayer = $state(true); // whole wind layer visible (arrows + widget)
@@ -254,6 +256,7 @@ class AppState {
       showJrRefs: this.showJrRefs,
       showZones: this.showZones,
       showRunways: this.showRunways,
+      showHeading: this.showHeading,
       showTarget: this.showTarget,
       showWind: this.showWind,
       showWindLayer: this.showWindLayer,

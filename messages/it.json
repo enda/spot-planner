@@ -194,5 +194,6 @@
   "jumprun_to_wind_1500": "controvento (1500 m)",
   "leg_runways": "Piste",
   "admin_done": "Fine",
-  "admin_cancel": "Annulla"
+  "admin_cancel": "Annulla",
+  "leg_heading": "Direzione vela"
 }

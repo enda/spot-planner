@@ -194,5 +194,6 @@
   "jumprun_to_wind_1500": "into wind (1500 m)",
   "leg_runways": "Runways",
   "admin_done": "Done",
-  "admin_cancel": "Cancel"
+  "admin_cancel": "Cancel",
+  "leg_heading": "Canopy heading"
 }

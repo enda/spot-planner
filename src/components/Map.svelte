@@ -8,6 +8,7 @@
     rad,
     type Geom,
     type PhysState,
+    type Vec,
   } from '$lib/physics';
   import { fmtAlt } from '$lib/units';
   import * as m from '$lib/paraglide/messages';
@@ -64,6 +65,7 @@
   let zoneLayers: any[] = [];
   let refLayers: any[] = [];
   let runwayLayers: any[] = [];
+  let headingLayers: any[] = [];
   let adminLayer: any = null;
   let dragMoved = false;
 
@@ -432,6 +434,41 @@
     });
   }
 
+  /** Canopy-heading arrows on each circuit node (direction faced, before drift). */
+  function drawHeadings(s: PhysState, tgt: Target) {
+    if (!map || !ready) return;
+    headingLayers.forEach((l) => map.removeLayer(l));
+    headingLayers = [];
+    if (!app.showHeading || app.adminOpen) return;
+    const g = geomMeters(s);
+    const o = { lat: tgt.lat, lng: tgt.lng };
+    const LL = (p: Vec): [number, number] => metersLatLng(o, p.e, p.n);
+    const mpp = (156543.03392 * Math.cos((o.lat * Math.PI) / 180)) / Math.pow(2, map.getZoom());
+    const viewMin = Math.min(map.getSize().x, map.getSize().y) * mpp;
+    const len = Math.max(25, viewMin * 0.05);
+    const ahLen = len * 0.34;
+    const ahW = ahLen * 0.6;
+    const col = '#5ad1e6';
+    const nodes: [Vec, Vec][] = [
+      [g.D, g.hD],
+      [g.B, g.hB],
+      [g.F, g.hF],
+    ];
+    for (const [node, h] of nodes) {
+      const base = LL(node);
+      const tip = metersLatLng({ lat: base[0], lng: base[1] }, h.e * len, h.n * len);
+      headingLayers.push(
+        L.polyline([base, tip], { renderer, interactive: false, color: col, weight: 2.5, opacity: 0.95 }).addTo(map),
+      );
+      const perp = { e: h.n, n: -h.e };
+      const aw1 = metersLatLng({ lat: tip[0], lng: tip[1] }, -h.e * ahLen - perp.e * ahW, -h.n * ahLen - perp.n * ahW);
+      const aw2 = metersLatLng({ lat: tip[0], lng: tip[1] }, -h.e * ahLen + perp.e * ahW, -h.n * ahLen + perp.n * ahW);
+      headingLayers.push(
+        L.polyline([aw1, tip, aw2], { renderer, interactive: false, color: col, weight: 2.5, opacity: 0.95 }).addTo(map),
+      );
+    }
+  }
+
   function drawOpenZone(s: PhysState, tgt: Target) {
     if (!map || !ready) return;
     if (!app.showOpenZone || app.adminOpen) {
@@ -556,6 +593,7 @@
       drawRefs(app.entry);
       drawRunways(app.entry);
       drawOpenZone(app.phys, tgt);
+      drawHeadings(app.phys, tgt);
     }
     drawAdmin();
   }
@@ -577,6 +615,7 @@
       app.jumpRunOffset,
       app.jumpRefIdx,
       app.showOpenZone,
+      app.showHeading,
       app.showJrRefs,
       app.showRunways,
       app.showZones,
@@ -597,6 +636,7 @@
     drawRefs(entry);
     drawRunways(entry);
     drawOpenZone(s, tgt);
+    drawHeadings(s, tgt);
   });
 
   // Basemap switch.

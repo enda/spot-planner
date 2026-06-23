@@ -39,6 +39,9 @@
     <button class:off={!app.showOpenZone} onclick={() => (app.showOpenZone = !app.showOpenZone)}>
       <span class="ring2"></span>{m.leg_zone()}
     </button>
+    <button class:off={!app.showHeading} onclick={() => (app.showHeading = !app.showHeading)}>
+      <span class="headarrow">↑</span>{m.leg_heading()}
+    </button>
   {/if}
   <button
     class:off={!app.adminOpen && !app.showJrRefs}
@@ -176,6 +179,13 @@
     border-radius: 1px;
     background: #fff;
     display: inline-block;
+  }
+  .headarrow {
+    display: inline-block;
+    width: 13px;
+    text-align: center;
+    color: #5ad1e6;
+    font: 700 13px/1 var(--font-mono);
   }
   .tbox {
     width: 13px;

@@ -136,6 +136,11 @@ export interface Geom {
   Bi: Vec;
   Di: Vec;
   O: Vec;
+  // Canopy headings (unit vectors) flown on each leg — the direction the pilot
+  // faces, before wind drift. hD on the downwind leg (from D), hB base, hF final.
+  hD: Vec;
+  hB: Vec;
+  hF: Vec;
   finalDist: number;
   baseDist: number;
   dwDist: number;
@@ -179,6 +184,9 @@ export function geomMeters(s: PhysState): Geom {
     Bi,
     Di,
     O,
+    hD: tD,
+    hB: tB,
+    hF: tF,
     finalDist: Math.hypot(gF.e, gF.n),
     baseDist: Math.hypot(gB.e, gB.n),
     dwDist: Math.hypot(gD.e, gD.n),

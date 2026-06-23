@@ -194,5 +194,6 @@
   "jumprun_to_wind_1500": "contra o vento (1500 m)",
   "leg_runways": "Pistas",
   "admin_done": "Concluir",
-  "admin_cancel": "Cancelar"
+  "admin_cancel": "Cancelar",
+  "leg_heading": "Rumo da vela"
 }
