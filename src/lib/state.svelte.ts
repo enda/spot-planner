@@ -59,18 +59,13 @@ interface PersistedSettings {
   weight: number;
   fwdOv: number | null;
   descOv: number | null;
-  handed: Handed;
-  landingMode: LandingMode;
-  landingDir: number;
+  // Circuit: only the three node heights are persisted (handed / landing axis /
+  // mode are not — they recompute from the DZ + wind). Jump run isn't persisted.
   dwAlt: number;
   baseAlt: number;
   finalAlt: number;
   zoneAlt: number;
   basemap: Basemap;
-  jumpRun: boolean;
-  jumpRunDir: number;
-  jumpRefIdx: number;
-  jumpDirAuto: boolean;
   showCircuit: boolean;
   showIdeal: boolean;
   showLegs: boolean;
@@ -235,18 +230,11 @@ class AppState {
       weight: this.weight,
       fwdOv: this.fwdOv,
       descOv: this.descOv,
-      handed: this.handed,
-      landingMode: this.landingMode,
-      landingDir: this.landingDir,
       dwAlt: this.dwAlt,
       baseAlt: this.baseAlt,
       finalAlt: this.finalAlt,
       zoneAlt: this.zoneAlt,
       basemap: this.basemap,
-      jumpRun: this.jumpRun,
-      jumpRunDir: this.jumpRunDir,
-      jumpRefIdx: this.jumpRefIdx,
-      jumpDirAuto: this.jumpDirAuto,
       showCircuit: this.showCircuit,
       showIdeal: this.showIdeal,
       showLegs: this.showLegs,
