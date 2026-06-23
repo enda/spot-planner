@@ -127,7 +127,6 @@ export const DROPZONES: Dropzone[] = [
   { name: 'Orléans-Saint-Denis-de-l’Hôtel', country: 'France', lat: 47.897758, lng: 2.164478 },
   { name: 'Périgueux-Bassillac', country: 'France', lat: 45.198101, lng: 0.815556 },
   { name: 'Péronne-Saint-Quentin', country: 'France', lat: 49.869852, lng: 3.03692 },
-  { name: 'Pontoise-Cormeilles', country: 'France', lat: 49.096064, lng: 2.035543 },
   { name: 'Quiberon', country: 'France', lat: 47.482201, lng: -3.1 },
   { name: 'Reims-Prunay', country: 'France', lat: 49.208698, lng: 4.15658 },
   { name: 'Roanne-Renaison', country: 'France', lat: 46.053818, lng: 3.999023 },
