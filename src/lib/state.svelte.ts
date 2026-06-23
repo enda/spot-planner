@@ -591,7 +591,45 @@ class AppState {
     }
   }
 
+  /**
+   * Apply the current draft to the in-memory database so the edits are usable
+   * right away this session. Not persisted (no localStorage) — gone on refresh;
+   * the JSON proposal is still how changes get merged permanently.
+   */
+  applyDraftToSession(): void {
+    const d = this.adminDraft;
+    const name = d.name?.trim();
+    if (!name) return;
+    const entry = {
+      landingDir: d.landingDir == null ? null : Math.round(+d.landingDir),
+      zones: d.zones
+        .filter((z) => z.polygon.length >= 3)
+        .map((z) => ({
+          name: z.name || 'Zone',
+          color: z.color || '#36c2d6',
+          polygon: z.polygon.map((p) => [p[0], p[1]] as LatLng),
+        })),
+      runways: d.runways
+        .filter((rw) => rw.a && rw.b)
+        .map((rw) => ({ ...(rw.name?.trim() ? { name: rw.name.trim() } : {}), a: rw.a, b: rw.b })),
+      jrRefs: d.jrRefs.filter((r) => r && r.ll).map((r) => ({ name: r.name || 'repère', ll: r.ll })),
+    };
+    if (this.db) (this.db as Record<string, unknown>)[name] = entry;
+    this.dbVersion++;
+    const dz = DROPZONES.find((z) => z.name === name);
+    if (dz) {
+      dz.lat = d.lat;
+      dz.lng = d.lng;
+      dz.country = d.country || dz.country;
+    } else {
+      DROPZONES.push({ name, country: d.country || 'France', lat: d.lat, lng: d.lng });
+    }
+    this.target = { lat: d.lat, lng: d.lng, name, country: d.country || '' };
+    this.lastDz = name;
+  }
+
   closeAdmin(): void {
+    this.applyDraftToSession();
     this.adminOpen = false;
     this.adminTool = 'target';
     this.adminActiveZone = null;
