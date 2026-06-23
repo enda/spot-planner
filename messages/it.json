@@ -191,5 +191,6 @@
   "fs_left": "Sinistra",
   "fs_right": "Destra",
   "jumprun_to_wind_6000": "controvento (6000 m)",
-  "jumprun_to_wind_1500": "controvento (1500 m)"
+  "jumprun_to_wind_1500": "controvento (1500 m)",
+  "leg_runways": "Piste"
 }

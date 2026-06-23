@@ -64,6 +64,7 @@
   let zoneRing: any = null;
   let zoneLayers: any[] = [];
   let refLayers: any[] = [];
+  let runwayLayers: any[] = [];
   let adminLayer: any = null;
   let dragMoved = false;
 
@@ -252,12 +253,15 @@
     const o = { lat: tgt.lat, lng: tgt.lng };
     const LL = (p: { e: number; n: number }) => metersLatLng(o, p.e, p.n);
 
+    // Flight overlays (circuit, ideal, nodes, legs, jump) are hidden while
+    // editing a DZ — only the editable zones / runways / refs stay visible.
+    const fl = !app.adminOpen;
     lIdeal
       .setLatLngs([LL(g.Di), LL(g.Bi), LL(g.Fi), [o.lat, o.lng]])
-      .setStyle({ opacity: app.showIdeal ? 0.95 : 0 });
+      .setStyle({ opacity: app.showIdeal && fl ? 0.95 : 0 });
     lCircuit
       .setLatLngs([LL(g.D), LL(g.B), LL(g.F), [o.lat, o.lng]])
-      .setStyle({ opacity: app.showCircuit ? 0.97 : 0 });
+      .setStyle({ opacity: app.showCircuit && fl ? 0.97 : 0 });
 
     const nd: [[number, number], string][] = [
       [LL(g.D), fmtA(s.dwAlt)],
@@ -269,10 +273,10 @@
       m.setLatLng(n[0]).setStyle({
         color: '#f2a40c',
         fillColor: '#0c1014',
-        opacity: app.showCircuit ? 1 : 0,
-        fillOpacity: app.showCircuit ? 1 : 0,
+        opacity: app.showCircuit && fl ? 1 : 0,
+        fillOpacity: app.showCircuit && fl ? 1 : 0,
       });
-      if (app.showLabels && app.showCircuit) {
+      if (app.showLabels && app.showCircuit && fl) {
         if (!m.getTooltip())
           m.bindTooltip('', { permanent: true, direction: 'right', offset: [8, 0], className: 'dz-tip' });
         m.setTooltipContent(n[1]);
@@ -291,7 +295,7 @@
     legs.forEach((lg, i) => {
       const m = lLegs[i];
       m.setLatLng(lg[0]);
-      if (app.showLegs) {
+      if (app.showLegs && fl) {
         if (!m.getTooltip())
           m.bindTooltip('', { permanent: true, direction: 'center', className: 'leg-tip' });
         m.setTooltipContent(lg[1]);
@@ -317,7 +321,7 @@
 
   function updateJump(o: { lat: number; lng: number }) {
     if (!lJump) return;
-    if (!app.jumpRun) {
+    if (!app.jumpRun || app.adminOpen) {
       lJump.setStyle({ opacity: 0 });
       lJumpArrow.setStyle({ opacity: 0 });
       return;
@@ -381,6 +385,25 @@
     }
   }
 
+  /** Runway lines (off by default — a big white stroke). Hidden while editing. */
+  function drawRunways(entry: DzEntry | null) {
+    if (!map || !ready) return;
+    runwayLayers.forEach((l) => map.removeLayer(l));
+    runwayLayers = [];
+    if (!app.showRunways || app.adminOpen || !entry || !entry.runways) return;
+    for (const rw of entry.runways) {
+      runwayLayers.push(
+        L.polyline([rw.a, rw.b], {
+          renderer,
+          interactive: false,
+          color: '#fff',
+          weight: 4,
+          opacity: 0.85,
+        }).addTo(map),
+      );
+    }
+  }
+
   /** Jump-run reference points (mid runway / thresholds) as toggleable markers. */
   function drawRefs(entry: DzEntry | null) {
     if (!map || !ready) return;
@@ -410,7 +433,7 @@
 
   function drawOpenZone(s: PhysState, tgt: Target) {
     if (!map || !ready) return;
-    if (!app.showOpenZone) {
+    if (!app.showOpenZone || app.adminOpen) {
       if (zoneRing) {
         map.removeLayer(zoneRing);
         zoneRing = null;
@@ -520,6 +543,7 @@
       updateOverlays(app.phys, tgt);
       drawZones(app.entry);
       drawRefs(app.entry);
+      drawRunways(app.entry);
       drawOpenZone(app.phys, tgt);
     }
     drawAdmin();
@@ -543,8 +567,10 @@
       app.jumpRefIdx,
       app.showOpenZone,
       app.showJrRefs,
+      app.showRunways,
       app.showZones,
       app.showTarget,
+      app.adminOpen,
       app.altUnit,
     ];
     const entry = app.entry;
@@ -558,6 +584,7 @@
     updateOverlays(s, tgt);
     drawZones(entry);
     drawRefs(entry);
+    drawRunways(entry);
     drawOpenZone(s, tgt);
   });
 
@@ -592,7 +619,7 @@
   <div bind:this={mapEl} class="map" class:placing></div>
 
   <div class="topleft">
-    <MapSummary />
+    {#if !app.adminOpen}<MapSummary />{/if}
     {#if app.fullscreen}
       {#if app.legendHidden}
         <button class="legend-reopen" onclick={() => (app.legendHidden = false)}>
@@ -610,8 +637,8 @@
       {/if}
     {/if}
   </div>
-  {#if app.showCompass}<Compass />{/if}
-  {#if app.showWindLayer}
+  {#if app.showCompass && !app.adminOpen}<Compass />{/if}
+  {#if app.showWindLayer && !app.adminOpen}
     <WindArrows />
     <WindWidget />
   {/if}
@@ -826,6 +853,14 @@
     border-radius: 11px;
     padding: 10px 13px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  }
+  /* On phones/tablets the editor is a bottom sheet → put the tool hint just
+     above it instead of at the top of the map. */
+  @media (max-width: 1024px) {
+    .admin-banner {
+      top: auto;
+      bottom: calc(50dvh + 10px);
+    }
   }
   .adot {
     width: 11px;

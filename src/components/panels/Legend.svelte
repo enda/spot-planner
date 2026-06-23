@@ -39,6 +39,9 @@
   <button class:off={!app.showJrRefs} onclick={() => (app.showJrRefs = !app.showJrRefs)}>
     <span class="refdot"></span>{m.leg_refs()}
   </button>
+  <button class:off={!app.showRunways} onclick={() => (app.showRunways = !app.showRunways)}>
+    <span class="runwaybar"></span>{m.leg_runways()}
+  </button>
   <button class:off={!app.showZones} onclick={() => (app.showZones = !app.showZones)}>
     <span class="zonebox"></span>{m.leg_zones()}
   </button>
@@ -144,6 +147,13 @@
     border-radius: 2px;
     background: rgba(63, 208, 122, 0.28);
     border: 1.5px solid #3fd07a;
+    display: inline-block;
+  }
+  .runwaybar {
+    width: 18px;
+    height: 4px;
+    border-radius: 1px;
+    background: #fff;
     display: inline-block;
   }
   .tbox {
