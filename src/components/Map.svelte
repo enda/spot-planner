@@ -21,7 +21,6 @@
 
   let { embed = false }: { embed?: boolean } = $props();
 
-  const drawingZone = $derived(app.adminTool === 'zone' && app.adminActiveZone != null);
   // A point-placing tool is active → show a crosshair instead of the pan hand.
   const placing = $derived(app.adminOpen && app.adminTool !== 'none');
   const banner = $derived.by(() => {
@@ -364,7 +363,7 @@
     if (!map || !ready) return;
     zoneLayers.forEach((l) => map.removeLayer(l));
     zoneLayers = [];
-    if (!app.showZones || !entry || !entry.zones) return;
+    if (!app.showZones || app.adminOpen || !entry || !entry.zones) return;
     for (const zn of entry.zones) {
       const c = zn.color || '#36c2d6';
       const poly = L.polygon(zn.polygon, {
@@ -409,7 +408,7 @@
     if (!map || !ready) return;
     refLayers.forEach((l) => map.removeLayer(l));
     refLayers = [];
-    if (!app.showJrRefs || !entry || !entry.jrRefs) return;
+    if (!app.showJrRefs || app.adminOpen || !entry || !entry.jrRefs) return;
     entry.jrRefs.forEach((r) => {
       const mk = L.circleMarker(r.ll, {
         renderer,
@@ -526,11 +525,15 @@
       });
     });
     d.jrRefs.forEach((r, i) => {
-      if (r && r.ll)
-        draftDot(r.ll, '#c77dff', 'rgba(199,125,255,0.55)', 6, (ll) => app.moveRef(i, ll)).bindTooltip(
-          r.name || 'repère',
-          { permanent: true, direction: 'top', offset: [0, -8], className: 'zone-tip' },
-        );
+      if (!(r && r.ll)) return;
+      const mk = draftDot(r.ll, '#c77dff', 'rgba(199,125,255,0.55)', 6, (ll) => app.moveRef(i, ll));
+      if (app.showLabels)
+        mk.bindTooltip(r.name || 'repère', {
+          permanent: true,
+          direction: 'top',
+          offset: [0, -8],
+          className: 'zone-tip',
+        });
     });
   }
 
@@ -609,7 +612,13 @@
 
   // Admin draft overlays.
   $effect(() => {
-    void [app.adminOpen, app.adminDraft, app.adminActiveZone, app.adminActiveRunway];
+    void [
+      app.adminOpen,
+      app.adminDraft,
+      app.adminActiveZone,
+      app.adminActiveRunway,
+      app.showLabels,
+    ];
     if (!map || !ready) return;
     drawAdmin();
   });
@@ -650,8 +659,12 @@
         <div class="bmain">{banner.main}</div>
         <div class="bsub">{banner.sub}</div>
       </div>
-      {#if drawingZone}
-        <button class="bdone" onclick={() => (app.adminTool = 'none')}>✓ Terminer</button>
+      {#if app.adminTool === 'runway'}
+        <button class="bdone cancel" onclick={() => app.cancelRunwayDraw()}>✕ {m.admin_cancel()}</button>
+      {:else if app.adminTool === 'jrref'}
+        <button class="bdone cancel" onclick={() => (app.adminTool = 'none')}>✕ {m.admin_cancel()}</button>
+      {:else if app.adminTool !== 'none'}
+        <button class="bdone" onclick={() => (app.adminTool = 'none')}>✓ {m.admin_done()}</button>
       {/if}
     </div>
   {/if}

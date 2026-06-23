@@ -735,6 +735,20 @@ class AppState {
     this.adminResult = null;
   }
 
+  /** Cancel an in-progress runway draw: drop it if it was never started. */
+  cancelRunwayDraw(): void {
+    const i = this.adminActiveRunway;
+    if (i != null) {
+      const rw = this.adminDraft.runways[i];
+      if (rw && !rw.a) {
+        this.removeAdminRunway(i);
+        return;
+      }
+    }
+    this.adminTool = 'none';
+    this.adminActiveRunway = null;
+  }
+
   patchRef(i: number, patch: Partial<AdminDraft['jrRefs'][number]>): void {
     const jrRefs = this.adminDraft.jrRefs.map((r, idx) => (idx === i ? { ...r, ...patch } : r));
     this.patchDraft({ jrRefs });

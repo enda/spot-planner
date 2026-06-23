@@ -192,5 +192,7 @@
   "fs_right": "Direita",
   "jumprun_to_wind_6000": "contra o vento (6000 m)",
   "jumprun_to_wind_1500": "contra o vento (1500 m)",
-  "leg_runways": "Pistas"
+  "leg_runways": "Pistas",
+  "admin_done": "Concluir",
+  "admin_cancel": "Cancelar"
 }

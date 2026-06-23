@@ -192,5 +192,7 @@
   "fs_right": "Right",
   "jumprun_to_wind_6000": "into wind (6000 m)",
   "jumprun_to_wind_1500": "into wind (1500 m)",
-  "leg_runways": "Runways"
+  "leg_runways": "Runways",
+  "admin_done": "Done",
+  "admin_cancel": "Cancel"
 }
