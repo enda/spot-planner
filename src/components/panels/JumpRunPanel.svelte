@@ -40,12 +40,12 @@
         />
         <span class="deg">°</span>
       </div>
+      <button class="towind" onclick={() => app.jumpDirToWindAt(1500)}>↺ {m.jumprun_to_wind_1500()}</button>
       {#if app.jumpDirAuto && app.jumpRefIsTarget}
         <div class="auto">↺ {m.jumprun_to_wind()}</div>
       {:else}
         <button class="towind" onclick={() => app.jumpDirToWind()}>↺ {m.jumprun_to_wind()}</button>
       {/if}
-      <button class="towind" onclick={() => app.jumpDirToWindAt(6000)}>↺ {m.jumprun_to_wind_6000()}</button>
     </div>
   </div>
 

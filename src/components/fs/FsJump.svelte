@@ -8,8 +8,8 @@
 
   const refs = $derived(app.jrRefs);
   const dir = $derived(Math.round(((app.jumpRunDir % 360) + 360) % 360));
+  const wind15 = $derived(((Math.round(windAt(app.winds, 1500).dir) % 360) + 360) % 360);
   const wind4k = $derived(((Math.round(windAt(app.winds, 4000).dir) % 360) + 360) % 360);
-  const wind6k = $derived(((Math.round(windAt(app.winds, 6000).dir) % 360) + 360) % 360);
   const offsetTxt = $derived.by(() => {
     const v = Math.round(app.jumpRunOffset || 0);
     return v === 0 ? m.offset_on_axis() : v > 0 ? m.offset_right({ v }) : m.offset_left({ v });
@@ -55,8 +55,8 @@
 
 <div class="lbl c top">{m.into_wind()}</div>
 <div class="seg2">
+  <button class:on={dir === wind15} onclick={() => app.jumpDirToWindAt(1500)}>1500 m</button>
   <button class:on={dir === wind4k} onclick={() => app.jumpDirToWind()}>4000 m</button>
-  <button class:on={dir === wind6k} onclick={() => app.jumpDirToWindAt(6000)}>6000 m</button>
 </div>
 
 <div class="lbl c top">{m.fs_offset()} · {offsetTxt}</div>

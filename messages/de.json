@@ -190,5 +190,6 @@
   "fs_offset": "Versatz",
   "fs_left": "Links",
   "fs_right": "Rechts",
-  "jumprun_to_wind_6000": "gegen den Wind (6000 m)"
+  "jumprun_to_wind_6000": "gegen den Wind (6000 m)",
+  "jumprun_to_wind_1500": "gegen den Wind (1500 m)"
 }

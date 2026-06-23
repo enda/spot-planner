@@ -190,5 +190,6 @@
   "fs_offset": "Décalage",
   "fs_left": "Gauche",
   "fs_right": "Droite",
-  "jumprun_to_wind_6000": "face au vent (6000 m)"
+  "jumprun_to_wind_6000": "face au vent (6000 m)",
+  "jumprun_to_wind_1500": "face au vent (1500 m)"
 }
