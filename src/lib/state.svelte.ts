@@ -151,6 +151,7 @@ class AppState {
   adminMoveIdx = $state<number | null>(null);
   adminResult = $state<string | null>(null);
   adminDraft = $state<AdminDraft>(emptyDraft());
+  private adminEnteredFs = false; // did opening admin trigger fullscreen (mobile)?
 
   /** Snapshot used by the pure physics module. */
   get phys(): PhysState {
@@ -576,6 +577,16 @@ class AppState {
     this.adminOpen = true;
     this.adminMode = mode;
     this.adminResult = null;
+    // On phones/tablets the drawer covers the map → go fullscreen so the map
+    // stays visible (the drawer becomes a bottom sheet over it). Restored on close.
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia('(max-width: 1024px)').matches &&
+      !this.fullscreen
+    ) {
+      this.fullscreen = true;
+      this.adminEnteredFs = true;
+    }
     if (mode === 'edit') {
       const name = t && DROPZONES.some((d) => d.name === t.name) ? t.name : DROPZONES[0].name;
       this.loadDraftFromDz(name);
@@ -635,6 +646,10 @@ class AppState {
     this.adminActiveZone = null;
     this.adminActiveRunway = null;
     this.adminMoveIdx = null;
+    if (this.adminEnteredFs) {
+      this.fullscreen = false;
+      this.adminEnteredFs = false;
+    }
   }
 
   loadDraftFromDz(name: string): void {

@@ -259,6 +259,25 @@
     display: flex;
     flex-direction: column;
   }
+  /* Phones & tablets: the map goes fullscreen and the editor becomes a bottom
+     sheet over it, so the map (and the points being placed) stays visible. */
+  @media (max-width: 1024px) {
+    .drawer {
+      top: auto;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: none;
+      max-height: 50dvh;
+      z-index: 100002;
+      border-right: none;
+      border-top: 1px solid var(--line);
+      border-radius: 14px 14px 0 0;
+      box-shadow: 0 -3px 30px rgba(0, 0, 0, 0.5);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+  }
   .dhead {
     display: flex;
     align-items: center;
