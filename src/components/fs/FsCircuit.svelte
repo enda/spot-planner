@@ -89,10 +89,6 @@
   <button onclick={() => ((app.dwAlt = 300), (app.baseAlt = 150), (app.finalAlt = 90))}>300·150·90</button>
 </div>
 
-{#if app.circuitEdited}
-  <button class="reset" onclick={() => app.resetCircuitNodes()}>{m.circuit_reset()}</button>
-{/if}
-
 <style>
   .head {
     display: flex;
@@ -185,17 +181,6 @@
     color: var(--muted);
     padding: 6px 0;
     font: 700 10px/1 var(--font-mono);
-  }
-  .reset {
-    width: 100%;
-    margin-top: 8px;
-    cursor: pointer;
-    background: var(--surface2);
-    border: 1px solid var(--accent);
-    border-radius: 7px;
-    padding: 7px 0;
-    font: 700 10.5px/1 var(--font-display);
-    color: var(--accent);
   }
   .seg {
     display: flex;

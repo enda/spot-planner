@@ -79,6 +79,9 @@
             </span>
           </button>
         </div>
+        {#if app.circuitEdited}
+          <button class="reset" onclick={() => app.resetCircuitNodes()}>{m.circuit_reset()}</button>
+        {/if}
         {#if app.embed}
           <a class="cta" href={app.configUrl()} target="_blank" rel="noopener">{m.sum_prepare()}</a>
         {/if}
@@ -162,6 +165,18 @@
     display: inline-block;
     margin-right: 3px;
     font: 700 11px/1 var(--font-mono);
+  }
+  .reset {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    cursor: pointer;
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 7px;
+    font: 700 10px/1 var(--font-display);
+    color: var(--accent);
   }
   .cta {
     display: block;
