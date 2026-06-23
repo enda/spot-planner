@@ -1,5 +1,10 @@
 // Real winds-aloft from open-meteo (free, no key, CORS-friendly).
-// Pressure levels 1000→500 hPa + geopotential height → AGL altitude.
+// Pressure levels 975→500 hPa + geopotential height → AGL altitude.
+//
+// The 1000 hPa level is deliberately skipped: it sits in the noisy near-surface
+// layer (~100 m AGL at low elevations) where the model's pressure-level wind is
+// unreliable — it can show a near-calm reversal while the 10 m surface wind and
+// the 975 hPa level agree. The 10 m diagnostic wind covers the surface instead.
 
 import type { Wind } from './physics';
 
@@ -8,7 +13,7 @@ export interface WindsResult {
   source: string;
 }
 
-const LEVELS = [1000, 975, 950, 925, 900, 850, 800, 700, 600, 500];
+const LEVELS = [975, 950, 925, 900, 850, 800, 700, 600, 500];
 
 /** Fallback profile used before the network responds (Gap-Tallard-ish SW wind). */
 export const DEFAULT_WINDS: Wind[] = [
