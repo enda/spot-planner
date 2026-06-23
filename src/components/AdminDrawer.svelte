@@ -1,12 +1,20 @@
 <script lang="ts">
   import { app, DROPZONES } from '$lib/state.svelte';
   import { ADMIN_EMAIL, ADMIN_SWATCHES } from '$lib/admin';
+  import { countryLabel } from '$lib/countries';
   import { copyText } from '$lib/clipboard';
   import * as m from '$lib/paraglide/messages';
   import type { LatLng } from '$lib/physics';
 
   const D = $derived(app.adminDraft);
   const dzNames = DROPZONES.map((d) => d.name).sort();
+  // Country picker: the countries already in the list (+ the draft's own), shown
+  // translated, value stored as the French name used throughout the data.
+  const countries = $derived(
+    Array.from(new Set([...DROPZONES.map((d) => d.country), D.country].filter(Boolean)))
+      .map((c) => ({ value: c, label: countryLabel(c) }))
+      .sort((a, b) => a.label.localeCompare(b.label)),
+  );
   const latlngTxt = $derived(
     isFinite(D.lat) && isFinite(D.lng) ? `${D.lat.toFixed(5)}, ${D.lng.toFixed(5)}` : m.admin_not_placed(),
   );
@@ -107,12 +115,14 @@
       </div>
       <div style="flex:1">
         <label class="label" for="adm-country">{m.admin_country()}</label>
-        <input
+        <select
           id="adm-country"
           class="field"
           value={D.country}
-          oninput={(e) => app.patchDraft({ country: e.currentTarget.value })}
-        />
+          onchange={(e) => app.patchDraft({ country: e.currentTarget.value })}
+        >
+          {#each countries as c}<option value={c.value}>{c.label}</option>{/each}
+        </select>
       </div>
     </div>
 
