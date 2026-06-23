@@ -107,7 +107,7 @@ export const DROPZONES: Dropzone[] = [
   { name: 'Grenoble-Le Versoud', country: 'France', lat: 45.218047, lng: 5.848317 },
   { name: 'Guiscriff-Scaër', country: 'France', lat: 48.052502, lng: -3.66472 },
   { name: 'Issoire-Le Broc', country: 'France', lat: 45.514999, lng: 3.2675 },
-  { name: 'ParisJump (La Ferté-Gaucher)', country: 'France', lat: 48.757019, lng: 3.278098 },
+  { name: 'Paris Jump (Saint-Florentin-Chéu)', country: 'France', lat: 47.981738, lng: 3.775012 },
   { name: 'La Môle (Saint-Tropez)', country: 'France', lat: 43.205399, lng: 6.482 },
   { name: 'Le Blanc', country: 'France', lat: 46.6208, lng: 1.0875 },
   { name: 'Le Luc-Le Cannet', country: 'France', lat: 43.384701, lng: 6.38714 },
