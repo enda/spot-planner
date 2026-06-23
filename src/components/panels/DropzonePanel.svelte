@@ -2,6 +2,7 @@
   import { tick } from 'svelte';
   import { app, DROPZONES } from '$lib/state.svelte';
   import { fold } from '$lib/text';
+  import { countryLabel } from '$lib/countries';
   import * as m from '$lib/paraglide/messages';
   import type { Dropzone } from '$lib/dropzones';
 
@@ -26,13 +27,17 @@
   const groups = $derived.by(() => {
     const q = fold(app.query);
     const matches = DROPZONES.filter(
-      (d) => !q || fold(d.name).includes(q) || fold(d.country).includes(q),
+      (d) =>
+        !q ||
+        fold(d.name).includes(q) ||
+        fold(d.country).includes(q) ||
+        fold(countryLabel(d.country)).includes(q),
     );
     const byC: Record<string, Dropzone[]> = {};
     for (const d of matches) (byC[d.country] ??= []).push(d);
     return Object.keys(byC)
-      .sort()
-      .map((c) => ({ country: c, items: byC[c] }));
+      .map((c) => ({ country: c, label: countryLabel(c), items: byC[c] }))
+      .sort((a, b) => a.label.localeCompare(b.label));
   });
 </script>
 
@@ -42,7 +47,7 @@
   <div class="coords">
     {#if app.target}
       {app.target.lat.toFixed(4)}, {app.target.lng.toFixed(4)}{app.target.country
-        ? ` · ${app.target.country}`
+        ? ` · ${countryLabel(app.target.country)}`
         : ''}
     {:else}
       {m.dz_hint()}
@@ -66,7 +71,7 @@
 
     <div class="list">
       {#each groups as grp}
-        <div class="country">{grp.country}</div>
+        <div class="country">{grp.label}</div>
         {#each grp.items as dz}
           <button class="row" class:active={app.target?.name === dz.name} onclick={() => pick(dz)}>
             {dz.name}
