@@ -598,9 +598,10 @@
     ensureTiles(bm);
   });
 
-  // Recenter only when a *new* DZ is selected (not on marker drag).
+  // Recenter only when a *new* DZ is selected/loaded (not on marker drag) — uses
+  // activeTarget so switching the edited DZ in the admin recenters too.
   $effect(() => {
-    const tgt = app.target;
+    const tgt = app.activeTarget;
     if (!map || !ready || !tgt) return;
     if (tgt.name === lastName) return;
     lastName = tgt.name;
