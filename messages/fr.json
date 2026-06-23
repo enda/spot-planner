@@ -162,7 +162,7 @@
   "admin_b_zone_main": "Dessin : {name}",
   "admin_b_zone_sub": "Clique pour ajouter les sommets · {count} point(s)",
   "admin_b_none_main": "Aucun outil actif",
-  "admin_b_none_sub": "Choisis un outil dans le panneau",
+  "admin_b_none_sub": "Choisis un outil ou déplace un point existant",
   "admin_finish": "✓ Terminer",
   "qr_button": "QR Code",
   "qr_title": "Partager ce circuit",

@@ -162,7 +162,7 @@
   "admin_b_zone_main": "Zeichnen: {name}",
   "admin_b_zone_sub": "Klicke, um Eckpunkte hinzuzufügen · {count} Punkt(e)",
   "admin_b_none_main": "Kein Werkzeug aktiv",
-  "admin_b_none_sub": "Wähle ein Werkzeug im Panel",
+  "admin_b_none_sub": "Wähle ein Werkzeug oder ziehe einen Punkt",
   "admin_finish": "✓ Fertig",
   "qr_button": "QR-Code",
   "qr_title": "Diesen Kreis teilen",

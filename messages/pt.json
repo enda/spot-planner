@@ -162,7 +162,7 @@
   "admin_b_zone_main": "Desenho: {name}",
   "admin_b_zone_sub": "Clica para adicionar os vértices · {count} ponto(s)",
   "admin_b_none_main": "Nenhuma ferramenta ativa",
-  "admin_b_none_sub": "Escolhe uma ferramenta no painel",
+  "admin_b_none_sub": "Escolhe uma ferramenta ou arrasta um ponto existente",
   "admin_finish": "✓ Terminar",
   "qr_button": "Código QR",
   "qr_title": "Partilhar este circuito",

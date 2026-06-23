@@ -4,7 +4,11 @@
 </script>
 
 <div class="legend">
-  <button class:off={!app.showTarget} onclick={() => (app.showTarget = !app.showTarget)}>
+  <button
+    class:off={!app.adminOpen && !app.showTarget}
+    disabled={app.adminOpen}
+    onclick={() => (app.showTarget = !app.showTarget)}
+  >
     <span class="targetdot"></span>{m.leg_target()}
   </button>
   {#if !app.adminOpen}
@@ -36,13 +40,25 @@
       <span class="ring2"></span>{m.leg_zone()}
     </button>
   {/if}
-  <button class:off={!app.showJrRefs} onclick={() => (app.showJrRefs = !app.showJrRefs)}>
+  <button
+    class:off={!app.adminOpen && !app.showJrRefs}
+    disabled={app.adminOpen}
+    onclick={() => (app.showJrRefs = !app.showJrRefs)}
+  >
     <span class="refdot"></span>{m.leg_refs()}
   </button>
-  <button class:off={!app.showRunways} onclick={() => (app.showRunways = !app.showRunways)}>
+  <button
+    class:off={!app.adminOpen && !app.showRunways}
+    disabled={app.adminOpen}
+    onclick={() => (app.showRunways = !app.showRunways)}
+  >
     <span class="runwaybar"></span>{m.leg_runways()}
   </button>
-  <button class:off={!app.showZones} onclick={() => (app.showZones = !app.showZones)}>
+  <button
+    class:off={!app.adminOpen && !app.showZones}
+    disabled={app.adminOpen}
+    onclick={() => (app.showZones = !app.showZones)}
+  >
     <span class="zonebox"></span>{m.leg_zones()}
   </button>
   {#if !app.adminOpen}
@@ -74,6 +90,11 @@
     font: 600 11px/1.3 var(--font-display);
     color: var(--muted);
     transition: opacity 0.15s;
+  }
+  /* In edit mode the always-on entries are shown active but not togglable. */
+  button:disabled {
+    cursor: default;
+    opacity: 1;
   }
   button.off {
     opacity: 0.5;

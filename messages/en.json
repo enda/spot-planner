@@ -162,7 +162,7 @@
   "admin_b_zone_main": "Drawing: {name}",
   "admin_b_zone_sub": "Click to add vertices · {count} point(s)",
   "admin_b_none_main": "No active tool",
-  "admin_b_none_sub": "Pick a tool in the panel",
+  "admin_b_none_sub": "Pick a tool or drag an existing point",
   "admin_finish": "✓ Finish",
   "qr_button": "QR code",
   "qr_title": "Share this circuit",

@@ -302,9 +302,11 @@
     });
 
     if (markerT) {
-      markerT.setOpacity(app.showTarget ? 1 : 0);
+      // The target is always visible while editing (you're placing it).
+      const showT = app.showTarget || app.adminOpen;
+      markerT.setOpacity(showT ? 1 : 0);
       const tt = markerT.getTooltip();
-      if (app.showLabels && app.showTarget) {
+      if (app.showLabels && showT) {
         if (!tt)
           markerT.bindTooltip('Cible', {
             permanent: true,
@@ -488,7 +490,7 @@
       const c = z.color || '#36c2d6';
       const active = i === app.adminActiveZone;
       if (z.polygon.length >= 3) {
-        L.polygon(z.polygon, {
+        const poly = L.polygon(z.polygon, {
           renderer,
           interactive: false,
           color: c,
@@ -497,6 +499,12 @@
           fillOpacity: 0.2,
           dashArray: active ? '6 5' : undefined,
         }).addTo(adminLayer);
+        if (app.showLabels)
+          poly.bindTooltip(z.name || 'Zone', {
+            permanent: true,
+            direction: 'center',
+            className: 'zone-tip',
+          });
       } else if (z.polygon.length === 2) {
         L.polyline(z.polygon, { renderer, interactive: false, color: c, weight: 2.5, dashArray: '6 5' }).addTo(
           adminLayer,

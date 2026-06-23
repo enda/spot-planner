@@ -162,7 +162,7 @@
   "admin_b_zone_main": "Disegno: {name}",
   "admin_b_zone_sub": "Clicca per aggiungere i vertici · {count} punto(i)",
   "admin_b_none_main": "Nessuno strumento attivo",
-  "admin_b_none_sub": "Scegli uno strumento nel pannello",
+  "admin_b_none_sub": "Scegli uno strumento o sposta un punto esistente",
   "admin_finish": "✓ Termina",
   "qr_button": "Codice QR",
   "qr_title": "Condividi questo circuito",
