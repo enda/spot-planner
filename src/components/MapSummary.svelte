@@ -17,6 +17,15 @@
     `${Math.round(((app.jumpRunDir % 360) + 360) % 360)}° · ${Math.round(app.jumpRunOffset || 0)} m / ${app.jrRefName}`,
   );
 
+  // No DZ selected (bare target) → show the GPS coordinates instead of a name.
+  const dzLabel = $derived(
+    app.target?.name?.trim()
+      ? app.target.name
+      : app.target
+        ? `${app.target.lat.toFixed(4)}, ${app.target.lng.toFixed(4)}`
+        : '',
+  );
+
   let open = $state(true);
   let fsEdit = $state<'circuit' | 'jump' | 'wind' | null>(null);
 
@@ -39,7 +48,7 @@
       {/if}
     {:else}
       <button class="hdr" onclick={() => (open = !open)} aria-expanded={open}>
-        <span class="dz">{app.target.name}</span>
+        <span class="dz">{dzLabel}</span>
         <span class="chev">{open ? '−' : '+'}</span>
       </button>
       {#if open}
