@@ -58,8 +58,12 @@
   }
   .back {
     flex: none;
+    box-sizing: border-box;
     width: 26px;
     height: 26px;
+    padding: 0;
+    -webkit-appearance: none;
+    appearance: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -68,7 +72,7 @@
     background: none;
     color: var(--fg);
     cursor: pointer;
-    font: 700 14px/1 var(--font-display);
+    font: 700 15px/1 var(--font-display);
   }
   .title {
     font: 700 11px/1 var(--font-display);

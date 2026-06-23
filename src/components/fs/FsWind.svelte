@@ -103,8 +103,12 @@
   }
   .back {
     flex: none;
+    box-sizing: border-box;
     width: 26px;
     height: 26px;
+    padding: 0;
+    -webkit-appearance: none;
+    appearance: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -113,7 +117,7 @@
     background: none;
     color: var(--fg);
     cursor: pointer;
-    font: 700 14px/1 var(--font-display);
+    font: 700 15px/1 var(--font-display);
   }
   .title {
     font: 700 11px/1 var(--font-display);
@@ -140,14 +144,16 @@
   .hdr,
   .row {
     display: grid;
-    gap: 5px;
+    gap: 4px;
     align-items: center;
   }
   .five {
-    grid-template-columns: 0.85fr 0.95fr 0.85fr 0.7fr 0.7fr;
+    grid-template-columns:
+      minmax(min-content, 0.9fr) minmax(min-content, 1fr) minmax(min-content, 0.9fr)
+      minmax(min-content, 0.7fr) minmax(min-content, 0.7fr);
   }
   .three {
-    grid-template-columns: 0.85fr 0.95fr 0.85fr;
+    grid-template-columns: minmax(min-content, 0.9fr) minmax(min-content, 1fr) minmax(min-content, 0.9fr);
   }
   .hdr {
     margin: 0 0 5px;
@@ -160,8 +166,9 @@
     margin-bottom: 5px;
   }
   .cell {
-    font: 600 10px/1.1 var(--font-mono);
+    font: 600 9.5px/1.1 var(--font-mono);
     color: var(--fg);
+    white-space: nowrap;
   }
   .cell.b {
     font-weight: 700;
