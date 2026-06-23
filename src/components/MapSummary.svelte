@@ -17,6 +17,12 @@
     `${Math.round(((app.jumpRunDir % 360) + 360) % 360)}° · ${Math.round(app.jumpRunOffset || 0)} m / ${app.jrRefName}`,
   );
 
+  // Little arrows, aligned to the map rotation. Jump run points the drop
+  // direction; the ground wind points where the wind blows TO (it comes FROM dir).
+  const norm = (a: number) => ((a % 360) + 360) % 360;
+  const jumpAngle = $derived(norm(Math.round(app.jumpRunDir) + app.bearing));
+  const windAngle = $derived(norm(Math.round(surf.dir) + 180 + app.bearing));
+
   // No DZ selected (bare target) → show the GPS coordinates instead of a name.
   const dzLabel = $derived(
     app.target?.name?.trim()
@@ -35,6 +41,10 @@
     if (!app.fullscreen) fsEdit = null;
   });
 </script>
+
+{#snippet arrow(angle: number, color: string)}
+  <span class="arr" style="transform:rotate({angle}deg);color:{color}">↑</span>
+{/snippet}
 
 {#if app.target}
   <div class="summary">
@@ -59,12 +69,12 @@
           </button>
           <button class="rw" class:click={editable} disabled={!editable} onclick={() => (fsEdit = 'jump')}>
             <span class="k">{m.sum_jump()}</span>
-            <span class="v jump">{jump}</span>
+            <span class="v jump">{@render arrow(jumpAngle, 'var(--jump)')}{jump}</span>
           </button>
           <button class="rw" class:click={editable} disabled={!editable} onclick={() => (fsEdit = 'wind')}>
             <span class="k">{m.sum_ground_wind()}</span>
             <span class="v">
-              {Math.round(surf.dir)}° ·
+              {@render arrow(windAngle, windCol(surf.spd))}{Math.round(surf.dir)}° ·
               <span style="color:{windCol(surf.spd)}">{fmtSpeed(surf.spd, app.windUnit)}</span>
             </span>
           </button>
@@ -147,6 +157,11 @@
   }
   .v.jump {
     color: var(--jump);
+  }
+  .arr {
+    display: inline-block;
+    margin-right: 3px;
+    font: 700 11px/1 var(--font-mono);
   }
   .cta {
     display: block;
