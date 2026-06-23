@@ -1,11 +1,16 @@
 <script lang="ts">
   import { app } from '$lib/state.svelte';
   import { windAt, landingHeading } from '$lib/physics';
+  import { dispAlt, altToM, altLabel } from '$lib/units';
   import * as m from '$lib/paraglide/messages';
   import Dial from '../Dial.svelte';
 
   let { back }: { back: () => void } = $props();
 
+  const aLabel = $derived(altLabel(app.altUnit));
+  const dwDisp = $derived(dispAlt(app.dwAlt, app.altUnit));
+  const baseDisp = $derived(dispAlt(app.baseAlt, app.altUnit));
+  const finalDisp = $derived(dispAlt(app.finalAlt, app.altUnit));
   const lh = $derived(Math.round(landingHeading(app.phys)));
   const windDir = $derived(((Math.round(windAt(app.winds, 0).dir) % 360) + 360) % 360);
   // "Face vent" is active whenever the landing axis equals the ground wind —
@@ -48,6 +53,41 @@
 <button class="facewind" class:on={facing} onclick={() => (app.landingMode = 'wind')}>
   {m.into_wind()}
 </button>
+
+<div class="lbl top">{m.fs_altitudes()} ({aLabel})</div>
+<div class="altrow">
+  <label class="altcell">
+    <span class="altlbl">{m.fs_alt_dw()}</span>
+    <input
+      class="afield"
+      type="number"
+      value={dwDisp}
+      oninput={(e) => (app.dwAlt = altToM(num(e.currentTarget.value), app.altUnit))}
+    />
+  </label>
+  <label class="altcell">
+    <span class="altlbl">{m.fs_alt_base()}</span>
+    <input
+      class="afield"
+      type="number"
+      value={baseDisp}
+      oninput={(e) => (app.baseAlt = altToM(num(e.currentTarget.value), app.altUnit))}
+    />
+  </label>
+  <label class="altcell">
+    <span class="altlbl">{m.fs_alt_final()}</span>
+    <input
+      class="afield"
+      type="number"
+      value={finalDisp}
+      oninput={(e) => (app.finalAlt = altToM(num(e.currentTarget.value), app.altUnit))}
+    />
+  </label>
+</div>
+<div class="presets">
+  <button onclick={() => ((app.dwAlt = 300), (app.baseAlt = 200), (app.finalAlt = 100))}>300·200·100</button>
+  <button onclick={() => ((app.dwAlt = 300), (app.baseAlt = 150), (app.finalAlt = 90))}>300·150·90</button>
+</div>
 
 <style>
   .head {
@@ -92,8 +132,55 @@
   .lbl.c {
     text-align: center;
   }
+  .lbl.top {
+    margin-top: 11px;
+  }
   .lbl.accent {
     color: var(--accent);
+  }
+  .altrow {
+    display: flex;
+    gap: 6px;
+  }
+  .altcell {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+  .altlbl {
+    font: 600 8px/1 var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .afield {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    background: var(--surface2);
+    color: var(--fg);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 7px 2px;
+    font: 700 12px/1 var(--font-mono);
+    outline: none;
+  }
+  .presets {
+    display: flex;
+    gap: 6px;
+    margin-top: 7px;
+  }
+  .presets button {
+    flex: 1;
+    cursor: pointer;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: transparent;
+    color: var(--muted);
+    padding: 6px 0;
+    font: 700 10px/1 var(--font-mono);
   }
   .seg {
     display: flex;

@@ -195,5 +195,9 @@
   "leg_runways": "Piste",
   "admin_done": "Fine",
   "admin_cancel": "Annulla",
-  "leg_heading": "Direzione vela"
+  "leg_heading": "Direzione vela",
+  "fs_altitudes": "Altezze",
+  "fs_alt_dw": "Sottov.",
+  "fs_alt_base": "Base",
+  "fs_alt_final": "Finale"
 }

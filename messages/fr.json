@@ -195,5 +195,9 @@
   "leg_runways": "Pistes",
   "admin_done": "Terminer",
   "admin_cancel": "Annuler",
-  "leg_heading": "Cap voile"
+  "leg_heading": "Cap voile",
+  "fs_altitudes": "Hauteurs",
+  "fs_alt_dw": "Vent arr.",
+  "fs_alt_base": "Base",
+  "fs_alt_final": "Finale"
 }

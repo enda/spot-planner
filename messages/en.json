@@ -195,5 +195,9 @@
   "leg_runways": "Runways",
   "admin_done": "Done",
   "admin_cancel": "Cancel",
-  "leg_heading": "Canopy heading"
+  "leg_heading": "Canopy heading",
+  "fs_altitudes": "Heights",
+  "fs_alt_dw": "Downwind",
+  "fs_alt_base": "Base",
+  "fs_alt_final": "Final"
 }

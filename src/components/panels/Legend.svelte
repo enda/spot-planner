@@ -15,6 +15,9 @@
     <button class:off={!app.showCircuit} onclick={() => (app.showCircuit = !app.showCircuit)}>
       <span class="bar" style="background:var(--accent)"></span>{m.leg_circuit()}
     </button>
+    <button class:off={!app.showHeading} onclick={() => (app.showHeading = !app.showHeading)}>
+      <span class="headarrow">↑</span>{m.leg_heading()}
+    </button>
     <button class:off={!app.showIdeal} onclick={() => (app.showIdeal = !app.showIdeal)}>
       <span class="dash" style="border-color:var(--accent2)"></span>{m.leg_ideal()}
     </button>
@@ -38,9 +41,6 @@
     </button>
     <button class:off={!app.showOpenZone} onclick={() => (app.showOpenZone = !app.showOpenZone)}>
       <span class="ring2"></span>{m.leg_zone()}
-    </button>
-    <button class:off={!app.showHeading} onclick={() => (app.showHeading = !app.showHeading)}>
-      <span class="headarrow">↑</span>{m.leg_heading()}
     </button>
   {/if}
   <button

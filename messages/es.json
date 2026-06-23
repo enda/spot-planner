@@ -195,5 +195,9 @@
   "leg_runways": "Pistas",
   "admin_done": "Listo",
   "admin_cancel": "Cancelar",
-  "leg_heading": "Rumbo vela"
+  "leg_heading": "Rumbo vela",
+  "fs_altitudes": "Alturas",
+  "fs_alt_dw": "Viento",
+  "fs_alt_base": "Base",
+  "fs_alt_final": "Final"
 }

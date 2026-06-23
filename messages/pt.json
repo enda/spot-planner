@@ -195,5 +195,9 @@
   "leg_runways": "Pistas",
   "admin_done": "Concluir",
   "admin_cancel": "Cancelar",
-  "leg_heading": "Rumo da vela"
+  "leg_heading": "Rumo da vela",
+  "fs_altitudes": "Alturas",
+  "fs_alt_dw": "Vento",
+  "fs_alt_base": "Base",
+  "fs_alt_final": "Final"
 }

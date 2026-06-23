@@ -195,5 +195,9 @@
   "leg_runways": "Bahnen",
   "admin_done": "Fertig",
   "admin_cancel": "Abbrechen",
-  "leg_heading": "Schirmkurs"
+  "leg_heading": "Schirmkurs",
+  "fs_altitudes": "Höhen",
+  "fs_alt_dw": "Gegenanf.",
+  "fs_alt_base": "Quer",
+  "fs_alt_final": "Final"
 }
