@@ -179,5 +179,16 @@
   "admin_runways_hint": "Each runway adds its mid + two thresholds as jump-run points.",
   "admin_jrrefs_hint": "Shown on the map (windsock, hazard…) and usable as a jump-run anchor.",
   "leg_zones": "Zones",
-  "leg_target": "Target"
+  "leg_target": "Target",
+  "fs_wind_title": "Winds & glide",
+  "fs_winds_high": "Winds aloft > 1000 m",
+  "fs_c_alt": "Alt",
+  "fs_c_dir": "Dir",
+  "fs_c_spd": "Spd",
+  "fs_c_face": "Into",
+  "fs_c_dos": "Down",
+  "fs_offset": "Offset",
+  "fs_left": "Left",
+  "fs_right": "Right",
+  "jumprun_to_wind_6000": "into wind (6000 m)"
 }

@@ -179,5 +179,16 @@
   "admin_runways_hint": "Cada pista adiciona o centro + 2 cabeceiras como referências.",
   "admin_jrrefs_hint": "Mostrados no mapa (biruta…) e utilizáveis como ponto do eixo de salto.",
   "leg_zones": "Zonas",
-  "leg_target": "Alvo"
+  "leg_target": "Alvo",
+  "fs_wind_title": "Ventos & planeio",
+  "fs_winds_high": "Ventos em altitude > 1000 m",
+  "fs_c_alt": "Alt",
+  "fs_c_dir": "Dir",
+  "fs_c_spd": "Vel",
+  "fs_c_face": "Frente",
+  "fs_c_dos": "Costas",
+  "fs_offset": "Desvio",
+  "fs_left": "Esquerda",
+  "fs_right": "Direita",
+  "jumprun_to_wind_6000": "contra o vento (6000 m)"
 }

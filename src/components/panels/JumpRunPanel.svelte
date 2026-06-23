@@ -41,10 +41,11 @@
         <span class="deg">°</span>
       </div>
       {#if app.jumpDirAuto && app.jumpRefIsTarget}
-        <div class="auto">↳ {m.jumprun_to_wind()}</div>
+        <div class="auto">↺ {m.jumprun_to_wind()}</div>
       {:else}
         <button class="towind" onclick={() => app.jumpDirToWind()}>↺ {m.jumprun_to_wind()}</button>
       {/if}
+      <button class="towind" onclick={() => app.jumpDirToWindAt(6000)}>↺ {m.jumprun_to_wind_6000()}</button>
     </div>
   </div>
 
@@ -126,7 +127,7 @@
   }
   .auto {
     font: 500 9.5px/1.3 var(--font-mono);
-    color: var(--jump);
+    color: var(--accent2);
   }
   .towind {
     background: none;

@@ -179,5 +179,16 @@
   "admin_runways_hint": "Chaque piste ajoute son milieu + 2 seuils comme repères d’axe.",
   "admin_jrrefs_hint": "Affichés sur la carte (manche à air, danger…) et utilisables comme point de l’axe de largage.",
   "leg_zones": "Zones",
-  "leg_target": "Cible"
+  "leg_target": "Cible",
+  "fs_wind_title": "Vents & plané",
+  "fs_winds_high": "Vents en altitude > 1000 m",
+  "fs_c_alt": "Alt",
+  "fs_c_dir": "Dir",
+  "fs_c_spd": "Vit",
+  "fs_c_face": "Face",
+  "fs_c_dos": "Dos",
+  "fs_offset": "Décalage",
+  "fs_left": "Gauche",
+  "fs_right": "Droite",
+  "jumprun_to_wind_6000": "face au vent (6000 m)"
 }

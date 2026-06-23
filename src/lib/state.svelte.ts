@@ -555,10 +555,17 @@ class AppState {
     this.jumpRun = true;
   }
 
-  /** Explicit "into wind" button: always re-face the 4000 m wind. */
+  /** Explicit "into wind" button: always re-face the 4000 m wind (auto-tracked). */
   jumpDirToWind(): void {
     this.jumpDirAuto = true;
     this.jumpRunDir = Math.round(windAt(this.winds, 4000).dir);
+    this.jumpRun = true;
+  }
+
+  /** Face the wind at a specific altitude (one-shot; no 4000 m auto-tracking). */
+  jumpDirToWindAt(alt: number): void {
+    this.jumpDirAuto = false;
+    this.jumpRunDir = Math.round(windAt(this.winds, alt).dir);
     this.jumpRun = true;
   }
 

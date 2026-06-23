@@ -179,5 +179,16 @@
   "admin_runways_hint": "Cada pista añade su centro + 2 umbrales como referencias.",
   "admin_jrrefs_hint": "Se muestran en el mapa (manga de viento…) y sirven como punto del eje de salto.",
   "leg_zones": "Zonas",
-  "leg_target": "Objetivo"
+  "leg_target": "Objetivo",
+  "fs_wind_title": "Vientos & planeo",
+  "fs_winds_high": "Vientos en altura > 1000 m",
+  "fs_c_alt": "Alt",
+  "fs_c_dir": "Dir",
+  "fs_c_spd": "Vel",
+  "fs_c_face": "Cara",
+  "fs_c_dos": "Espalda",
+  "fs_offset": "Desfase",
+  "fs_left": "Izquierda",
+  "fs_right": "Derecha",
+  "jumprun_to_wind_6000": "contra el viento (6000 m)"
 }

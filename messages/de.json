@@ -179,5 +179,16 @@
   "admin_runways_hint": "Jede Bahn fügt Mitte + 2 Schwellen als Absetzpunkte hinzu.",
   "admin_jrrefs_hint": "Auf der Karte sichtbar (Windsack …) und als Absetzachsen-Punkt nutzbar.",
   "leg_zones": "Zonen",
-  "leg_target": "Ziel"
+  "leg_target": "Ziel",
+  "fs_wind_title": "Wind & Gleitzahl",
+  "fs_winds_high": "Höhenwind > 1000 m",
+  "fs_c_alt": "Höhe",
+  "fs_c_dir": "Ri",
+  "fs_c_spd": "Gesch",
+  "fs_c_face": "Gegen",
+  "fs_c_dos": "Rücken",
+  "fs_offset": "Versatz",
+  "fs_left": "Links",
+  "fs_right": "Rechts",
+  "jumprun_to_wind_6000": "gegen den Wind (6000 m)"
 }

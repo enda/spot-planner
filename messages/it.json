@@ -179,5 +179,16 @@
   "admin_runways_hint": "Ogni pista aggiunge centro + 2 soglie come riferimenti.",
   "admin_jrrefs_hint": "Mostrati sulla mappa (manica a vento…) e usabili come punto dell’asse di lancio.",
   "leg_zones": "Zone",
-  "leg_target": "Bersaglio"
+  "leg_target": "Bersaglio",
+  "fs_wind_title": "Venti & planata",
+  "fs_winds_high": "Venti in quota > 1000 m",
+  "fs_c_alt": "Alt",
+  "fs_c_dir": "Dir",
+  "fs_c_spd": "Vel",
+  "fs_c_face": "Contro",
+  "fs_c_dos": "Dietro",
+  "fs_offset": "Scostamento",
+  "fs_left": "Sinistra",
+  "fs_right": "Destra",
+  "jumprun_to_wind_6000": "controvento (6000 m)"
 }
