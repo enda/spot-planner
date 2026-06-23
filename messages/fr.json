@@ -37,7 +37,7 @@
   "circuit_direction": "Sens du circuit",
   "left_hand": "Main gauche",
   "right_hand": "Main droite",
-  "downwind_alt": "Vent arrière ({unit})",
+  "downwind_alt": "Vent arr. ({unit})",
   "base_alt": "Base ({unit})",
   "final_alt": "Finale ({unit})",
   "circuit_note": "Altitudes de tes virages (vent arrière → base → finale). Aucune règle figée : adapte-les à ton école et à ta voile.",
@@ -199,5 +199,6 @@
   "fs_altitudes": "Hauteurs",
   "fs_alt_dw": "Vent arr.",
   "fs_alt_base": "Base",
-  "fs_alt_final": "Finale"
+  "fs_alt_final": "Finale",
+  "circuit_reset": "↺ Réinitialiser"
 }

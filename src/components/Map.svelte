@@ -66,6 +66,7 @@
   let refLayers: any[] = [];
   let runwayLayers: any[] = [];
   let headingLayers: any[] = [];
+  let handleLayers: any[] = [];
   let adminLayer: any = null;
   let dragMoved = false;
 
@@ -434,6 +435,41 @@
     });
   }
 
+  /** Ground-track direction (unit, pointing FROM the dragged node TO its anchor). */
+  function circuitDir(anchor: [number, number], p: { lat: number; lng: number }): Vec {
+    const dn = p.lat - anchor[0];
+    const de = (p.lng - anchor[1]) * Math.cos((anchor[0] * Math.PI) / 180);
+    const mag = Math.hypot(de, dn) || 1;
+    return { e: -de / mag, n: -dn / mag };
+  }
+
+  /** Draggable handles on the 3 circuit nodes — drag fine-tunes the leg angle,
+      constrained to its glide-imposed arc (downstream nodes follow). */
+  function drawCircuitHandles(s: PhysState, tgt: Target) {
+    if (!map || !ready) return;
+    handleLayers.forEach((l) => map.removeLayer(l));
+    handleLayers = [];
+    if (!app.showCircuit || app.adminOpen) return;
+    const g = geomMeters(s);
+    const o = { lat: tgt.lat, lng: tgt.lng };
+    const LL = (p: Vec): [number, number] => metersLatLng(o, p.e, p.n);
+    const tgtLL: [number, number] = [o.lat, o.lng];
+    const FLL = LL(g.F);
+    const BLL = LL(g.B);
+    const mk = (pos: [number, number], anchor: [number, number], leg: 'dw' | 'base' | 'final') => {
+      const html =
+        '<div style="width:15px;height:15px;border-radius:50%;background:rgba(242,164,12,.2);' +
+        'border:2.5px solid #f2a40c;box-shadow:0 0 0 1.5px rgba(0,0,0,.5);cursor:grab"></div>';
+      const icon = L.divIcon({ className: '', html, iconSize: [15, 15], iconAnchor: [7.5, 7.5] });
+      const m = L.marker(pos, { draggable: true, autoPan: false, keyboard: false, icon }).addTo(map);
+      m.on('dragend', () => app.setLegDir(leg, circuitDir(anchor, m.getLatLng())));
+      handleLayers.push(m);
+    };
+    mk(FLL, tgtLL, 'final');
+    mk(BLL, FLL, 'base');
+    mk(LL(g.D), BLL, 'dw');
+  }
+
   /** Canopy-heading arrows on each circuit node (direction faced, before drift). */
   function drawHeadings(s: PhysState, tgt: Target) {
     if (!map || !ready) return;
@@ -594,6 +630,7 @@
       drawRunways(app.entry);
       drawOpenZone(app.phys, tgt);
       drawHeadings(app.phys, tgt);
+      drawCircuitHandles(app.phys, tgt);
     }
     drawAdmin();
   }
@@ -637,6 +674,7 @@
     drawRunways(entry);
     drawOpenZone(s, tgt);
     drawHeadings(s, tgt);
+    drawCircuitHandles(s, tgt);
   });
 
   // Basemap switch.

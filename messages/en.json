@@ -199,5 +199,6 @@
   "fs_altitudes": "Heights",
   "fs_alt_dw": "Downwind",
   "fs_alt_base": "Base",
-  "fs_alt_final": "Final"
+  "fs_alt_final": "Final",
+  "circuit_reset": "↺ Reset circuit"
 }

@@ -11,7 +11,7 @@ import {
   type WindsResult,
 } from './winds';
 import type { AltUnit, WindUnit } from './units';
-import type { Handed, LandingMode, PhysState, Wind } from './physics';
+import type { Handed, LandingMode, PhysState, Wind, Vec } from './physics';
 import { windAt, landingHeading } from './physics';
 import {
   DROPZONES,
@@ -103,6 +103,13 @@ class AppState {
   jumpRunDir = $state(0);
   jumpRunOffset = $state(0);
   jumpRefIdx = $state(0);
+  // Per-leg ground-track direction overrides from dragging circuit nodes
+  // (ephemeral — reset by the circuit Reset button and on reload).
+  legDirs = $state<{ dw: Vec | null; base: Vec | null; final: Vec | null }>({
+    dw: null,
+    base: null,
+    final: null,
+  });
   // When true, the jump-run axis tracks the 4000 m wind (face au vent).
   jumpDirAuto = $state(true);
   showCircuit = $state(true);
@@ -168,7 +175,23 @@ class AppState {
       finalAlt: this.finalAlt,
       openAlt: this.openAlt,
       zoneAlt: this.zoneAlt,
+      legDirs: this.legDirs,
     };
+  }
+
+  /** Set/clear a circuit leg's ground-track direction override (node drag). */
+  setLegDir(leg: 'dw' | 'base' | 'final', dir: Vec | null): void {
+    this.legDirs = { ...this.legDirs, [leg]: dir };
+  }
+
+  /** Reset the circuit to its auto-computed shape (clear all node drags). */
+  resetCircuitNodes(): void {
+    this.legDirs = { dw: null, base: null, final: null };
+  }
+
+  /** Any circuit node has been manually dragged. */
+  get circuitEdited(): boolean {
+    return !!(this.legDirs.dw || this.legDirs.base || this.legDirs.final);
   }
 
   /** Hand-traced entry (zones/runway/jrRefs) for the current target, if any. */
@@ -533,12 +556,9 @@ class AppState {
     return this.jrRefs.length === 0;
   }
 
-  /**
-   * Auto-face the 4000 m wind — but only while untouched AND the axis is anchored
-   * to the target (no runway reference). With a runway, the heading is left alone.
-   */
+  /** Auto mode: the jump-run axis faces the 4000 m wind by default. */
   syncJumpDir(): void {
-    if (this.jumpDirAuto && this.jumpRefIsTarget) {
+    if (this.jumpDirAuto) {
       this.jumpRunDir = Math.round(windAt(this.winds, 4000).dir);
     }
   }

@@ -35,6 +35,9 @@ export interface PhysState {
   finalAlt: number; // final turn altitude (m)
   openAlt: number; // opening altitude for drift (m)
   zoneAlt: number; // canopy altitude H for the open zone (m)
+  // Per-leg ground-track direction overrides (unit vectors) from dragging a
+  // circuit node — keeps the leg's glide length, only changes its angle.
+  legDirs?: { dw: Vec | null; base: Vec | null; final: Vec | null };
 }
 
 export const rad = (d: number): number => (d * Math.PI) / 180;
@@ -158,12 +161,34 @@ export function geomMeters(s: PhysState): Geom {
   const fwd = getFwd(s);
 
   // Real drifted ground track (perpendicular headings, wind drifts each leg).
-  const gF = glegVec(s, s.finalAlt, 0, tF);
-  const gB = glegVec(s, s.baseAlt, s.finalAlt, tB);
-  const gD = glegVec(s, s.dwAlt, s.baseAlt, tD);
+  const gF0 = glegVec(s, s.finalAlt, 0, tF);
+  const gB0 = glegVec(s, s.baseAlt, s.finalAlt, tB);
+  const gD0 = glegVec(s, s.dwAlt, s.baseAlt, tD);
+  // A dragged node overrides its leg's ground-track direction, keeping length.
+  const ovDir = (g: Vec, d: Vec | null | undefined): Vec => {
+    if (!d) return g;
+    const len = Math.hypot(g.e, g.n);
+    return { e: d.e * len, n: d.n * len };
+  };
+  const gF = ovDir(gF0, s.legDirs?.final);
+  const gB = ovDir(gB0, s.legDirs?.base);
+  const gD = ovDir(gD0, s.legDirs?.dw);
   const F = { e: -gF.e, n: -gF.n };
   const B = { e: F.e - gB.e, n: F.n - gB.n };
   const D = { e: B.e - gD.e, n: B.n - gD.n };
+
+  // Canopy heading per leg = ground track minus the (heading-independent) wind
+  // drift over that band, normalised. Recovers tF/tB/tD when not overridden.
+  const wF = glegVec(s, s.finalAlt, 0, { e: 0, n: 0 });
+  const wB = glegVec(s, s.baseAlt, s.finalAlt, { e: 0, n: 0 });
+  const wD = glegVec(s, s.dwAlt, s.baseAlt, { e: 0, n: 0 });
+  const unitV = (e: number, n: number): Vec => {
+    const mag = Math.hypot(e, n) || 1;
+    return { e: e / mag, n: n / mag };
+  };
+  const hF = unitV(gF.e - wF.e, gF.n - wF.n);
+  const hB = unitV(gB.e - wB.e, gB.n - wB.n);
+  const hD = unitV(gD.e - wD.e, gD.n - wD.n);
 
   // Ideal no-wind rectangle (still air): straight perpendicular legs.
   const lF = fwd * (s.finalAlt / desc);
@@ -184,9 +209,9 @@ export function geomMeters(s: PhysState): Geom {
     Bi,
     Di,
     O,
-    hD: tD,
-    hB: tB,
-    hF: tF,
+    hD,
+    hB,
+    hF,
     finalDist: Math.hypot(gF.e, gF.n),
     baseDist: Math.hypot(gB.e, gB.n),
     dwDist: Math.hypot(gD.e, gD.n),

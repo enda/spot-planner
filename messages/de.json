@@ -199,5 +199,6 @@
   "fs_altitudes": "Höhen",
   "fs_alt_dw": "Gegenanf.",
   "fs_alt_base": "Quer",
-  "fs_alt_final": "Final"
+  "fs_alt_final": "Final",
+  "circuit_reset": "↺ Zurücksetzen"
 }
