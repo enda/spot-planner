@@ -61,12 +61,14 @@ interface PersistedSettings {
   fwdOv: number | null;
   descOv: number | null;
   // Circuit: only the three node heights are persisted (handed / landing axis /
-  // mode are not — they recompute from the DZ + wind). Jump run isn't persisted.
+  // mode are not — they recompute from the DZ + wind). For the jump run, only the
+  // display toggle persists — its dir / ref / offset recompute from the DZ + wind.
   dwAlt: number;
   baseAlt: number;
   finalAlt: number;
   zoneAlt: number;
   basemap: Basemap;
+  jumpRun: boolean;
   showCircuit: boolean;
   showIdeal: boolean;
   showLegs: boolean;
@@ -100,7 +102,7 @@ class AppState {
   openAlt = $state(1000);
   zoneAlt = $state(650);
   basemap = $state<Basemap>('sat');
-  jumpRun = $state(false);
+  jumpRun = $state(true);
   jumpRunDir = $state(0);
   jumpRunOffset = $state(0);
   jumpRefIdx = $state(0);
@@ -118,14 +120,14 @@ class AppState {
   showLegs = $state(false);
   showCompass = $state(false);
   showLabels = $state(true);
-  showOpenZone = $state(false);
-  showJrRefs = $state(false); // jump-run reference points (mid runway / seuils) on the map
+  showOpenZone = $state(true);
+  showJrRefs = $state(true); // jump-run reference points (mid runway / seuils) on the map
   showZones = $state(true); // hand-traced posing zones (polygons)
   showRunways = $state(false); // runway lines (off by default — big white stroke)
-  showHeading = $state(false); // canopy-heading arrows on each circuit node
+  showHeading = $state(true); // canopy-heading arrows on each circuit node
   showTarget = $state(true); // the target / cible marker
   showWind = $state(false); // widget expanded (vs. collapsed chip); collapsed by default
-  showWindLayer = $state(true); // whole wind layer visible (arrows + widget)
+  showWindLayer = $state(false); // wind arrows on the map (the rose widget stays)
   lastDz = $state<string | null>(null);
 
   // — Ephemeral state —
@@ -267,6 +269,7 @@ class AppState {
       finalAlt: this.finalAlt,
       zoneAlt: this.zoneAlt,
       basemap: this.basemap,
+      jumpRun: this.jumpRun,
       showCircuit: this.showCircuit,
       showIdeal: this.showIdeal,
       showLegs: this.showLegs,
