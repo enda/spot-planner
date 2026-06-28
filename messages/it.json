@@ -206,5 +206,6 @@
   "consent_policy": "Questo sito usa Google Analytics (tramite Google Tag Manager) per una misurazione aggregata: pagine viste, dropzone consultate, funzioni usate e lingua. Nessun cookie di misurazione viene impostato finché non accetti; puoi cambiare idea in qualsiasi momento dal link «Cookies» in fondo alla pagina. Nessuna pubblicità, nessuna rivendita di dati.",
   "consent_accept": "Accetta",
   "consent_refuse": "Rifiuta",
-  "consent_cookies": "Cookies"
+  "consent_cookies": "Cookies",
+  "admin_github_pr": "Proponi su GitHub"
 }

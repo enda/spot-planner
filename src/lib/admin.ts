@@ -5,6 +5,10 @@
 import { rad, type LatLng } from './physics';
 
 export const ADMIN_EMAIL = 'jerome.musialak@gmail.com';
+// Used to open a prefilled "new file" page on GitHub so a proposal becomes a pull
+// request in one click — no backend / token needed (uses the user's GitHub session).
+export const GITHUB_REPO = 'enda/spot-planner';
+export const GITHUB_BRANCH = 'master';
 export const ADMIN_SWATCHES = ['#3fd07a', '#36c2d6', '#f2a40c', '#ff6b5e', '#2a6fdb', '#a06bd6'];
 
 export interface AdminZone {

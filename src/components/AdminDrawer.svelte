@@ -1,6 +1,6 @@
 <script lang="ts">
   import { app, DROPZONES } from '$lib/state.svelte';
-  import { ADMIN_EMAIL, ADMIN_SWATCHES } from '$lib/admin';
+  import { ADMIN_EMAIL, ADMIN_SWATCHES, GITHUB_REPO, GITHUB_BRANCH } from '$lib/admin';
   import { countryLabel } from '$lib/countries';
   import { copyText } from '$lib/clipboard';
   import * as m from '$lib/paraglide/messages';
@@ -29,6 +29,16 @@
     const subject = 'DZ: ' + (D.name || '—');
     const body = (app.adminResult || '') + '\n';
     return `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+  // Prefilled "new file" page → GitHub then offers "commit + open a pull request".
+  const githubUrl = $derived.by(() => {
+    const slug = (D.name || 'dz').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+    const path = `proposals/${slug}.json`;
+    const content = (app.adminResult || '') + '\n';
+    return (
+      `https://github.com/${GITHUB_REPO}/new/${GITHUB_BRANCH}` +
+      `?filename=${encodeURIComponent(path)}&value=${encodeURIComponent(content)}`
+    );
   });
 
   let copied = $state(false);
@@ -242,6 +252,7 @@
         <textarea readonly value={app.adminResult}></textarea>
         <div class="rbtns">
           <a class="mail" href={mailto}>{m.admin_email_send()}</a>
+          <a class="gh" href={githubUrl} target="_blank" rel="noopener">{m.admin_github_pr()}</a>
           <button class="ghost" onclick={copyJson}>{copied ? m.embed_copied() : m.admin_copy()}</button>
           <button class="ghost" aria-label="download" onclick={download}>⤓</button>
         </div>
@@ -522,6 +533,19 @@
     text-decoration: none;
     background: var(--accent);
     color: var(--onAccent);
+    border-radius: 8px;
+    padding: 9px;
+    font: 700 11px/1 var(--font-display);
+  }
+  .gh {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    color: var(--fg);
     border-radius: 8px;
     padding: 9px;
     font: 700 11px/1 var(--font-display);
