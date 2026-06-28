@@ -10,7 +10,7 @@ import {
   loadRealWinds,
   type WindsResult,
 } from './winds';
-import type { AltUnit, WindUnit } from './units';
+import type { AltUnit, WindUnit, TempUnit } from './units';
 import type { Handed, LandingMode, PhysState, Wind, Vec } from './physics';
 import { windAt, landingHeading } from './physics';
 import { track } from './analytics';
@@ -56,6 +56,7 @@ export type Basemap = 'sat' | 'plan';
 interface PersistedSettings {
   windUnit: WindUnit;
   altUnit: AltUnit;
+  tempUnit: TempUnit;
   canopy: number;
   weight: number;
   fwdOv: number | null;
@@ -89,6 +90,7 @@ class AppState {
   // — Persisted settings —
   windUnit = $state<WindUnit>('kt');
   altUnit = $state<AltUnit>('m');
+  tempUnit = $state<TempUnit>('C');
   canopy = $state(170);
   weight = $state(90);
   fwdOv = $state<number | null>(null);
@@ -260,6 +262,7 @@ class AppState {
     return {
       windUnit: this.windUnit,
       altUnit: this.altUnit,
+      tempUnit: this.tempUnit,
       canopy: this.canopy,
       weight: this.weight,
       fwdOv: this.fwdOv,
@@ -362,6 +365,7 @@ class AppState {
     if (cfg.basemap) this.basemap = cfg.basemap;
     if (cfg.windUnit) this.windUnit = cfg.windUnit;
     if (cfg.altUnit) this.altUnit = cfg.altUnit;
+    if (cfg.tempUnit) this.tempUnit = cfg.tempUnit;
     if (cfg.canopy != null) this.canopy = cfg.canopy;
     if (cfg.weight != null) this.weight = cfg.weight;
     if (cfg.landingMode) this.landingMode = cfg.landingMode;
@@ -405,6 +409,7 @@ class AppState {
       basemap: this.basemap,
       windUnit: this.windUnit,
       altUnit: this.altUnit,
+      tempUnit: this.tempUnit,
       canopy: this.canopy,
       weight: this.weight,
       landingMode: this.landingMode,

@@ -3,7 +3,7 @@
 
 import type { Wind } from './physics';
 import type { Target } from './dropzones';
-import type { AltUnit, WindUnit } from './units';
+import type { AltUnit, WindUnit, TempUnit } from './units';
 import type { Basemap } from './state.svelte';
 
 export interface EmbedConfig {
@@ -14,6 +14,7 @@ export interface EmbedConfig {
   basemap?: Basemap;
   windUnit?: WindUnit;
   altUnit?: AltUnit;
+  tempUnit?: TempUnit;
   canopy?: number;
   weight?: number;
   landingMode?: 'wind' | 'manual';
@@ -74,6 +75,8 @@ export function parseEmbed(raw: string): EmbedConfig {
     if (wu === 'kt' || wu === 'ms') cfg.windUnit = wu;
     const au = p.get('au');
     if (au === 'm' || au === 'ft') cfg.altUnit = au;
+    const tu = p.get('tu');
+    if (tu === 'C' || tu === 'F') cfg.tempUnit = tu;
     if (num('cn') != null) cfg.canopy = num('cn')!;
     if (num('wt') != null) cfg.weight = num('wt')!;
     const lm = p.get('lm');
@@ -123,6 +126,7 @@ export interface EmbedSource {
   theme?: string;
   windUnit: WindUnit;
   altUnit: AltUnit;
+  tempUnit: TempUnit;
   canopy: number;
   weight: number;
   landingMode: 'wind' | 'manual';
@@ -160,6 +164,7 @@ export function buildEmbedParams(s: EmbedSource): string {
   p.set('bm', s.basemap);
   p.set('wu', s.windUnit);
   p.set('au', s.altUnit);
+  p.set('tu', s.tempUnit);
   p.set('cn', String(s.canopy));
   p.set('wt', String(s.weight));
   p.set('lm', s.landingMode);

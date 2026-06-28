@@ -207,5 +207,7 @@
   "consent_accept": "Akzeptieren",
   "consent_refuse": "Ablehnen",
   "consent_cookies": "Cookies",
-  "admin_github_pr": "Auf GitHub vorschlagen"
+  "admin_github_pr": "Auf GitHub vorschlagen",
+  "col_temp": "Temp",
+  "fs_c_temp": "Temp"
 }

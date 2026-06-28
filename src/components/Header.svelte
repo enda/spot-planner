@@ -42,6 +42,10 @@
       <button class:on={app.altUnit === 'm'} onclick={() => (app.altUnit = 'm')}>m</button>
       <button class:on={app.altUnit === 'ft'} onclick={() => (app.altUnit = 'ft')}>ft</button>
     </div>
+    <div class="seg">
+      <button class:on={app.tempUnit === 'C'} onclick={() => (app.tempUnit = 'C')}>°C</button>
+      <button class:on={app.tempUnit === 'F'} onclick={() => (app.tempUnit = 'F')}>°F</button>
+    </div>
     <LanguageSwitcher />
     <InstallButton />
   </div>

@@ -47,9 +47,9 @@ interface Hourly {
 export async function loadRealWinds(lat: number, lng: number): Promise<WindsResult> {
   const vars: string[] = [];
   for (const p of LEVELS) {
-    vars.push(`windspeed_${p}hPa`, `winddirection_${p}hPa`, `geopotential_height_${p}hPa`);
+    vars.push(`windspeed_${p}hPa`, `winddirection_${p}hPa`, `geopotential_height_${p}hPa`, `temperature_${p}hPa`);
   }
-  vars.push('windspeed_10m', 'winddirection_10m');
+  vars.push('windspeed_10m', 'winddirection_10m', 'temperature_2m');
 
   const url =
     `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}` +
@@ -77,16 +77,24 @@ export async function loadRealWinds(lat: number, lng: number): Promise<WindsResu
 
   const s10 = num('windspeed_10m');
   const d10 = num('winddirection_10m');
-  if (s10 != null && d10 != null) winds.push({ alt: 0, dir: Math.round(d10), spd: s10 });
+  const t2 = num('temperature_2m');
+  if (s10 != null && d10 != null)
+    winds.push({ alt: 0, dir: Math.round(d10), spd: s10, ...(t2 != null ? { temp: t2 } : {}) });
 
   for (const p of LEVELS) {
     const sp = num(`windspeed_${p}hPa`);
     const dr = num(`winddirection_${p}hPa`);
     const gh = num(`geopotential_height_${p}hPa`);
+    const tp = num(`temperature_${p}hPa`);
     if (sp != null && dr != null && gh != null) {
       const agl = gh - elev;
       if (agl > 20 && agl <= 6500) {
-        winds.push({ alt: Math.round(agl / 50) * 50, dir: Math.round(dr), spd: sp });
+        winds.push({
+          alt: Math.round(agl / 50) * 50,
+          dir: Math.round(dr),
+          spd: sp,
+          ...(tp != null ? { temp: tp } : {}),
+        });
       }
     }
   }

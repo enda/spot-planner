@@ -6,6 +6,7 @@ export const M_TO_FT = 3.28084;
 
 export type WindUnit = 'kt' | 'ms';
 export type AltUnit = 'm' | 'ft';
+export type TempUnit = 'C' | 'F';
 
 export const toKt = (ms: number): number => ms * MS_TO_KT;
 export const fromKt = (kt: number): number => kt / MS_TO_KT;
@@ -44,3 +45,9 @@ export function altToM(value: number, unit: AltUnit): number {
 
 export const altLabel = (unit: AltUnit): string => (unit === 'ft' ? 'ft' : 'm');
 export const speedLabel = (unit: WindUnit): string => (unit === 'kt' ? 'kt' : 'm/s');
+export const tempLabel = (unit: TempUnit): string => (unit === 'F' ? '°F' : '°C');
+
+/** Display an air temperature (stored °C) in the active unit, e.g. "12°" / "54°". */
+export function fmtTemp(c: number, unit: TempUnit): string {
+  return unit === 'F' ? `${Math.round(c * 1.8 + 32)}°` : `${Math.round(c)}°`;
+}

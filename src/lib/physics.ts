@@ -8,6 +8,7 @@ export interface Wind {
   alt: number;
   dir: number;
   spd: number;
+  temp?: number; // air temperature at this level (°C), if available
 }
 
 export interface Vec {

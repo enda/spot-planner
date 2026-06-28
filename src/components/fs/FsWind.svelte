@@ -2,7 +2,7 @@
   import { app } from '$lib/state.svelte';
   import { windAt, getFwd, getDesc } from '$lib/physics';
   import { windCol, grCol } from '$lib/colors';
-  import { fmtSpeed, dispAlt, altLabel } from '$lib/units';
+  import { fmtSpeed, dispAlt, altLabel, fmtTemp, tempLabel } from '$lib/units';
   import * as m from '$lib/paraglide/messages';
 
   let { back }: { back: () => void } = $props();
@@ -47,6 +47,7 @@
         wind: fmtSpeed(w.spd, app.windUnit),
         wcol: windCol(w.spd),
         arrow: (w.dir + 180) % 360,
+        temp: w.temp != null ? fmtTemp(w.temp, app.tempUnit) : '—',
       })),
   );
 </script>
@@ -58,18 +59,20 @@
 
 <div class="scroll">
   <div class="sec accent">{m.windsaloft_heading()}</div>
-  <div class="hdr three">
+  <div class="hdr wfour">
     <div>{m.fs_c_alt()}</div>
     <div>{m.fs_c_dir()}</div>
     <div>{m.fs_c_spd()}</div>
+    <div>{m.fs_c_temp()} {tempLabel(app.tempUnit)}</div>
   </div>
   {#each high as r}
-    <div class="row three">
+    <div class="row wfour">
       <div class="cell">{r.alt}</div>
       <div class="cell dir">
         <span class="arr" style="transform:rotate({r.arrow}deg);color:{r.wcol}">↑</span>{r.dir}°
       </div>
       <div class="cell" style="color:{r.wcol}">{r.wind}</div>
+      <div class="cell t">{r.temp}</div>
     </div>
   {/each}
 
@@ -152,8 +155,13 @@
       minmax(min-content, 0.9fr) minmax(min-content, 1fr) minmax(min-content, 0.9fr)
       minmax(min-content, 0.7fr) minmax(min-content, 0.7fr);
   }
-  .three {
-    grid-template-columns: minmax(min-content, 0.9fr) minmax(min-content, 1fr) minmax(min-content, 0.9fr);
+  .wfour {
+    grid-template-columns:
+      minmax(min-content, 0.9fr) minmax(min-content, 1fr)
+      minmax(min-content, 0.9fr) minmax(min-content, 0.7fr);
+  }
+  .cell.t {
+    color: var(--muted);
   }
   .hdr {
     margin: 0 0 5px;

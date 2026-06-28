@@ -1,7 +1,7 @@
 <script lang="ts">
   import { app } from '$lib/state.svelte';
   import { windCol } from '$lib/colors';
-  import { fmtSpeed, dispAlt, altLabel } from '$lib/units';
+  import { fmtSpeed, dispAlt, altLabel, fmtTemp, tempLabel } from '$lib/units';
   import * as m from '$lib/paraglide/messages';
   import Collapsible from '../Collapsible.svelte';
 
@@ -15,6 +15,7 @@
         spd: fmtSpeed(w.spd, app.windUnit),
         col: windCol(w.spd),
         arrow: (w.dir + 180) % 360,
+        temp: w.temp != null ? fmtTemp(w.temp, app.tempUnit) : '—',
       })),
   );
 </script>
@@ -26,6 +27,7 @@
     <div>{m.col_altitude()}</div>
     <div>{m.col_direction()}</div>
     <div>{m.col_speed()}</div>
+    <div>{m.col_temp()} ({tempLabel(app.tempUnit)})</div>
   </div>
   {#each rows as r}
     <div class="row">
@@ -34,6 +36,7 @@
         <span class="arr" style="transform:rotate({r.arrow}deg)">↑</span>{r.dir}°
       </div>
       <div class="spd" style="color:{r.col}">{r.spd}</div>
+      <div class="temp">{r.temp}</div>
     </div>
   {/each}
 </Collapsible>
@@ -47,7 +50,7 @@
   .hdr,
   .row {
     display: grid;
-    grid-template-columns: 1fr 1.25fr 1fr;
+    grid-template-columns: 1fr 1.25fr 0.9fr 0.8fr;
     gap: 8px;
     align-items: center;
   }
@@ -78,5 +81,9 @@
   }
   .spd {
     font: 700 12px/1.1 var(--font-mono);
+  }
+  .temp {
+    font: 600 12px/1.1 var(--font-mono);
+    color: var(--muted);
   }
 </style>
