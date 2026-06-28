@@ -1,10 +1,11 @@
 // Real winds-aloft from open-meteo (free, no key, CORS-friendly).
-// Pressure levels 975→500 hPa + geopotential height → AGL altitude.
+// Pressure levels 1000→500 hPa + geopotential height → AGL altitude.
 //
-// The 1000 hPa level is deliberately skipped: it sits in the noisy near-surface
-// layer (~100 m AGL at low elevations) where the model's pressure-level wind is
-// unreliable — it can show a near-calm reversal while the 10 m surface wind and
-// the 975 hPa level agree. The 10 m diagnostic wind covers the surface instead.
+// Near-surface winds are tricky: in the lowest ~200 m a near-calm sample (the
+// 10 m diagnostic OR the 1000 hPa level, depending on the spot) has an essentially
+// random direction and pollutes the surface reading. We drop low samples below
+// CALM_MS so the surface settles on the first usable wind (matching windaloft,
+// which anchors on the lowest pressure level rather than the 10 m wind).
 
 import type { Wind } from './physics';
 
@@ -13,7 +14,12 @@ export interface WindsResult {
   source: string;
 }
 
-const LEVELS = [975, 950, 925, 900, 850, 800, 700, 600, 500];
+const LEVELS = [1000, 975, 950, 925, 900, 850, 800, 700, 600, 500];
+
+// Below this altitude (m AGL), drop samples slower than this (m/s) — their
+// direction is unreliable (light/variable wind or model near-surface artifact).
+const LOW_ALT = 200;
+const CALM_MS = 1.5;
 
 /** Fallback profile used before the network responds (Gap-Tallard-ish SW wind). */
 export const DEFAULT_WINDS: Wind[] = [
@@ -62,7 +68,7 @@ export async function loadRealWinds(lat: number, lng: number): Promise<WindsResu
   }
 
   const elev = j.elevation ?? 0;
-  const winds: Wind[] = [];
+  let winds: Wind[] = [];
   const num = (key: string): number | null => {
     const arr = H[key] as (number | null)[] | undefined;
     const v = arr?.[idx];
@@ -86,6 +92,12 @@ export async function loadRealWinds(lat: number, lng: number): Promise<WindsResu
   }
 
   winds.sort((a, b) => a.alt - b.alt);
+
+  // Drop near-calm samples in the lowest layer (unreliable direction) — but keep
+  // at least two points so the profile and surface reading stay defined.
+  const usable = winds.filter((w) => !(w.alt <= LOW_ALT && w.spd < CALM_MS));
+  if (usable.length >= 2) winds = usable;
+
   if (winds.length < 2) throw new Error('Pas de données pour ce lieu');
 
   return { winds, source: 'open-meteo · ' + times[idx].replace('T', ' ') };
