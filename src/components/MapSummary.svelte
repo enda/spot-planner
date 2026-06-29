@@ -35,11 +35,8 @@
   let open = $state(true);
   let fsEdit = $state<'circuit' | 'jump' | 'wind' | null>(null);
 
-  // Rows are only clickable in fullscreen; leaving fullscreen closes the editor.
-  const editable = $derived(app.fullscreen);
-  $effect(() => {
-    if (!app.fullscreen) fsEdit = null;
-  });
+  // Rows are always clickable for quick edits — in fullscreen and normal view.
+  const editable = true;
 </script>
 
 {#snippet arrow(angle: number, color: string)}
@@ -48,7 +45,7 @@
 
 {#if app.target}
   <div class="summary">
-    {#if fsEdit && app.fullscreen}
+    {#if fsEdit}
       {#if fsEdit === 'circuit'}
         <FsCircuit back={() => (fsEdit = null)} />
       {:else if fsEdit === 'jump'}
