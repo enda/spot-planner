@@ -63,7 +63,7 @@
     <div>{m.fs_c_alt()}</div>
     <div>{m.fs_c_dir()}</div>
     <div>{m.fs_c_spd()}</div>
-    <div>{m.fs_c_temp()} {tempLabel(app.tempUnit)}</div>
+    <div>{tempLabel(app.tempUnit)}</div>
   </div>
   {#each high as r}
     <div class="row wfour">
