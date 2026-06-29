@@ -1,6 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "app_title": "Landing circuit · winds & glide",
+  "app_title": "Landing circuit · winds, glide & weather",
   "app_subtitle": "planning aid · real conditions (open-meteo)",
   "refresh_winds": "⟳ Refresh weather",
   "loading": "Loading…",

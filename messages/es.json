@@ -1,6 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "app_title": "Preparación del circuito · vientos y planeo",
+  "app_title": "Preparación del circuito · vientos, planeo y meteo",
   "app_subtitle": "ayuda a la planificación · condiciones reales (open-meteo)",
   "refresh_winds": "⟳ Actualizar el tiempo",
   "loading": "Cargando…",

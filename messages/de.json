@@ -1,6 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "app_title": "Landekreis-Planung · Wind & Gleiten",
+  "app_title": "Landekreis-Planung · Wind, Gleiten & Wetter",
   "app_subtitle": "Planungshilfe · echte Bedingungen (open-meteo)",
   "refresh_winds": "⟳ Wetter aktualisieren",
   "loading": "Lädt…",

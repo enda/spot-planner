@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, flushSync } from 'svelte';
   import { app } from '$lib/state.svelte';
   import Header from '$components/Header.svelte';
   import Map from '$components/Map.svelte';
@@ -31,7 +31,19 @@
     const mq = window.matchMedia('(min-width: 1290px)');
     const onChange = (e: MediaQueryListEvent) => (xxl = e.matches);
     mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
+    // Toggle a flag around printing so the summary can render the full winds list.
+    const onBefore = () => {
+      app.printMode = true;
+      flushSync(); // ensure the winds list is in the DOM before the print snapshot
+    };
+    const onAfter = () => (app.printMode = false);
+    window.addEventListener('beforeprint', onBefore);
+    window.addEventListener('afterprint', onAfter);
+    return () => {
+      mq.removeEventListener('change', onChange);
+      window.removeEventListener('beforeprint', onBefore);
+      window.removeEventListener('afterprint', onAfter);
+    };
   });
 
   // Keep the active DZ / country / language attached to every analytics event.
@@ -54,7 +66,7 @@
 
 {#if app.adminOpen}<AdminDrawer />{/if}
 
-<main>
+<main class:fsprint={app.fullscreen}>
   <section class="col left">
     <DropzonePanel />
     <CanopyPanel />
@@ -233,6 +245,31 @@
     }
     .right {
       flex-direction: column;
+    }
+  }
+
+  /* Print while the map is full-screen (briefing view OR plain fullscreen): only
+     the map prints. Hiding the page flow (header, panels, footer, cookie banner)
+     collapses the document to one page so the fixed map isn't repeated. */
+  @media print {
+    :global(header),
+    :global(.cc) {
+      display: none !important;
+    }
+    main.fsprint {
+      display: block;
+      padding: 0;
+      gap: 0;
+    }
+    main.fsprint > .left,
+    main.fsprint > .right,
+    main.fsprint > .bottom,
+    main.fsprint > .condfull,
+    main.fsprint > footer {
+      display: none !important;
+    }
+    main.fsprint > .center > :global(:not(.map-card)) {
+      display: none !important;
     }
   }
 </style>

@@ -175,6 +175,8 @@ class AppState {
   fullscreen = $state(false);
   // Clean kiosk "display" view (read-only full-screen map, opened from a share link).
   displayMode = $state(false);
+  // True only while a print is in progress (beforeprint → afterprint).
+  printMode = $state(false);
   consentOpen = $state(false); // re-opened cookie/consent banner
   db = $state<Record<string, unknown> | null>(null);
   private dbVersion = $state(0);

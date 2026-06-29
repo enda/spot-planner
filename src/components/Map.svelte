@@ -1044,13 +1044,21 @@
   @media print {
     .display-exit,
     .legend-reopen,
-    .legend-close {
+    .legend-close,
+    .tabs {
       display: none !important;
     }
     :global(.leaflet-control-zoom),
     :global(.leaflet-control-rotate),
     :global(.leaflet-control-attribution) {
       display: none !important;
+    }
+    /* Keep CSS background swatches (legend icons, summary dots/bars) — browsers
+       drop background colours when printing unless we force exact colours. */
+    .map-card,
+    .map-card :global(*) {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
   }
 </style>

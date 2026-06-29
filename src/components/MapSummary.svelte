@@ -82,7 +82,7 @@
             <span class="k">{m.sum_jump()}</span>
             <span class="v jump">{@render arrow(jumpAngle, 'var(--jump)')}{jump}</span>
           </button>
-          {#if app.displayMode}
+          {#if app.displayMode || (app.printMode && app.fullscreen)}
             <div class="rw">
               <span class="k">{m.windsaloft_heading()}</span>
               <div class="wlist">

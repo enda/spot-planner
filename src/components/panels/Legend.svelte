@@ -72,7 +72,7 @@
       <span class="legbox"></span>{m.leg_legs()}
     </button>
   {/if}
-  <button class:off={!app.showLabels} onclick={() => (app.showLabels = !app.showLabels)}>
+  <button class="toggleronly" class:off={!app.showLabels} onclick={() => (app.showLabels = !app.showLabels)}>
     <span class="tbox">T</span>{m.leg_labels()}
   </button>
 </div>
@@ -112,6 +112,20 @@
   }
   .legend.display button.off {
     display: none;
+  }
+  /* "Map text" is only a toggle — pointless in the read-only display legend. */
+  .legend.display .toggleronly {
+    display: none;
+  }
+  /* Print: any legend becomes static like the briefing view (active layers only). */
+  @media print {
+    .legend button {
+      pointer-events: none;
+    }
+    .legend button.off,
+    .legend .toggleronly {
+      display: none !important;
+    }
   }
   .bar {
     width: 18px;
