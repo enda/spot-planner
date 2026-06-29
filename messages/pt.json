@@ -164,7 +164,7 @@
   "admin_b_none_main": "Nenhuma ferramenta ativa",
   "admin_b_none_sub": "Escolhe uma ferramenta ou arrasta um ponto existente",
   "admin_finish": "✓ Terminar",
-  "qr_button": "Código QR",
+  "qr_button": "Partilhar",
   "qr_title": "Partilhar este circuito",
   "qr_lead": "Lê para abrir a ferramenta com este circuito bloqueado (sentido de aterragem, sentido do circuito, eixo de lançamento). Os paraquedistas ajustam vela, peso e alvo.",
   "qr_download": "Descarregar",
@@ -268,5 +268,8 @@
   "wmo_thunderstorm_hail": "Trovoada + granizo",
   "fc_today": "Hoje",
   "fc_tomorrow": "Amanhã",
-  "fc_now": "Agora"
+  "fc_now": "Agora",
+  "qr_copy": "Copiar a ligação",
+  "qr_display": "Vista briefing no terreno",
+  "qr_display_hint": "ecrã inteiro, só leitura"
 }

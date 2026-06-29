@@ -164,7 +164,7 @@
   "admin_b_none_main": "No active tool",
   "admin_b_none_sub": "Pick a tool or drag an existing point",
   "admin_finish": "✓ Finish",
-  "qr_button": "QR code",
+  "qr_button": "Share",
   "qr_title": "Share this circuit",
   "qr_lead": "Scan to open the planner with this circuit locked (landing direction, pattern, jump run). Jumpers still set their own canopy, weight and target.",
   "qr_download": "Download",
@@ -268,5 +268,8 @@
   "wmo_thunderstorm_hail": "Thunderstorm + hail",
   "fc_today": "Today",
   "fc_tomorrow": "Tomorrow",
-  "fc_now": "Now"
+  "fc_now": "Now",
+  "qr_copy": "Copy the link",
+  "qr_display": "Field briefing view",
+  "qr_display_hint": "clean full-screen, read-only"
 }

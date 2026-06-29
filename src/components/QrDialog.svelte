@@ -6,27 +6,36 @@
 
   let { open = $bindable(false) }: { open?: boolean } = $props();
 
-  const url = $derived(open ? app.circuitShareUrl() : '');
+  // "Display" mode shares a link that opens the clean full-screen kiosk view.
+  let displayShare = $state(false);
+  // The QR image and the copy-able link carry different UTM mediums so we can
+  // tell scans (qr) from clicked/pasted links in analytics.
+  const qrUrl = $derived(
+    !open ? '' : displayShare ? app.displayShareUrl('qr') : app.circuitShareUrl('qr'),
+  );
+  const linkUrl = $derived(
+    !open ? '' : displayShare ? app.displayShareUrl('link') : app.circuitShareUrl('link'),
+  );
   const qrSvg = $derived.by(() => {
-    if (!url) return '';
+    if (!qrUrl) return '';
     const qr = qrcode(0, 'M');
-    qr.addData(url);
+    qr.addData(qrUrl);
     qr.make();
     return qr.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
   });
 
   let copied = $state(false);
   async function copy() {
-    if (await copyText(url)) {
+    if (await copyText(linkUrl)) {
       copied = true;
       setTimeout(() => (copied = false), 1800);
     }
   }
   function download() {
-    if (!url) return;
+    if (!qrUrl) return;
     // Render the QR straight onto a canvas → crisp PNG (broadly supported, unlike SVG).
     const qr = qrcode(0, 'M');
-    qr.addData(url);
+    qr.addData(qrUrl);
     qr.make();
     const count = qr.getModuleCount();
     const cell = 12;
@@ -80,16 +89,22 @@
       </div>
 
       <div class="dz">{app.target?.name ?? ''}</div>
+
+      <label class="disptoggle">
+        <input type="checkbox" bind:checked={displayShare} />
+        <span>{m.qr_display()} <span class="hint">· {m.qr_display_hint()}</span></span>
+      </label>
+
       <!-- eslint-disable-next-line svelte/no-at-html-tags -->
       <div class="qr">{@html qrSvg}</div>
 
       <p class="lead">{m.qr_lead()}</p>
 
       <div class="linklabel">{m.qr_link()}</div>
-      <textarea readonly value={url}></textarea>
+      <textarea readonly value={linkUrl}></textarea>
 
       <div class="btns">
-        <button class="copy" onclick={copy}>{copied ? m.embed_copied() : m.embed_copy()}</button>
+        <button class="copy" onclick={copy}>{copied ? m.embed_copied() : m.qr_copy()}</button>
         <button class="dl" onclick={download}>⤓ {m.qr_download()}</button>
       </div>
     </div>
@@ -140,6 +155,23 @@
     color: var(--accent);
     margin: 0 0 10px;
     text-align: center;
+  }
+  .disptoggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+    cursor: pointer;
+    font: 600 11px/1.3 var(--font-display);
+    color: var(--fg);
+  }
+  .disptoggle input {
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .disptoggle .hint {
+    color: var(--muted);
+    font-weight: 500;
   }
   .qr {
     width: 240px;

@@ -2,7 +2,7 @@
   import { app } from '$lib/state.svelte';
   import { windAt, landingHeading } from '$lib/physics';
   import { windCol } from '$lib/colors';
-  import { fmtSpeed } from '$lib/units';
+  import { fmtSpeed, dispAlt, altLabel } from '$lib/units';
   import * as m from '$lib/paraglide/messages';
   import FsCircuit from './fs/FsCircuit.svelte';
   import FsJump from './fs/FsJump.svelte';
@@ -23,6 +23,20 @@
   const jumpAngle = $derived(norm(Math.round(app.jumpRunDir) + app.bearing));
   const windAngle = $derived(norm(Math.round(surf.dir) + 180 + app.bearing));
 
+  // Full winds profile (display view shows every level, not just the ground wind).
+  const allWinds = $derived(
+    app.winds
+      .slice()
+      .sort((a, b) => b.alt - a.alt)
+      .map((w) => ({
+        alt: `${dispAlt(w.alt, app.altUnit)} ${altLabel(app.altUnit)}`,
+        dir: Math.round(w.dir),
+        spd: fmtSpeed(w.spd, app.windUnit),
+        col: windCol(w.spd),
+        angle: norm(Math.round(w.dir) + 180 + app.bearing),
+      })),
+  );
+
   // No DZ selected (bare target) → show the GPS coordinates instead of a name.
   const dzLabel = $derived(
     app.target?.name?.trim()
@@ -35,8 +49,8 @@
   let open = $state(true);
   let fsEdit = $state<'circuit' | 'jump' | 'wind' | null>(null);
 
-  // Rows are always clickable for quick edits — in fullscreen and normal view.
-  const editable = true;
+  // Rows are clickable for quick edits everywhere — except the read-only display view.
+  const editable = $derived(!app.displayMode);
 </script>
 
 {#snippet arrow(angle: number, color: string)}
@@ -68,13 +82,29 @@
             <span class="k">{m.sum_jump()}</span>
             <span class="v jump">{@render arrow(jumpAngle, 'var(--jump)')}{jump}</span>
           </button>
-          <button class="rw" class:click={editable} disabled={!editable} onclick={() => (fsEdit = 'wind')}>
-            <span class="k">{m.sum_ground_wind()}</span>
-            <span class="v">
-              {@render arrow(windAngle, windCol(surf.spd))}{Math.round(surf.dir)}° ·
-              <span style="color:{windCol(surf.spd)}">{fmtSpeed(surf.spd, app.windUnit)}</span>
-            </span>
-          </button>
+          {#if app.displayMode}
+            <div class="rw">
+              <span class="k">{m.windsaloft_heading()}</span>
+              <div class="wlist">
+                {#each allWinds as w}
+                  <div class="wrow">
+                    <span class="wa">{w.alt}</span>
+                    <span class="warr">{@render arrow(w.angle, w.col)}</span>
+                    <span class="wd">{w.dir}°</span>
+                    <span class="ws" style="color:{w.col}">{w.spd}</span>
+                  </div>
+                {/each}
+              </div>
+            </div>
+          {:else}
+            <button class="rw" class:click={editable} disabled={!editable} onclick={() => (fsEdit = 'wind')}>
+              <span class="k">{m.sum_ground_wind()}</span>
+              <span class="v">
+                {@render arrow(windAngle, windCol(surf.spd))}{Math.round(surf.dir)}° ·
+                <span style="color:{windCol(surf.spd)}">{fmtSpeed(surf.spd, app.windUnit)}</span>
+              </span>
+            </button>
+          {/if}
         </div>
         {#if app.circuitEdited}
           <button class="reset" onclick={() => app.resetCircuitNodes()}>{m.circuit_reset()}</button>
@@ -142,6 +172,35 @@
   .rw.click {
     cursor: pointer;
   }
+  .wlist {
+    margin-top: 4px;
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    align-items: center;
+    gap: 3px 8px;
+    max-height: 46vh;
+    overflow: auto;
+    font: 600 10.5px/1.2 var(--font-mono);
+    color: var(--fg);
+  }
+  /* Each row contributes its cells to the shared grid so columns line up. */
+  .wrow {
+    display: contents;
+  }
+  .wa {
+    color: var(--muted);
+  }
+  .warr {
+    display: flex;
+    justify-content: center;
+  }
+  .wd {
+    text-align: right;
+  }
+  .ws {
+    text-align: right;
+    font-weight: 700;
+  }
   .k {
     display: block;
     font: 600 8px/1 var(--font-display);
@@ -185,5 +244,14 @@
     border-radius: 8px;
     padding: 8px;
     font: 700 10.5px/1 var(--font-display);
+  }
+
+  /* Print: no collapse toggle or reset/CTA controls — just the read-out. */
+  @media print {
+    .chev,
+    .reset,
+    .cta {
+      display: none !important;
+    }
   }
 </style>

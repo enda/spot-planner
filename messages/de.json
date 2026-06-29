@@ -164,7 +164,7 @@
   "admin_b_none_main": "Kein Werkzeug aktiv",
   "admin_b_none_sub": "Wähle ein Werkzeug oder ziehe einen Punkt",
   "admin_finish": "✓ Fertig",
-  "qr_button": "QR-Code",
+  "qr_button": "Teilen",
   "qr_title": "Diesen Kreis teilen",
   "qr_lead": "Scanne, um die App mit diesem gesperrten Kreis zu öffnen (Landerichtung, Kreisrichtung, Absetzachse). Springer stellen Schirm, Gewicht und Ziel selbst ein.",
   "qr_download": "Herunterladen",
@@ -268,5 +268,8 @@
   "wmo_thunderstorm_hail": "Gewitter + Hagel",
   "fc_today": "Heute",
   "fc_tomorrow": "Morgen",
-  "fc_now": "Jetzt"
+  "fc_now": "Jetzt",
+  "qr_copy": "Link kopieren",
+  "qr_display": "Platz-Briefing-Ansicht",
+  "qr_display_hint": "Vollbild, schreibgeschützt"
 }

@@ -164,7 +164,7 @@
   "admin_b_none_main": "Nessuno strumento attivo",
   "admin_b_none_sub": "Scegli uno strumento o sposta un punto esistente",
   "admin_finish": "✓ Termina",
-  "qr_button": "Codice QR",
+  "qr_button": "Condividi",
   "qr_title": "Condividi questo circuito",
   "qr_lead": "Scansiona per aprire lo strumento con questo circuito bloccato (direzione di atterraggio, senso del circuito, asse di lancio). I paracadutisti regolano vela, peso e bersaglio.",
   "qr_download": "Scarica",
@@ -268,5 +268,8 @@
   "wmo_thunderstorm_hail": "Temporale + grandine",
   "fc_today": "Oggi",
   "fc_tomorrow": "Domani",
-  "fc_now": "Adesso"
+  "fc_now": "Adesso",
+  "qr_copy": "Copia il link",
+  "qr_display": "Vista briefing in campo",
+  "qr_display_hint": "schermo intero, sola lettura"
 }

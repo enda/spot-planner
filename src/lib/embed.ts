@@ -31,6 +31,8 @@ export interface EmbedConfig {
   jumpRun?: boolean;
   /** Locked "circuit of the day": the circuit/jump-run controls are read-only. */
   lock?: boolean;
+  /** Clean kiosk "display" view: full-screen map only, read-only chrome. */
+  display?: boolean;
   showOpenZone?: boolean;
   showLegs?: boolean;
   showCompass?: boolean;
@@ -39,6 +41,11 @@ export interface EmbedConfig {
   showCircuit?: boolean;
   showWind?: boolean;
   showWindLayer?: boolean;
+  showHeading?: boolean;
+  showJrRefs?: boolean;
+  showRunways?: boolean;
+  showZones?: boolean;
+  showTarget?: boolean;
   winds?: Wind[];
 }
 
@@ -94,6 +101,7 @@ export function parseEmbed(raw: string): EmbedConfig {
     if (num('ji') != null) cfg.jumpRefIdx = num('ji')!;
     if (bool('jr') != null) cfg.jumpRun = bool('jr')!;
     if (bool('lock') != null) cfg.lock = bool('lock')!;
+    if (bool('disp') != null) cfg.display = bool('disp')!;
     if (bool('oz') != null) cfg.showOpenZone = bool('oz')!;
     if (bool('lg') != null) cfg.showLegs = bool('lg')!;
     if (bool('cp') != null) cfg.showCompass = bool('cp')!;
@@ -101,6 +109,11 @@ export function parseEmbed(raw: string): EmbedConfig {
     if (bool('id') != null) cfg.showIdeal = bool('id')!;
     if (bool('cr') != null) cfg.showCircuit = bool('cr')!;
     if (bool('wv') != null) cfg.showWindLayer = bool('wv')!;
+    if (bool('hd') != null) cfg.showHeading = bool('hd')!;
+    if (bool('rf') != null) cfg.showJrRefs = bool('rf')!;
+    if (bool('rw') != null) cfg.showRunways = bool('rw')!;
+    if (bool('zn') != null) cfg.showZones = bool('zn')!;
+    if (bool('tg') != null) cfg.showTarget = bool('tg')!;
     const w = p.get('w');
     if (w) {
       const winds = w
@@ -148,6 +161,11 @@ export interface EmbedSource {
   showIdeal: boolean;
   showCircuit: boolean;
   showWindLayer: boolean;
+  showHeading: boolean;
+  showJrRefs: boolean;
+  showRunways: boolean;
+  showZones: boolean;
+  showTarget: boolean;
   winds: Wind[];
 }
 
@@ -186,6 +204,11 @@ export function buildEmbedParams(s: EmbedSource): string {
   p.set('id', s.showIdeal ? '1' : '0');
   p.set('cr', s.showCircuit ? '1' : '0');
   p.set('wv', s.showWindLayer ? '1' : '0');
+  p.set('hd', s.showHeading ? '1' : '0');
+  p.set('rf', s.showJrRefs ? '1' : '0');
+  p.set('rw', s.showRunways ? '1' : '0');
+  p.set('zn', s.showZones ? '1' : '0');
+  p.set('tg', s.showTarget ? '1' : '0');
   p.set(
     'w',
     s.winds.map((x) => `${x.alt},${Math.round(x.dir)},${Math.round(x.spd * 1000) / 1000}`).join(';'),

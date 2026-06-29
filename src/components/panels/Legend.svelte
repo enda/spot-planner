@@ -1,9 +1,12 @@
 <script lang="ts">
   import { app } from '$lib/state.svelte';
   import * as m from '$lib/paraglide/messages';
+
+  // In "display" (kiosk) mode the legend is read-only and only shows active layers.
+  let { display = false }: { display?: boolean } = $props();
 </script>
 
-<div class="legend">
+<div class="legend" class:display>
   <button
     class:off={!app.adminOpen && !app.showTarget}
     disabled={app.adminOpen}
@@ -101,6 +104,14 @@
   }
   button.off {
     opacity: 0.5;
+  }
+  /* Display/kiosk: read-only, and only the active layers are listed. */
+  .legend.display button {
+    pointer-events: none;
+    cursor: default;
+  }
+  .legend.display button.off {
+    display: none;
   }
   .bar {
     width: 18px;

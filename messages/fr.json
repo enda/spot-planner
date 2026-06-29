@@ -164,7 +164,7 @@
   "admin_b_none_main": "Aucun outil actif",
   "admin_b_none_sub": "Choisis un outil ou déplace un point existant",
   "admin_finish": "✓ Terminer",
-  "qr_button": "QR Code",
+  "qr_button": "Partager",
   "qr_title": "Partager ce circuit",
   "qr_lead": "Scanne pour ouvrir l'outil avec ce circuit verrouillé (sens de posé, sens de circuit, axe de largage). Les sauteurs règlent voile, poids et cible.",
   "qr_download": "Télécharger",
@@ -268,5 +268,8 @@
   "wmo_thunderstorm_hail": "Orage + grêle",
   "fc_today": "Aujourd'hui",
   "fc_tomorrow": "Demain",
-  "fc_now": "Maintenant"
+  "fc_now": "Maintenant",
+  "qr_copy": "Copier le lien",
+  "qr_display": "Vue briefing terrain",
+  "qr_display_hint": "plein écran épuré, lecture seule"
 }

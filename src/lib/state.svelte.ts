@@ -173,6 +173,8 @@ class AppState {
   forecastBase = $state(0);
   legendHidden = $state(true);
   fullscreen = $state(false);
+  // Clean kiosk "display" view (read-only full-screen map, opened from a share link).
+  displayMode = $state(false);
   consentOpen = $state(false); // re-opened cookie/consent banner
   db = $state<Record<string, unknown> | null>(null);
   private dbVersion = $state(0);
@@ -424,6 +426,18 @@ class AppState {
     if (cfg.showIdeal != null) this.showIdeal = cfg.showIdeal;
     if (cfg.showCircuit != null) this.showCircuit = cfg.showCircuit;
     if (cfg.showWindLayer != null) this.showWindLayer = cfg.showWindLayer;
+    if (cfg.showHeading != null) this.showHeading = cfg.showHeading;
+    if (cfg.showJrRefs != null) this.showJrRefs = cfg.showJrRefs;
+    if (cfg.showRunways != null) this.showRunways = cfg.showRunways;
+    if (cfg.showZones != null) this.showZones = cfg.showZones;
+    if (cfg.showTarget != null) this.showTarget = cfg.showTarget;
+    // Clean "display" kiosk view: open straight into a read-only full-screen map
+    // with the chosen legends visible.
+    if (cfg.display) {
+      this.displayMode = true;
+      this.fullscreen = true;
+      this.legendHidden = false;
+    }
     if (cfg.target) {
       this.target = cfg.target;
       this.lastDz = cfg.target.name;
@@ -462,6 +476,11 @@ class AppState {
       showIdeal: this.showIdeal,
       showCircuit: this.showCircuit,
       showWindLayer: this.showWindLayer,
+      showHeading: this.showHeading,
+      showJrRefs: this.showJrRefs,
+      showRunways: this.showRunways,
+      showZones: this.showZones,
+      showTarget: this.showTarget,
       winds: this.winds,
     };
   }
@@ -471,23 +490,38 @@ class AppState {
     return location.origin + base;
   }
 
+  /**
+   * Append UTM params so analytics can attribute opens by channel (qr / link /
+   * embed) and by DZ. They go in the query string (before any #hash) so GA4
+   * picks them up as the session source/medium/campaign.
+   */
+  private withUtm(url: string, medium: 'qr' | 'link' | 'embed'): string {
+    const slug = (this.target?.name || 'spotplanner').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+    const utm = `utm_source=spotplanner&utm_medium=${medium}&utm_campaign=${encodeURIComponent(slug)}`;
+    const h = url.indexOf('#');
+    const head = h === -1 ? url : url.slice(0, h);
+    const hash = h === -1 ? '' : url.slice(h);
+    return head + (head.includes('?') ? '&' : '?') + utm + hash;
+  }
+
   /** URL of the standalone embeddable map with the current view encoded. */
   embedUrl(): string {
-    return `${this.origin()}/embed/#${buildEmbedParams(this.embedSource())}`;
+    return this.withUtm(`${this.origin()}/embed/#${buildEmbedParams(this.embedSource())}`, 'embed');
   }
 
   /** URL of the full planner pre-configured with the current view. */
   configUrl(): string {
     const params = buildEmbedParams(this.embedSource()).replace(/(^|&)embed=1(&|$)/, '$1');
-    return `${this.origin()}/#${params.replace(/^&/, '')}`;
+    return this.withUtm(`${this.origin()}/#${params.replace(/^&/, '')}`, 'link');
   }
 
   embedSnippet(): string {
     return `<iframe src="${this.embedUrl()}" style="width:100%;height:600px;border:0;border-radius:12px" loading="lazy" allow="fullscreen"></iframe>`;
   }
 
-  /** Shareable URL of the full planner with the current circuit imposed (QR code). */
-  circuitShareUrl(): string {
+  /** Shareable URL of the full planner with the current circuit imposed.
+   *  `medium` tags the channel (qr code vs copied link) for analytics. */
+  circuitShareUrl(medium: 'qr' | 'link' = 'qr'): string {
     const t = this.target;
     if (!t) return this.origin() + '/';
     const params = buildCircuitShareParams({
@@ -502,7 +536,27 @@ class AppState {
       jumpRunOffset: this.jumpRunOffset,
       jumpRefIdx: this.jumpRefIdx,
     });
-    return `${this.origin()}/#${params}`;
+    return this.withUtm(`${this.origin()}/#${params}`, medium);
+  }
+
+  /**
+   * Shareable URL that opens the clean full-screen "display" view: the imposed
+   * circuit + every legend toggle, locked and read-only. Winds are dropped so the
+   * viewer's app fetches fresh ones for the spot.
+   */
+  displayShareUrl(medium: 'qr' | 'link' = 'qr'): string {
+    if (!this.target) return this.origin() + '/';
+    const params = buildEmbedParams(this.embedSource())
+      .replace(/(^|&)embed=1(&|$)/, '$1')
+      .replace(/(^|&)w=[^&]*/, '')
+      .replace(/^&/, '');
+    return this.withUtm(`${this.origin()}/#${params}&lock=1&disp=1`, medium);
+  }
+
+  /** Leave the kiosk display view back to the normal (still circuit-locked) app. */
+  exitDisplay(): void {
+    this.displayMode = false;
+    this.fullscreen = false;
   }
 
   /** Persist settings to localStorage on any change (guarded). */

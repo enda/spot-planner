@@ -737,6 +737,8 @@
   });
 </script>
 
+<svelte:window onkeydown={(e) => app.displayMode && e.key === 'Escape' && app.exitDisplay()} />
+
 <div class="map-card" class:fs={app.fullscreen}>
   <div bind:this={mapEl} class="map" class:placing></div>
 
@@ -754,11 +756,15 @@
             aria-label={m.close()}
             onclick={() => (app.legendHidden = true)}>×</button
           >
-          <Legend />
+          <Legend display={app.displayMode} />
         </div>
       {/if}
     {/if}
   </div>
+
+  {#if app.displayMode}
+    <button class="display-exit" onclick={() => app.exitDisplay()}>✕ {m.close()}</button>
+  {/if}
   {#if app.showCompass && !app.adminOpen}<Compass />{/if}
   {#if !app.adminOpen}
     {#if app.showWindLayer}<WindArrows />{/if}
@@ -782,6 +788,7 @@
     </div>
   {/if}
 
+  {#if !app.displayMode}
   <div class="tabs">
     <div class="seg">
       <button class:on={app.basemap !== 'sat'} onclick={() => (app.basemap = 'plan')}>{m.map_plan()}</button>
@@ -817,6 +824,7 @@
       {/if}
     </div>
   </div>
+  {/if}
 </div>
 
 <style>
@@ -949,6 +957,24 @@
     cursor: pointer;
     font: 700 14px/1 var(--font-display);
   }
+  .display-exit {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    z-index: 1300;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 18px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: rgba(20, 26, 33, 0.92);
+    color: var(--fg);
+    cursor: pointer;
+    font: 700 12px/1 var(--font-display);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  }
   .legend-reopen {
     display: flex;
     align-items: center;
@@ -1011,5 +1037,20 @@
     font: 700 10.5px/1 var(--font-display);
     color: var(--fg);
     background: var(--surface2);
+  }
+
+  /* Print: strip every control. Close button, legend toggles and the map's own
+     zoom/rotate controls are hidden; a reduced (hidden) legend prints nothing. */
+  @media print {
+    .display-exit,
+    .legend-reopen,
+    .legend-close {
+      display: none !important;
+    }
+    :global(.leaflet-control-zoom),
+    :global(.leaflet-control-rotate),
+    :global(.leaflet-control-attribution) {
+      display: none !important;
+    }
   }
 </style>

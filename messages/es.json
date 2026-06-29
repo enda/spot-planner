@@ -164,7 +164,7 @@
   "admin_b_none_main": "Ninguna herramienta activa",
   "admin_b_none_sub": "Elige una herramienta o arrastra un punto existente",
   "admin_finish": "✓ Terminar",
-  "qr_button": "Código QR",
+  "qr_button": "Compartir",
   "qr_title": "Compartir este circuito",
   "qr_lead": "Escanea para abrir la herramienta con este circuito bloqueado (sentido de aterrizaje, sentido del circuito, eje de lanzamiento). Los saltadores ajustan vela, peso y objetivo.",
   "qr_download": "Descargar",
@@ -268,5 +268,8 @@
   "wmo_thunderstorm_hail": "Tormenta + granizo",
   "fc_today": "Hoy",
   "fc_tomorrow": "Mañana",
-  "fc_now": "Ahora"
+  "fc_now": "Ahora",
+  "qr_copy": "Copiar el enlace",
+  "qr_display": "Vista briefing en campo",
+  "qr_display_hint": "pantalla completa, solo lectura"
 }
