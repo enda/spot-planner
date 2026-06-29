@@ -94,7 +94,7 @@
   });
 
   function buildMap() {
-    const t = app.activeTarget ?? { lat: 46.6, lng: 2.5 };
+    const t = app.activeTarget ?? app.defaultCenter;
     const canRotate = !!(L.Map && L.Map.prototype.setBearing);
     const opts: any = { zoomControl: true, attributionControl: true, scrollWheelZoom: true };
     if (canRotate) {

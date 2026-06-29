@@ -9,11 +9,13 @@ import {
   DEFAULT_WINDS,
   loadRealWinds,
   type WindsResult,
+  type Conditions,
 } from './winds';
 import type { AltUnit, WindUnit, TempUnit } from './units';
 import type { Handed, LandingMode, PhysState, Wind, Vec } from './physics';
 import { windAt, landingHeading } from './physics';
 import { track } from './analytics';
+import { getLocale } from './i18n';
 import {
   DROPZONES,
   dzToTarget,
@@ -86,6 +88,21 @@ interface PersistedSettings {
   lastDz: string | null;
 }
 
+/**
+ * Fallback map center when there is no DZ/geoloc — a representative point in the
+ * country matching the active UI language, so the app opens on the right region
+ * and we can still fetch real winds + conditions there.
+ */
+const LOCALE_CENTERS: Record<string, { lat: number; lng: number }> = {
+  fr: { lat: 46.6, lng: 2.5 }, // France
+  en: { lat: 52.6, lng: -1.5 }, // United Kingdom
+  it: { lat: 42.8, lng: 12.6 }, // Italy
+  es: { lat: 40.0, lng: -3.7 }, // Spain
+  pt: { lat: 39.5, lng: -8.0 }, // Portugal
+  de: { lat: 51.1, lng: 10.4 }, // Germany
+};
+const FALLBACK_CENTER = LOCALE_CENTERS.fr;
+
 class AppState {
   // — Persisted settings —
   windUnit = $state<WindUnit>('kt');
@@ -147,6 +164,7 @@ class AppState {
   windsLoading = $state(false);
   windsErr = $state('');
   windsSource = $state('');
+  conditions = $state<Conditions | null>(null);
   legendHidden = $state(true);
   fullscreen = $state(false);
   consentOpen = $state(false); // re-opened cookie/consent banner
@@ -234,6 +252,11 @@ class AppState {
       return { lat: d.lat, lng: d.lng, name: d.name || 'Cible', country: d.country || '' };
     }
     return this.target;
+  }
+
+  /** Map center / winds-fetch point used when no DZ is selected — language-based. */
+  get defaultCenter(): { lat: number; lng: number } {
+    return LOCALE_CENTERS[getLocale()] ?? FALLBACK_CENTER;
   }
 
   /**
@@ -327,8 +350,10 @@ class AppState {
     }
 
     // Geolocate FIRST so nothing else can block the permission prompt.
-    // No geoloc ⇒ leave the DZ unselected, as specified.
+    // No geoloc ⇒ leave the DZ unselected, but still fetch real winds +
+    // conditions for the language's default region so the data panels aren't empty.
     await this.geolocateAndSelect();
+    if (!this.target) void this.refreshWinds(this.defaultCenter);
 
     // Persistence is set up after, and never allowed to break the boot path.
     this.setupPersistence();
@@ -556,6 +581,7 @@ class AppState {
       const res: WindsResult = await loadRealWinds(lat, lng);
       this.winds = res.winds;
       this.windsSource = res.source;
+      this.conditions = res.conditions;
       this.syncJumpDir();
     } catch {
       this.windsErr = m.winds_failed();

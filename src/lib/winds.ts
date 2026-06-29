@@ -9,10 +9,52 @@
 
 import type { Wind } from './physics';
 
+/** Surface/atmosphere snapshot at the current hour — not winds-aloft. */
+export interface Conditions {
+  weatherCode: number | null;
+  cloudTotal: number | null;
+  cloudLow: number | null;
+  cloudMid: number | null;
+  cloudHigh: number | null;
+  gust: number | null; // m/s
+  wind: number | null; // m/s (10 m)
+  visibility: number | null; // m
+  cape: number | null; // J/kg
+  qnh: number | null; // hPa surface pressure
+  pmsl: number | null; // hPa sea-level pressure
+  freezing: number | null; // m
+  temp: number | null; // °C
+  humidity: number | null; // %
+  dewpoint: number | null; // °C
+  precip: number | null; // mm
+  rain: number | null; // mm
+  showers: number | null; // mm
+}
+
 export interface WindsResult {
   winds: Wind[];
   source: string;
+  conditions: Conditions;
 }
+
+const COND_VARS = [
+  'weather_code',
+  'cloud_cover',
+  'cloud_cover_low',
+  'cloud_cover_mid',
+  'cloud_cover_high',
+  'wind_gusts_10m',
+  'visibility',
+  'cape',
+  'surface_pressure',
+  'pressure_msl',
+  'freezing_level_height',
+  'relative_humidity_2m',
+  'dew_point_2m',
+  'precipitation',
+  'rain',
+  'showers',
+];
 
 const LEVELS = [1000, 975, 950, 925, 900, 850, 800, 700, 600, 500];
 
@@ -49,7 +91,7 @@ export async function loadRealWinds(lat: number, lng: number): Promise<WindsResu
   for (const p of LEVELS) {
     vars.push(`windspeed_${p}hPa`, `winddirection_${p}hPa`, `geopotential_height_${p}hPa`, `temperature_${p}hPa`);
   }
-  vars.push('windspeed_10m', 'winddirection_10m', 'temperature_2m');
+  vars.push('windspeed_10m', 'winddirection_10m', 'temperature_2m', ...COND_VARS);
 
   const url =
     `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}` +
@@ -108,5 +150,26 @@ export async function loadRealWinds(lat: number, lng: number): Promise<WindsResu
 
   if (winds.length < 2) throw new Error('Pas de données pour ce lieu');
 
-  return { winds, source: 'open-meteo · ' + times[idx].replace('T', ' ') };
+  const conditions: Conditions = {
+    weatherCode: num('weather_code'),
+    cloudTotal: num('cloud_cover'),
+    cloudLow: num('cloud_cover_low'),
+    cloudMid: num('cloud_cover_mid'),
+    cloudHigh: num('cloud_cover_high'),
+    gust: num('wind_gusts_10m'),
+    wind: s10,
+    visibility: num('visibility'),
+    cape: num('cape'),
+    qnh: num('surface_pressure'),
+    pmsl: num('pressure_msl'),
+    freezing: num('freezing_level_height'),
+    temp: t2,
+    humidity: num('relative_humidity_2m'),
+    dewpoint: num('dew_point_2m'),
+    precip: num('precipitation'),
+    rain: num('rain'),
+    showers: num('showers'),
+  };
+
+  return { winds, source: 'open-meteo · ' + times[idx].replace('T', ' '), conditions };
 }

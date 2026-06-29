@@ -14,6 +14,7 @@
   import CanopyGlideTable from '$components/panels/CanopyGlideTable.svelte';
   import WindsAloftTable from '$components/panels/WindsAloftTable.svelte';
   import GroundGlideTable from '$components/panels/GroundGlideTable.svelte';
+  import ConditionsPanel from '$components/panels/ConditionsPanel.svelte';
   import AdminDrawer from '$components/AdminDrawer.svelte';
   import ConsentBanner from '$components/ConsentBanner.svelte';
   import { initAnalytics, setAnalyticsContext } from '$lib/analytics';
@@ -62,6 +63,7 @@
     {:else}
       <CircuitPanel />
       <JumpRunPanel />
+      <RangePanel />
     {/if}
   </section>
 
@@ -71,7 +73,7 @@
     <GlideCards />
     <FootprintPanel />
     {#if !xxl}
-      <RangePanel />
+      <ConditionsPanel />
     {/if}
   </section>
 
@@ -79,6 +81,7 @@
     {#if xxl}
       <CircuitPanel />
       <JumpRunPanel />
+      <ConditionsPanel />
     {:else}
       <CanopyGlideTable />
       <WindsAloftTable />
