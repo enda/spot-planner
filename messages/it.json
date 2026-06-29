@@ -210,7 +210,7 @@
   "admin_github_pr": "Proponi su GitHub",
   "col_temp": "Temp",
   "fs_c_temp": "Temp",
-  "cond_title": "Condizioni attuali",
+  "cond_title": "Condizioni meteo",
   "cond_loading": "Caricamento meteo…",
   "verdict_ok": "Condizioni OK",
   "verdict_watch": "Da monitorare",
@@ -265,5 +265,8 @@
   "wmo_showers_violent": "Rovesci violenti",
   "wmo_snow_showers": "Rovesci di neve",
   "wmo_thunderstorm": "Temporale",
-  "wmo_thunderstorm_hail": "Temporale + grandine"
+  "wmo_thunderstorm_hail": "Temporale + grandine",
+  "fc_today": "Oggi",
+  "fc_tomorrow": "Domani",
+  "fc_now": "Adesso"
 }

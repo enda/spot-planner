@@ -210,7 +210,7 @@
   "admin_github_pr": "Propose on GitHub",
   "col_temp": "Temp",
   "fs_c_temp": "Temp",
-  "cond_title": "Current conditions",
+  "cond_title": "Weather conditions",
   "cond_loading": "Loading weather…",
   "verdict_ok": "Conditions OK",
   "verdict_watch": "Caution",
@@ -265,5 +265,8 @@
   "wmo_showers_violent": "Violent showers",
   "wmo_snow_showers": "Snow showers",
   "wmo_thunderstorm": "Thunderstorm",
-  "wmo_thunderstorm_hail": "Thunderstorm + hail"
+  "wmo_thunderstorm_hail": "Thunderstorm + hail",
+  "fc_today": "Today",
+  "fc_tomorrow": "Tomorrow",
+  "fc_now": "Now"
 }

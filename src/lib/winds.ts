@@ -37,6 +37,22 @@ export interface WindsResult {
   conditions: Conditions;
 }
 
+/** One hourly forecast step (winds-aloft + ground conditions) at a given time. */
+export interface ForecastStep {
+  time: string; // local time of the DZ, "YYYY-MM-DDTHH:MM"
+  winds: Wind[];
+  conditions: Conditions;
+}
+
+export interface ForecastResult {
+  steps: ForecastStep[];
+  baseIdx: number; // index of the current hour within steps
+  source: string; // 'open-meteo'
+}
+
+/** How many days of hourly forecast to fetch (today + the next 3). */
+const FORECAST_DAYS = 4;
+
 const COND_VARS = [
   'weather_code',
   'cloud_cover',
@@ -85,31 +101,8 @@ interface Hourly {
   [key: string]: (number | null)[] | string[];
 }
 
-/** Fetch and parse the winds profile for a location (winds in m/s, alt AGL m). */
-export async function loadRealWinds(lat: number, lng: number): Promise<WindsResult> {
-  const vars: string[] = [];
-  for (const p of LEVELS) {
-    vars.push(`windspeed_${p}hPa`, `winddirection_${p}hPa`, `geopotential_height_${p}hPa`, `temperature_${p}hPa`);
-  }
-  vars.push('windspeed_10m', 'winddirection_10m', 'temperature_2m', ...COND_VARS);
-
-  const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}` +
-    `&longitude=${lng.toFixed(4)}&hourly=${vars.join(',')}&windspeed_unit=ms&forecast_days=1`;
-
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('open-meteo HTTP ' + res.status);
-  const j = (await res.json()) as { hourly: Hourly; elevation?: number };
-
-  const H = j.hourly;
-  const times = H.time;
-  const now = Date.now();
-  let idx = 0;
-  for (let i = 0; i < times.length; i++) {
-    if (new Date(times[i]).getTime() <= now) idx = i;
-  }
-
-  const elev = j.elevation ?? 0;
+/** Parse the winds-aloft profile + ground conditions at one hourly index. */
+function parseStep(H: Hourly, elev: number, idx: number): ForecastStep | null {
   let winds: Wind[] = [];
   const num = (key: string): number | null => {
     const arr = H[key] as (number | null)[] | undefined;
@@ -148,7 +141,7 @@ export async function loadRealWinds(lat: number, lng: number): Promise<WindsResu
   const usable = winds.filter((w) => !(w.alt <= LOW_ALT && w.spd < CALM_MS));
   if (usable.length >= 2) winds = usable;
 
-  if (winds.length < 2) throw new Error('Pas de données pour ce lieu');
+  if (winds.length < 2) return null;
 
   const conditions: Conditions = {
     weatherCode: num('weather_code'),
@@ -171,5 +164,48 @@ export async function loadRealWinds(lat: number, lng: number): Promise<WindsResu
     showers: num('showers'),
   };
 
-  return { winds, source: 'open-meteo · ' + times[idx].replace('T', ' '), conditions };
+  return { time: (H.time[idx] as string) ?? '', winds, conditions };
+}
+
+/**
+ * Fetch the hourly forecast (today + next 3 days) for a location and parse every
+ * hour into a step. Times come back in the DZ's local timezone; `baseIdx` points
+ * at the current hour so callers can default to "now" and scrub forward.
+ */
+export async function loadForecast(lat: number, lng: number): Promise<ForecastResult> {
+  const vars: string[] = [];
+  for (const p of LEVELS) {
+    vars.push(`windspeed_${p}hPa`, `winddirection_${p}hPa`, `geopotential_height_${p}hPa`, `temperature_${p}hPa`);
+  }
+  vars.push('windspeed_10m', 'winddirection_10m', 'temperature_2m', ...COND_VARS);
+
+  const url =
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}` +
+    `&longitude=${lng.toFixed(4)}&hourly=${vars.join(',')}&windspeed_unit=ms` +
+    `&timezone=auto&forecast_days=${FORECAST_DAYS}`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('open-meteo HTTP ' + res.status);
+  const j = (await res.json()) as { hourly: Hourly; elevation?: number; utc_offset_seconds?: number };
+
+  const H = j.hourly;
+  const elev = j.elevation ?? 0;
+  const offset = (j.utc_offset_seconds ?? 0) * 1000;
+
+  const steps: ForecastStep[] = [];
+  for (let i = 0; i < H.time.length; i++) {
+    const s = parseStep(H, elev, i);
+    if (s) steps.push(s);
+  }
+  if (steps.length < 2) throw new Error('Pas de données pour ce lieu');
+
+  // Current-hour index: the times are DZ-local, so convert each to true UTC
+  // (local − utc_offset) before comparing with the real now.
+  const now = Date.now();
+  let baseIdx = 0;
+  for (let i = 0; i < steps.length; i++) {
+    if (Date.parse(steps[i].time + 'Z') - offset <= now) baseIdx = i;
+  }
+
+  return { steps, baseIdx, source: 'open-meteo' };
 }

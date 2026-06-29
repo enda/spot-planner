@@ -81,7 +81,6 @@
     {#if xxl}
       <CircuitPanel />
       <JumpRunPanel />
-      <ConditionsPanel />
     {:else}
       <CanopyGlideTable />
       <WindsAloftTable />
@@ -94,6 +93,9 @@
       <CanopyGlideTable />
       <WindsAloftTable />
       <GroundGlideTable />
+    </section>
+    <section class="condfull">
+      <ConditionsPanel />
     </section>
   {/if}
 
@@ -149,6 +151,12 @@
   .bottom > :global(*) {
     flex: 1 1 0;
     min-width: 0;
+  }
+  /* XXL: Conditions météo as a full-width block above the data tables. */
+  .condfull {
+    order: 7;
+    flex: 1 1 100%;
+    width: 100%;
   }
   footer {
     order: 9;

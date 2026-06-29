@@ -7,8 +7,9 @@
 import { base } from '$app/paths';
 import {
   DEFAULT_WINDS,
-  loadRealWinds,
-  type WindsResult,
+  loadForecast,
+  type ForecastResult,
+  type ForecastStep,
   type Conditions,
 } from './winds';
 import type { AltUnit, WindUnit, TempUnit } from './units';
@@ -165,6 +166,11 @@ class AppState {
   windsErr = $state('');
   windsSource = $state('');
   conditions = $state<Conditions | null>(null);
+  // Hourly forecast (today + next 3 days). forecastIdx is the displayed hour;
+  // forecastBase is the "now" hour we default to and can't scrub before.
+  forecast = $state<ForecastStep[]>([]);
+  forecastIdx = $state(0);
+  forecastBase = $state(0);
   legendHidden = $state(true);
   fullscreen = $state(false);
   consentOpen = $state(false); // re-opened cookie/consent banner
@@ -570,7 +576,7 @@ class AppState {
     void this.refreshWinds();
   }
 
-  /** Re-fetch open-meteo winds for a position (defaults to the active target). */
+  /** Re-fetch the open-meteo forecast for a position (defaults to the active target). */
   async refreshWinds(coords?: { lat: number; lng: number }): Promise<void> {
     const t = coords ?? this.activeTarget;
     if (!t) return;
@@ -578,16 +584,44 @@ class AppState {
     this.windsLoading = true;
     this.windsErr = '';
     try {
-      const res: WindsResult = await loadRealWinds(lat, lng);
-      this.winds = res.winds;
-      this.windsSource = res.source;
-      this.conditions = res.conditions;
-      this.syncJumpDir();
+      const res: ForecastResult = await loadForecast(lat, lng);
+      this.forecast = res.steps;
+      this.forecastBase = res.baseIdx;
+      this.forecastIdx = res.baseIdx;
+      this.applyForecastStep();
     } catch {
       this.windsErr = m.winds_failed();
     } finally {
       this.windsLoading = false;
     }
+  }
+
+  /** Push the currently-selected forecast step into the live winds + conditions. */
+  applyForecastStep(): void {
+    const s = this.forecast[this.forecastIdx];
+    if (!s) return;
+    this.winds = s.winds;
+    this.conditions = s.conditions;
+    this.windsSource = 'open-meteo · ' + s.time.replace('T', ' ');
+    this.syncJumpDir();
+  }
+
+  /** Latest hour we let the user scrub to (now + 3 days, capped to data). */
+  get forecastMaxIdx(): number {
+    return Math.min(this.forecast.length - 1, this.forecastBase + 72);
+  }
+
+  /** Currently-displayed forecast step (for the time label), or null. */
+  get forecastStep(): ForecastStep | null {
+    return this.forecast[this.forecastIdx] ?? null;
+  }
+
+  /** Move the displayed forecast hour (clamped to now … now+3 days). */
+  setForecastIdx(i: number): void {
+    const clamped = Math.max(this.forecastBase, Math.min(this.forecastMaxIdx, Math.round(i)));
+    if (clamped === this.forecastIdx) return;
+    this.forecastIdx = clamped;
+    this.applyForecastStep();
   }
 
   resetSpeeds(): void {
