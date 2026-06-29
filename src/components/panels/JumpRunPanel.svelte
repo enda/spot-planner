@@ -68,8 +68,8 @@
     <input
       class="range"
       type="range"
-      min="-600"
-      max="600"
+      min="-1000"
+      max="1000"
       step="20"
       bind:value={app.jumpRunOffset}
       oninput={() => (app.jumpRun = true)}
