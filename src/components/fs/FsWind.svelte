@@ -12,6 +12,10 @@
 
   const aLabel = $derived(altLabel(app.altUnit));
 
+  // Arrows point where the wind blows TO, aligned to the current map rotation —
+  // same convention as the summary arrows over the map.
+  const norm = (a: number) => ((a % 360) + 360) % 360;
+
   // "Plané sous voile": ground-glide profile (into-wind / downwind) up to PMAX.
   const profile = $derived.by(() => {
     const fwd = getFwd(app.phys);
@@ -29,7 +33,7 @@
         gf: gf.toFixed(2),
         gd: gd.toFixed(2),
         fcol: grCol(gf),
-        arrow: (w.dir + 180) % 360,
+        arrow: norm(w.dir + 180 + app.bearing),
       });
     }
     return out;
@@ -46,7 +50,7 @@
         dir: Math.round(w.dir),
         wind: fmtSpeed(w.spd, app.windUnit),
         wcol: windCol(w.spd),
-        arrow: (w.dir + 180) % 360,
+        arrow: norm(w.dir + 180 + app.bearing),
         temp: w.temp != null ? fmtTemp(w.temp, app.tempUnit) : '—',
       })),
   );
