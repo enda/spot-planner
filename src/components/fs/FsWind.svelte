@@ -161,7 +161,7 @@
       minmax(min-content, 0.9fr) minmax(min-content, 0.7fr);
   }
   .cell.t {
-    color: var(--muted);
+    color: var(--fg);
   }
   .hdr {
     margin: 0 0 5px;

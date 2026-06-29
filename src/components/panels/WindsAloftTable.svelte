@@ -84,6 +84,6 @@
   }
   .temp {
     font: 600 12px/1.1 var(--font-mono);
-    color: var(--muted);
+    color: var(--fg);
   }
 </style>
