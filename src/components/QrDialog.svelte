@@ -98,7 +98,7 @@
       <!-- eslint-disable-next-line svelte/no-at-html-tags -->
       <div class="qr">{@html qrSvg}</div>
 
-      <p class="lead">{m.qr_lead()}</p>
+      <p class="lead">{displayShare ? m.qr_lead_display() : m.qr_lead()}</p>
 
       <div class="linklabel">{m.qr_link()}</div>
       <textarea readonly value={linkUrl}></textarea>

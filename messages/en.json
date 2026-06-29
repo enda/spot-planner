@@ -271,5 +271,6 @@
   "fc_now": "Now",
   "qr_copy": "Copy the link",
   "qr_display": "Field briefing view",
-  "qr_display_hint": "clean full-screen, read-only"
+  "qr_display_hint": "clean full-screen, read-only",
+  "qr_lead_display": "Scan to open the field briefing: a clean read-only full-screen map with this circuit and the shown legends."
 }

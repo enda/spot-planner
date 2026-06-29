@@ -271,5 +271,6 @@
   "fc_now": "Ahora",
   "qr_copy": "Copiar el enlace",
   "qr_display": "Vista briefing en campo",
-  "qr_display_hint": "pantalla completa, solo lectura"
+  "qr_display_hint": "pantalla completa, solo lectura",
+  "qr_lead_display": "Escanea para abrir el briefing en campo: mapa a pantalla completa, de solo lectura, con este circuito y las leyendas mostradas."
 }
