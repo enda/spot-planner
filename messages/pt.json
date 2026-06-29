@@ -18,7 +18,7 @@
   "canopy_surface": "Superfície (ft²)",
   "canopy_weight": "Peso equipado (kg)",
   "canopy_fwd": "Avanço ({unit})",
-  "canopy_desc": "Taxa de queda (m/s)",
+  "canopy_desc": "Taxa de queda ({unit})",
   "canopy_reset": "↺ velocidades auto pela carga alar",
   "wl_student": "Estudante",
   "wl_intermediate": "Intermédio",

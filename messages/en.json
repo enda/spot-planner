@@ -18,7 +18,7 @@
   "canopy_surface": "Surface (ft²)",
   "canopy_weight": "Exit weight (kg)",
   "canopy_fwd": "Forward speed ({unit})",
-  "canopy_desc": "Descent rate (m/s)",
+  "canopy_desc": "Descent rate ({unit})",
   "canopy_reset": "↺ auto speeds from wing loading",
   "wl_student": "Student",
   "wl_intermediate": "Intermediate",

@@ -18,7 +18,7 @@
   "canopy_surface": "Surface (ft²)",
   "canopy_weight": "Poids équipé (kg)",
   "canopy_fwd": "Avancement ({unit})",
-  "canopy_desc": "Taux chute (m/s)",
+  "canopy_desc": "Taux chute ({unit})",
   "canopy_reset": "↺ vitesses auto selon wingload",
   "wl_student": "Étudiant",
   "wl_intermediate": "Intermédiaire",

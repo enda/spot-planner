@@ -8,7 +8,7 @@
   const fwd = $derived(getFwd(app.phys));
   const desc = $derived(getDesc(app.phys));
   const fwdDisp = $derived(dispSpeed(fwd, app.windUnit));
-  const descDisp = $derived(Math.round(desc * 10) / 10);
+  const descDisp = $derived(dispSpeed(desc, app.windUnit));
   const WL_LABEL = {
     student: m.wl_student,
     intermediate: m.wl_intermediate,
@@ -69,13 +69,13 @@
       />
     </div>
     <div>
-      <label class="label" for="desc">{m.canopy_desc()}</label>
+      <label class="label" for="desc">{m.canopy_desc({ unit: speedLabel(app.windUnit) })}</label>
       <input
         id="desc"
         class="field"
         type="number"
         value={descDisp}
-        oninput={(e) => (app.descOv = num(e.currentTarget.value))}
+        oninput={(e) => (app.descOv = speedToMs(num(e.currentTarget.value), app.windUnit))}
       />
     </div>
   </div>

@@ -18,7 +18,7 @@
   "canopy_surface": "Superficie (ft²)",
   "canopy_weight": "Peso equipaggiato (kg)",
   "canopy_fwd": "Avanzamento ({unit})",
-  "canopy_desc": "Rateo di caduta (m/s)",
+  "canopy_desc": "Rateo di caduta ({unit})",
   "canopy_reset": "↺ velocità auto dal carico alare",
   "wl_student": "Studente",
   "wl_intermediate": "Intermedio",

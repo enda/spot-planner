@@ -18,7 +18,7 @@
   "canopy_surface": "Fläche (ft²)",
   "canopy_weight": "Abfluggewicht (kg)",
   "canopy_fwd": "Vorfahrt ({unit})",
-  "canopy_desc": "Sinkrate (m/s)",
+  "canopy_desc": "Sinkrate ({unit})",
   "canopy_reset": "↺ Auto-Geschwindigkeiten nach Flächenbelastung",
   "wl_student": "Schüler",
   "wl_intermediate": "Fortgeschritten",
