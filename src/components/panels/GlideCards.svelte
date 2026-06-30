@@ -1,7 +1,7 @@
 <script lang="ts">
   import { app } from '$lib/state.svelte';
   import { windAt, landingHeading, getFwd, getDesc, angDiff, rad } from '$lib/physics';
-  import { grCol } from '$lib/colors';
+  import { windCol } from '$lib/colors';
   import * as m from '$lib/paraglide/messages';
 
   const surf = $derived(windAt(app.winds, 0));
@@ -18,16 +18,16 @@
 <div class="cards">
   <div class="card cell">
     <div class="t">{m.glide_final()}</div>
-    <div class="v" style="color:{grCol(grFinal)}">{grFinal.toFixed(2)}<span class="u"> :1</span></div>
+    <div class="v" style="color:{windCol(Math.abs(hw))}">{grFinal.toFixed(2)}<span class="u"> :1</span></div>
     {#if grFinal < 0}<div class="warn">{m.glide_backup()}</div>{/if}
   </div>
   <div class="card cell">
     <div class="t">{m.glide_still()}</div>
-    <div class="v" style="color:{grCol(grStill)}">{grStill.toFixed(2)}<span class="u"> :1</span></div>
+    <div class="v" style="color:{windCol(0)}">{grStill.toFixed(2)}<span class="u"> :1</span></div>
   </div>
   <div class="card cell">
     <div class="t">{m.glide_downwind()}</div>
-    <div class="v" style="color:{grCol(grDown)}">{grDown.toFixed(2)}<span class="u"> :1</span></div>
+    <div class="v" style="color:{windCol(Math.abs(hw))}">{grDown.toFixed(2)}<span class="u"> :1</span></div>
   </div>
 </div>
 
