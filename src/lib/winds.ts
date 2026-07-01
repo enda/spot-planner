@@ -24,11 +24,14 @@ export interface Conditions {
   pmsl: number | null; // hPa sea-level pressure
   freezing: number | null; // m
   temp: number | null; // °C
+  feels: number | null; // °C apparent (feels-like) temperature
   humidity: number | null; // %
   dewpoint: number | null; // °C
   precip: number | null; // mm
   rain: number | null; // mm
   showers: number | null; // mm
+  /** Cloud cover (%) per real altitude (m AGL) from the pressure levels. */
+  cloudProfile: { alt: number; pct: number }[];
 }
 
 export interface WindsResult {
@@ -65,6 +68,7 @@ const COND_VARS = [
   'surface_pressure',
   'pressure_msl',
   'freezing_level_height',
+  'apparent_temperature',
   'relative_humidity_2m',
   'dew_point_2m',
   'precipitation',
@@ -72,7 +76,14 @@ const COND_VARS = [
   'showers',
 ];
 
-const LEVELS = [1000, 975, 950, 925, 900, 850, 800, 700, 600, 500];
+// Pressure levels start at 975 hPa (~350 m AGL): the 1000 hPa level sits in the
+// boundary layer where it disagrees with the height-above-ground diagnostics, so
+// we let the 80/120/180 m winds own the low band instead.
+const LEVELS = [975, 950, 925, 900, 850, 800, 700, 600, 500];
+
+// Height-above-ground diagnostic winds (m AGL) for the canopy-circuit band — the
+// boundary-layer scheme is more accurate near the surface than the pressure levels.
+const LOW_LEVELS = [80, 120, 180];
 
 // Below this altitude (m AGL), drop samples slower than this (m/s) — their
 // direction is unreliable (light/variable wind or model near-surface artifact).
@@ -116,20 +127,34 @@ function parseStep(H: Hourly, elev: number, idx: number): ForecastStep | null {
   if (s10 != null && d10 != null)
     winds.push({ alt: 0, dir: Math.round(d10), spd: s10, ...(t2 != null ? { temp: t2 } : {}) });
 
+  // Low-level diagnostic winds (80/120/180 m AGL) with their own temperature.
+  for (const h of LOW_LEVELS) {
+    const sp = num(`wind_speed_${h}m`);
+    const dr = num(`wind_direction_${h}m`);
+    const tp = num(`temperature_${h}m`);
+    if (sp != null && dr != null)
+      winds.push({ alt: h, dir: Math.round(dr), spd: sp, ...(tp != null ? { temp: tp } : {}) });
+  }
+
+  const cloudProfile: { alt: number; pct: number }[] = [];
   for (const p of LEVELS) {
     const sp = num(`windspeed_${p}hPa`);
     const dr = num(`winddirection_${p}hPa`);
     const gh = num(`geopotential_height_${p}hPa`);
     const tp = num(`temperature_${p}hPa`);
-    if (sp != null && dr != null && gh != null) {
+    const cc = num(`cloud_cover_${p}hPa`);
+    if (gh != null) {
       const agl = gh - elev;
       if (agl > 20 && agl <= 6500) {
-        winds.push({
-          alt: Math.round(agl / 50) * 50,
-          dir: Math.round(dr),
-          spd: sp,
-          ...(tp != null ? { temp: tp } : {}),
-        });
+        if (sp != null && dr != null) {
+          winds.push({
+            alt: Math.round(agl / 50) * 50,
+            dir: Math.round(dr),
+            spd: sp,
+            ...(tp != null ? { temp: tp } : {}),
+          });
+        }
+        if (cc != null) cloudProfile.push({ alt: Math.round(agl / 50) * 50, pct: cc });
       }
     }
   }
@@ -157,11 +182,13 @@ function parseStep(H: Hourly, elev: number, idx: number): ForecastStep | null {
     pmsl: num('pressure_msl'),
     freezing: num('freezing_level_height'),
     temp: t2,
+    feels: num('apparent_temperature'),
     humidity: num('relative_humidity_2m'),
     dewpoint: num('dew_point_2m'),
     precip: num('precipitation'),
     rain: num('rain'),
     showers: num('showers'),
+    cloudProfile,
   };
 
   return { time: (H.time[idx] as string) ?? '', winds, conditions };
@@ -175,9 +202,10 @@ function parseStep(H: Hourly, elev: number, idx: number): ForecastStep | null {
 export async function loadForecast(lat: number, lng: number): Promise<ForecastResult> {
   const vars: string[] = [];
   for (const p of LEVELS) {
-    vars.push(`windspeed_${p}hPa`, `winddirection_${p}hPa`, `geopotential_height_${p}hPa`, `temperature_${p}hPa`);
+    vars.push(`windspeed_${p}hPa`, `winddirection_${p}hPa`, `geopotential_height_${p}hPa`, `temperature_${p}hPa`, `cloud_cover_${p}hPa`);
   }
   vars.push('windspeed_10m', 'winddirection_10m', 'temperature_2m', ...COND_VARS);
+  for (const h of LOW_LEVELS) vars.push(`wind_speed_${h}m`, `wind_direction_${h}m`, `temperature_${h}m`);
 
   const url =
     `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}` +

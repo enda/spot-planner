@@ -44,6 +44,14 @@
 
   const fmt = (v: number | null | undefined, d = 0) => (v == null ? '—' : v.toFixed(d));
 
+  // Cloud base: lowest pressure level that's meaningfully clouded (≥ 25%).
+  const cloudBase = $derived(
+    (c?.cloudProfile ?? [])
+      .slice()
+      .sort((a, b) => a.alt - b.alt)
+      .find((p) => p.pct >= 25)?.alt ?? null,
+  );
+
   type Level = 'go' | 'maybe' | 'no';
   const LEVEL_COL: Record<Level, string> = { go: 'var(--good)', maybe: 'var(--accent)', no: 'var(--danger)' };
 
@@ -152,7 +160,13 @@
       {/if}
 
       <div class="clouds">
-        <div class="ck">☁️ {m.cond_clouds()} <span class="tot">{m.cond_clouds_total({ pct: fmt(c.cloudTotal) })}</span></div>
+        <div class="ck">
+          ☁️ {m.cond_clouds()}
+          <span class="tot">{m.cond_clouds_total({ pct: fmt(c.cloudTotal) })}</span>
+          <span class="tot base">· {m.cond_cloudbase()}
+            {#if cloudBase != null}<strong>{dispAlt(cloudBase, app.altUnit)} {altLabel(app.altUnit)}</strong>{:else}<strong class="clear">{m.cond_clear()}</strong>{/if}
+          </span>
+        </div>
         {#each [[m.cloud_low(), '≤ 3 km', c.cloudLow], [m.cloud_mid(), '3–8 km', c.cloudMid], [m.cloud_high(), '≥ 8 km', c.cloudHigh]] as [lbl, rng, p]}
           <div class="crow">
             <span class="clbl">{lbl} <span class="rng">{rng}</span></span>
@@ -195,6 +209,7 @@
       <div class="tile">
         <div class="k">🌡️ {m.cond_temp_ground()}</div>
         <div class="v">{c.temp != null ? fmtTemp(c.temp, app.tempUnit) : '—'}{c.temp != null ? app.tempUnit : ''}</div>
+        {#if c.feels != null}<div class="s">{m.cond_feels()} {fmtTemp(c.feels, app.tempUnit)}{app.tempUnit}</div>{/if}
       </div>
       <div class="tile">
         <div class="k">🌧️ {m.cond_precip()}</div>
@@ -389,8 +404,9 @@
   }
   .ck {
     display: flex;
-    align-items: center;
-    gap: 7px;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 7px;
     font: 600 8.5px/1 var(--font-display);
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -398,9 +414,16 @@
     margin-bottom: 10px;
   }
   .tot {
-    font: 600 9px/1 var(--font-mono);
+    font: 600 9px/1.2 var(--font-mono);
     text-transform: none;
     letter-spacing: 0;
+  }
+  .tot.base strong {
+    color: var(--fg);
+    font-weight: 700;
+  }
+  .tot.base strong.clear {
+    color: var(--good);
   }
   .crow {
     display: grid;

@@ -272,5 +272,8 @@
   "qr_copy": "Copiar a ligação",
   "qr_display": "Vista briefing no terreno",
   "qr_display_hint": "ecrã inteiro, só leitura",
-  "qr_lead_display": "Digitaliza para abrir o briefing no terreno: mapa em ecrã inteiro, só de leitura, com este circuito e as legendas mostradas."
+  "qr_lead_display": "Digitaliza para abrir o briefing no terreno: mapa em ecrã inteiro, só de leitura, com este circuito e as legendas mostradas.",
+  "cond_feels": "sensação",
+  "cond_cloudbase": "Base das nuvens",
+  "cond_clear": "limpo"
 }

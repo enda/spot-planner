@@ -272,5 +272,8 @@
   "qr_copy": "Link kopieren",
   "qr_display": "Platz-Briefing-Ansicht",
   "qr_display_hint": "Vollbild, schreibgeschützt",
-  "qr_lead_display": "Scanne, um das Platz-Briefing zu öffnen: aufgeräumte Vollbildkarte, schreibgeschützt, mit diesem Kreis und den gewählten Legenden."
+  "qr_lead_display": "Scanne, um das Platz-Briefing zu öffnen: aufgeräumte Vollbildkarte, schreibgeschützt, mit diesem Kreis und den gewählten Legenden.",
+  "cond_feels": "gefühlt",
+  "cond_cloudbase": "Wolkenbasis",
+  "cond_clear": "klar"
 }

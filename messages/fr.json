@@ -272,5 +272,8 @@
   "qr_copy": "Copier le lien",
   "qr_display": "Vue briefing terrain",
   "qr_display_hint": "plein écran épuré, lecture seule",
-  "qr_lead_display": "Scanne pour afficher le briefing terrain : carte plein écran épurée, en lecture seule, avec ce circuit et les légendes affichées."
+  "qr_lead_display": "Scanne pour afficher le briefing terrain : carte plein écran épurée, en lecture seule, avec ce circuit et les légendes affichées.",
+  "cond_feels": "ressenti",
+  "cond_cloudbase": "Base nuageuse",
+  "cond_clear": "dégagé"
 }

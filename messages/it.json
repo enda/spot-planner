@@ -272,5 +272,8 @@
   "qr_copy": "Copia il link",
   "qr_display": "Vista briefing in campo",
   "qr_display_hint": "schermo intero, sola lettura",
-  "qr_lead_display": "Scansiona per aprire il briefing in campo: mappa a schermo intero, di sola lettura, con questo circuito e le legende mostrate."
+  "qr_lead_display": "Scansiona per aprire il briefing in campo: mappa a schermo intero, di sola lettura, con questo circuito e le legende mostrate.",
+  "cond_feels": "percepita",
+  "cond_cloudbase": "Base nubi",
+  "cond_clear": "sereno"
 }
