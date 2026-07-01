@@ -5,8 +5,8 @@
   "refresh_winds": "⟳ Refresh weather",
   "loading": "Loading…",
   "embed_button": "</> Embed the map",
-  "winds_source_tip": "Source: {source}",
-  "winds_default_tip": "Real winds & conditions (open-meteo)",
+  "winds_source_tip": "Forecast: {source}",
+  "winds_default_tip": "Refresh forecast",
   "dz_heading": "Dropzone",
   "dz_none": "No DZ selected",
   "dz_hint": "Enable geolocation or pick a DZ",
@@ -275,5 +275,6 @@
   "qr_lead_display": "Scan to open the field briefing: a clean read-only full-screen map with this circuit and the shown legends.",
   "cond_feels": "feels",
   "cond_cloudbase": "Cloud base",
-  "cond_clear": "clear"
+  "cond_clear": "clear",
+  "model_tip": "Weather model"
 }

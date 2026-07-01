@@ -5,8 +5,8 @@
   "refresh_winds": "⟳ Wetter aktualisieren",
   "loading": "Lädt…",
   "embed_button": "</> Karte einbetten",
-  "winds_source_tip": "Quelle: {source}",
-  "winds_default_tip": "Echte Winde & Bedingungen (open-meteo)",
+  "winds_source_tip": "Vorhersage: {source}",
+  "winds_default_tip": "Vorhersage aktualisieren",
   "dz_heading": "Dropzone",
   "dz_none": "Keine DZ ausgewählt",
   "dz_hint": "Standort aktivieren oder eine DZ wählen",
@@ -275,5 +275,6 @@
   "qr_lead_display": "Scanne, um das Platz-Briefing zu öffnen: aufgeräumte Vollbildkarte, schreibgeschützt, mit diesem Kreis und den gewählten Legenden.",
   "cond_feels": "gefühlt",
   "cond_cloudbase": "Wolkenbasis",
-  "cond_clear": "klar"
+  "cond_clear": "klar",
+  "model_tip": "Wettermodell"
 }

@@ -5,8 +5,8 @@
   "refresh_winds": "⟳ Actualiser la météo",
   "loading": "Chargement…",
   "embed_button": "</> Intégrer la carte",
-  "winds_source_tip": "Source : {source}",
-  "winds_default_tip": "Vents & conditions réels (open-meteo)",
+  "winds_source_tip": "Prévision : {source}",
+  "winds_default_tip": "Actualiser la prévision",
   "dz_heading": "Dropzone",
   "dz_none": "Aucune DZ sélectionnée",
   "dz_hint": "Active la géolocalisation ou choisis une DZ",
@@ -275,5 +275,6 @@
   "qr_lead_display": "Scanne pour afficher le briefing terrain : carte plein écran épurée, en lecture seule, avec ce circuit et les légendes affichées.",
   "cond_feels": "ressenti",
   "cond_cloudbase": "Base nuageuse",
-  "cond_clear": "dégagé"
+  "cond_clear": "dégagé",
+  "model_tip": "Modèle météo"
 }

@@ -5,8 +5,8 @@
   "refresh_winds": "⟳ Aggiorna meteo",
   "loading": "Caricamento…",
   "embed_button": "</> Incorpora la mappa",
-  "winds_source_tip": "Fonte: {source}",
-  "winds_default_tip": "Venti e condizioni reali (open-meteo)",
+  "winds_source_tip": "Previsione: {source}",
+  "winds_default_tip": "Aggiorna la previsione",
   "dz_heading": "Dropzone",
   "dz_none": "Nessuna DZ selezionata",
   "dz_hint": "Attiva la geolocalizzazione o scegli una DZ",
@@ -275,5 +275,6 @@
   "qr_lead_display": "Scansiona per aprire il briefing in campo: mappa a schermo intero, di sola lettura, con questo circuito e le legende mostrate.",
   "cond_feels": "percepita",
   "cond_cloudbase": "Base nubi",
-  "cond_clear": "sereno"
+  "cond_clear": "sereno",
+  "model_tip": "Modello meteo"
 }

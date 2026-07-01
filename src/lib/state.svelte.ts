@@ -86,6 +86,7 @@ interface PersistedSettings {
   showTarget: boolean;
   showWind: boolean;
   showWindLayer: boolean;
+  weatherModel: string;
   lastDz: string | null;
 }
 
@@ -109,6 +110,7 @@ class AppState {
   windUnit = $state<WindUnit>('kt');
   altUnit = $state<AltUnit>('m');
   tempUnit = $state<TempUnit>('C');
+  weatherModel = $state<string>('best_match'); // open-meteo model ('best_match' = auto)
   canopy = $state(170);
   weight = $state(90);
   fwdOv = $state<number | null>(null);
@@ -319,6 +321,7 @@ class AppState {
       showTarget: this.showTarget,
       showWind: this.showWind,
       showWindLayer: this.showWindLayer,
+      weatherModel: this.weatherModel,
       lastDz: this.lastDz,
     };
   }
@@ -640,7 +643,7 @@ class AppState {
     this.windsLoading = true;
     this.windsErr = '';
     try {
-      const res: ForecastResult = await loadForecast(lat, lng);
+      const res: ForecastResult = await loadForecast(lat, lng, this.weatherModel);
       this.forecast = res.steps;
       this.forecastBase = res.baseIdx;
       this.forecastIdx = res.baseIdx;
@@ -652,13 +655,20 @@ class AppState {
     }
   }
 
+  /** Switch the open-meteo weather model and refetch. */
+  setWeatherModel(model: string): void {
+    if (model === this.weatherModel) return;
+    this.weatherModel = model;
+    void this.refreshWinds();
+  }
+
   /** Push the currently-selected forecast step into the live winds + conditions. */
   applyForecastStep(): void {
     const s = this.forecast[this.forecastIdx];
     if (!s) return;
     this.winds = s.winds;
     this.conditions = s.conditions;
-    this.windsSource = 'open-meteo · ' + s.time.replace('T', ' ');
+    this.windsSource = s.time.replace('T', ' ');
     this.syncJumpDir();
   }
 

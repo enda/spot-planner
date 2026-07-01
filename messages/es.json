@@ -5,8 +5,8 @@
   "refresh_winds": "⟳ Actualizar el tiempo",
   "loading": "Cargando…",
   "embed_button": "</> Insertar el mapa",
-  "winds_source_tip": "Fuente: {source}",
-  "winds_default_tip": "Vientos y condiciones reales (open-meteo)",
+  "winds_source_tip": "Previsión: {source}",
+  "winds_default_tip": "Actualizar la previsión",
   "dz_heading": "Zona de salto",
   "dz_none": "Ninguna DZ seleccionada",
   "dz_hint": "Activa la geolocalización o elige una DZ",
@@ -275,5 +275,6 @@
   "qr_lead_display": "Escanea para abrir el briefing en campo: mapa a pantalla completa, de solo lectura, con este circuito y las leyendas mostradas.",
   "cond_feels": "sensación",
   "cond_cloudbase": "Base de nubes",
-  "cond_clear": "despejado"
+  "cond_clear": "despejado",
+  "model_tip": "Modelo meteo"
 }

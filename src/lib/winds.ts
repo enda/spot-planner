@@ -40,6 +40,15 @@ export interface WindsResult {
   conditions: Conditions;
 }
 
+/** Selectable open-meteo weather models. 'best_match' auto-picks per location. */
+export const WEATHER_MODELS = [
+  { id: 'best_match', label: 'Auto' },
+  { id: 'meteofrance_seamless', label: 'Météo-France' },
+  { id: 'ecmwf_ifs025', label: 'ECMWF' },
+  { id: 'icon_seamless', label: 'ICON' },
+  { id: 'gfs_seamless', label: 'GFS' },
+] as const;
+
 /** One hourly forecast step (winds-aloft + ground conditions) at a given time. */
 export interface ForecastStep {
   time: string; // local time of the DZ, "YYYY-MM-DDTHH:MM"
@@ -199,7 +208,11 @@ function parseStep(H: Hourly, elev: number, idx: number): ForecastStep | null {
  * hour into a step. Times come back in the DZ's local timezone; `baseIdx` points
  * at the current hour so callers can default to "now" and scrub forward.
  */
-export async function loadForecast(lat: number, lng: number): Promise<ForecastResult> {
+export async function loadForecast(
+  lat: number,
+  lng: number,
+  model = 'best_match',
+): Promise<ForecastResult> {
   const vars: string[] = [];
   for (const p of LEVELS) {
     vars.push(`windspeed_${p}hPa`, `winddirection_${p}hPa`, `geopotential_height_${p}hPa`, `temperature_${p}hPa`, `cloud_cover_${p}hPa`);
@@ -210,7 +223,7 @@ export async function loadForecast(lat: number, lng: number): Promise<ForecastRe
   const url =
     `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}` +
     `&longitude=${lng.toFixed(4)}&hourly=${vars.join(',')}&windspeed_unit=ms` +
-    `&timezone=auto&forecast_days=${FORECAST_DAYS}`;
+    `&timezone=auto&forecast_days=${FORECAST_DAYS}&models=${model}`;
 
   const res = await fetch(url);
   if (!res.ok) throw new Error('open-meteo HTTP ' + res.status);

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { base } from '$app/paths';
   import { app } from '$lib/state.svelte';
+  import { WEATHER_MODELS } from '$lib/winds';
   import * as m from '$lib/paraglide/messages';
   import EmbedDialog from './EmbedDialog.svelte';
   import QrDialog from './QrDialog.svelte';
@@ -28,6 +29,17 @@
     >
       {app.windsLoading ? m.loading() : m.refresh_winds()}
     </button>
+    <select
+      class="model"
+      data-tip={m.model_tip()}
+      value={app.weatherModel}
+      disabled={app.windsLoading}
+      onchange={(e) => app.setWeatherModel(e.currentTarget.value)}
+    >
+      {#each WEATHER_MODELS as mo}
+        <option value={mo.id}>{mo.label}</option>
+      {/each}
+    </select>
     <button class="embed" disabled={!app.target} onclick={() => (embedOpen = true)}>
       {m.embed_button()}
     </button>
@@ -112,5 +124,29 @@
     padding: 7px 12px;
     font: 600 11px/1 var(--font-display);
     color: var(--accent2);
+  }
+  .model {
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 7px 24px 7px 12px;
+    font: 600 11px/1 var(--font-display);
+    color: var(--fg);
+    background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+      linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position:
+      calc(100% - 13px) 50%,
+      calc(100% - 9px) 50%;
+    background-size:
+      4px 4px,
+      4px 4px;
+    background-repeat: no-repeat;
+  }
+  .model:disabled {
+    opacity: 0.55;
+    cursor: default;
   }
 </style>
